@@ -1,72 +1,43 @@
 /* =============================================================
-INTRODUCTION TO GAME PROGRAMMING SE102
+	INTRODUCTION TO GAME PROGRAMMING SE102
 
-SAMPLE 00 - INTRODUCTORY CODE
+	SAMPLE 02 - SPRITE AND ANIMATION
 
-This sample illustrates how to:
+	This sample illustrates how to:
 
-1/ Create a window
-2/ Initiate DirectX 9, Direct3D, DirectX Sprite
-3/ Draw a static brick sprite to the screen
-4/ Create frame rate independent movements
-
-5/ Some good C programming practices
-- Use constants whenever possible
-- 0 Warnings
-
-6/ Debug using __FILE__ __LINE__
-
-WARNING: This one file example has a hell LOT of *sinful* programming practices
+		1/ Render a sprite (within a sprite sheet)
+		2/ How to manage sprites/animations in a game
+		3/ Enhance CGameObject with sprite animation
 ================================================================ */
 
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
 
-#include <signal.h>
-#include <string.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <time.h>
-#include <stdlib.h>
+#include "debug.h"
+#include "Game.h"
+#include "Textures.h"
+#include "Mario.h"
+
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
-#define WINDOW_TITLE L"00 - Intro"
-#define WINDOW_ICON_PATH L"brick.ico" 
+#define MAIN_WINDOW_TITLE L"02 - Sprite animation"
+#define WINDOW_ICON_PATH L"mario.ico"
 
-HWND hWnd = 0;
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(200, 200, 255)
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 
-#define D3DCOLOR_WHITE D3DCOLOR_XRGB(255, 255, 255)
+#define MAX_FRAME_RATE 60
 
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(0, 0, 0)
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define ID_TEX_MARIO 0
+#define ID_TEX_ENEMY 10
+#define ID_TEX_MISC 20
 
-#define MAX_FRAME_RATE 120
-
-LPDIRECT3D9 d3d = NULL;						// Direct3D handle
-LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
-
-LPDIRECT3DSURFACE9 backBuffer = NULL;
-int BackBufferWidth = 0;
-int BackBufferHeight = 0;
-
-LPD3DXSPRITE spriteHandler = NULL;			// Sprite helper library to help us draw 2D images 
-
-
-#define BRICK_TEXTURE_PATH L"brick.png"
-#define BRICK_START_X 30.0f
-#define BRICK_START_Y 10.0f
-#define BRICK_START_VX 0.2f
-#define BRICK_WIDTH 16.0f
-
-
-LPDIRECT3DTEXTURE9 texBrick;				// Texture object to store brick image
-
-float brick_x = BRICK_START_X;
-float brick_vx = BRICK_START_VX;
-float brick_y = BRICK_START_Y;
-
+CMario* mario;
+#define MARIO_START_X 10.0f
+#define MARIO_START_Y 130.0f
+#define MARIO_START_VX 0.001f
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -81,152 +52,127 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-// DEBUG SUPPORT FUNCTIONS //////////////
-#define _W(x)  __W(x)
-#define __W(x)  L##x
-
-#define VA_PRINTS(s) {				\
-		va_list argp;				\
-		va_start(argp, fmt);		\
-		vswprintf_s(s, fmt, argp);	\
-		va_end(argp);				\
-}		
-
-void DebugOut(wchar_t* fmt, ...)
-{
-	wchar_t s[4096];
-	VA_PRINTS(s);
-	OutputDebugString(s);
-}
-
-void DebugOutTitle(wchar_t* fmt, ...)
-{
-	wchar_t s[1024];
-	VA_PRINTS(s);
-	SetWindowText(hWnd, s);
-}
-//////////////////////////////////////////
-
-void InitDirectX(HWND hWnd)
-{
-	d3d = Direct3DCreate9(D3D_SDK_VERSION);
-
-	D3DPRESENT_PARAMETERS d3dpp;
-
-	ZeroMemory(&d3dpp, sizeof(d3dpp));
-
-	d3dpp.Windowed = TRUE;
-	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8;
-	d3dpp.BackBufferCount = 1;
-
-	// retrieve window width & height so that we can create backbuffer height & width accordingly 
-	RECT r;
-	GetClientRect(hWnd, &r);
-
-	BackBufferWidth = r.right + 1;
-	BackBufferHeight = r.bottom + 1;
-
-	d3dpp.BackBufferHeight = BackBufferHeight;
-	d3dpp.BackBufferWidth = BackBufferWidth;
-
-	d3d->CreateDevice(
-		D3DADAPTER_DEFAULT,			// use default video card in the system, some systems have more than one video cards
-		D3DDEVTYPE_HAL,				// HAL = Hardware Abstraction Layer - a "thin" software layer to allow application to directly interact with video card hardware
-		hWnd,
-		D3DCREATE_SOFTWARE_VERTEXPROCESSING,
-		&d3dpp,
-		&d3ddv);
-
-	if (d3ddv == NULL)
-	{
-		//DebugOut(L"[ERROR] CreateDevice failed\n %s %d", __FILE__, __LINE__);
-		return;
-	}
-
-	d3ddv->GetBackBuffer(0, 0, D3DBACKBUFFER_TYPE_MONO, &backBuffer);
-
-	// Initialize Direct3DX helper library
-	D3DXCreateSprite(d3ddv, &spriteHandler);
-
-	//DebugOut(L"[INFO] InitDirectX OK\n");
-}
-
 /*
-	Load game resources. In this example, we only load a brick image
+	Load all game resources
+	In this example: load textures, sprites, animations and mario object
 */
 void LoadResources()
 {
-	HRESULT result = D3DXCreateTextureFromFileEx(
-		d3ddv,								// Pointer to Direct3D device object
-		BRICK_TEXTURE_PATH,					// Path to the image to load
-		D3DX_DEFAULT_NONPOW2, 				// Auto texture width (get from file)
-		D3DX_DEFAULT_NONPOW2, 				// Auto texture height (get from file)
-		1,
-		D3DUSAGE_DYNAMIC,
-		D3DFMT_UNKNOWN,
-		D3DPOOL_DEFAULT,
-		D3DX_DEFAULT,
-		D3DX_DEFAULT,
-		D3DCOLOR_XRGB(255, 255, 255),		// Transparent color
-		NULL,
-		NULL,
-		&texBrick);
+	CTextures* textures = CTextures::GetInstance();
 
-	if (result != D3D_OK)
-	{
-		//DebugOut(L"[ERROR] CreateTextureFromFileEx %s failed\n", BRICK_TEXTURE_PATH);
-		return;
-	}
+	//textures->Add(ID_TEX_MARIO, L"textures\\mario.png", D3DCOLOR_XRGB(176, 224, 248));
+	//me
+	textures->Add(ID_TEX_MARIO, L"textures\\mario-luigi.png", D3DCOLOR_XRGB(68, 145, 190));
 
-	//DebugOut(L"[INFO] Texture loaded Ok: %s \n", BRICK_TEXTURE_PATH);
+	//textures->Add(ID_ENEMY_TEXTURE, L"textures\\enemies.png", D3DCOLOR_XRGB(156, 219, 239));
+	//textures->Add(ID_TEX_MISC, L"textures\\misc.png", D3DCOLOR_XRGB(156, 219, 239));
+
+
+	CSprites* sprites = CSprites::GetInstance();
+
+	LPDIRECT3DTEXTURE9 texMario = textures->Get(ID_TEX_MARIO);
+
+	// readline => id, left, top, right 
+	sprites->Add(10001, 246, 154, 259, 181, texMario);
+	sprites->Add(10002, 275, 154, 290, 181, texMario);
+	sprites->Add(10003, 304, 154, 321, 181, texMario);
+
+	sprites->Add(10011, 186, 154, 199, 181, texMario);
+	sprites->Add(10012, 155, 154, 170, 181, texMario);
+	sprites->Add(10013, 125, 154, 140, 181, texMario);
+
+	//(me assum) readline => id, left, top, right+1, bottom+1
+	//small mario walk
+	sprites->Add(20001, 2, 16, 15, 32, texMario);
+	sprites->Add(20002, 20, 16, 35, 32, texMario);
+	sprites->Add(20003, 37, 16, 52, 32, texMario);
+
+
+	/*LPDIRECT3DTEXTURE9 texMisc = textures->Get(ID_TEX_MISC);
+	sprites->Add(20001, 300, 117, 315, 132, texMisc);
+	sprites->Add(20002, 318, 117, 333, 132, texMisc);
+	sprites->Add(20003, 336, 117, 351, 132, texMisc);
+	sprites->Add(20004, 354, 117, 369, 132, texMisc);*/
+
+
+	CAnimations* animations = CAnimations::GetInstance();
+	LPANIMATION ani;
+
+	ani = new CAnimation(100);
+	ani->Add(10001);
+	ani->Add(10002);
+	ani->Add(10003);
+	animations->Add(500, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(10011);
+	ani->Add(10012);
+	ani->Add(10013);
+	animations->Add(501, ani);
+
+	ani = new CAnimation(1000);
+	ani->Add(20001);
+	ani->Add(20002);
+	//ani->Add(20003);
+	animations->Add(502, ani);
+
+	/*
+	ani = new CAnimation(100);
+	ani->Add(20001,1000);
+	ani->Add(20002);
+	ani->Add(20003);
+	ani->Add(20004);
+	animations->Add(510, ani);
+	*/
+
+	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
 }
 
 /*
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame
-
-	IMPORTANT: no render-related code should be used inside this function.
 */
 void Update(DWORD dt)
 {
-	//Uncomment the whole function to see the brick moves and bounces back when hitting left and right edges
-
-	//brick_x += brick_vx*dt; 
-
-	//if (brick_x <= 0 || brick_x >= BackBufferWidth - BRICK_WIDTH) { 
-	//	
-	//	brick_vx = -brick_vx;
-
-	//	//Why not having these logics would make the brick disappear sometimes?  
-	//	if (brick_x <= 0)
-	//	{
-	//		brick_x = 0;
-	//	}
-	//	else if (brick_x >= BackBufferWidth - BRICK_WIDTH)
-	//	{
-	//		brick_x = BackBufferWidth - BRICK_WIDTH;
-	//	}
-	//} 
+	mario->Update(dt);
 }
 
 /*
 	Render a frame
-	IMPORTANT: world status must NOT be changed during rendering
 */
 void Render()
 {
+	CGame* game = CGame::GetInstance();
+	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
+	LPDIRECT3DSURFACE9 bb = game->GetBackBuffer();
+	LPD3DXSPRITE spriteHandler = game->GetSpriteHandler();
+
 	if (d3ddv->BeginScene())
 	{
-		// Clear the whole window with a color
-		d3ddv->ColorFill(backBuffer, NULL, BACKGROUND_COLOR);
+		// Clear back buffer with a color
+		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
-		D3DXVECTOR3 p(brick_x, brick_y, 0);
-		spriteHandler->Draw(texBrick, NULL, NULL, &p, D3DCOLOR_WHITE);
+		mario->Render();
 
-		//DebugOutTitle(L"%s (%0.1f,%0.1f) v:%0.1f", WINDOW_TITLE, brick_x, brick_y, brick_vx);
+		DebugOutTitle(L"01 - Sprite %0.1f %0.1f", mario->GetX(), mario->GetY());
+
+		//
+		// TEST SPRITE DRAW
+		//
+
+		/*
+		CTextures *textures = CTextures::GetInstance();
+
+		D3DXVECTOR3 p(20, 20, 0);
+		RECT r;
+		r.left = 274;
+		r.top = 234;
+		r.right = 292;
+		r.bottom = 264;
+		spriteHandler->Draw(textures->Get(ID_TEX_MARIO), &r, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
+		*/
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -244,13 +190,10 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	wc.style = CS_HREDRAW | CS_VREDRAW;
 	wc.hInstance = hInstance;
 
-	//Try this to see how the debug function prints out file and line 
-	//wc.hInstance = (HINSTANCE)-100; 
-
 	wc.lpfnWndProc = (WNDPROC)WinProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hIcon = (HICON)LoadImage(hInstance, WINDOW_ICON_PATH, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);;
+	wc.hIcon = (HICON)LoadImage(hInstance, WINDOW_ICON_PATH, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 	wc.lpszMenuName = NULL;
@@ -262,7 +205,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	HWND hWnd =
 		CreateWindow(
 			WINDOW_CLASS_NAME,
-			WINDOW_TITLE,
+			MAIN_WINDOW_TITLE,
 			WS_OVERLAPPEDWINDOW, // WS_EX_TOPMOST | WS_VISIBLE | WS_POPUP,
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,
@@ -276,12 +219,14 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	if (!hWnd)
 	{
 		DWORD ErrCode = GetLastError();
-		//DebugOut(L"[ERROR] CreateWindow failed! ErrCode: %d\nAt: %s %d \n", ErrCode, _W(__FILE__), __LINE__);
+		DebugOut(L"[ERROR] CreateWindow failed! ErrCode: %d\nAt: %s %d \n", ErrCode, _W(__FILE__), __LINE__);
 		return 0;
 	}
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
+
+	SetDebugWindow(hWnd);
 
 	return hWnd;
 }
@@ -322,27 +267,15 @@ int Run()
 	return 1;
 }
 
-void Cleanup()
-{
-	texBrick->Release();
-	spriteHandler->Release();
-	backBuffer->Release();
-	d3ddv->Release();
-	d3d->Release();
-
-	//DebugOut(L"[INFO] Cleanup Ok\n");
-}
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	hWnd = CreateGameWindow(hInstance, nCmdShow, WINDOW_WIDTH, WINDOW_HEIGHT);
-	if (hWnd == 0) return 0;
+	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	InitDirectX(hWnd);
+	CGame* game = CGame::GetInstance();
+	game->Init(hWnd);
 
 	LoadResources();
 	Run();
-	Cleanup();
 
 	return 0;
 }
