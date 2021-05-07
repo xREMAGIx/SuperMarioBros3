@@ -136,13 +136,15 @@ void LoadResources()
 	}
 
 	ani = new CAnimation(1000);
-	ani->Add(1001);
-	ani->Add(1002);
+	ani->Add(12001);
+	ani->Add(12002);
+	ani->Add(12003);
+	ani->Add(12004);
 	//ani->Add(20003);
 	animations->Add(503, ani);
 	ani = new CAnimation(1000);
-	ani->Add(1002);
-	ani->Add(1001);
+	ani->Add(10002);
+	ani->Add(10001);
 	//ani->Add(20003);
 	animations->Add(504, ani);
 
