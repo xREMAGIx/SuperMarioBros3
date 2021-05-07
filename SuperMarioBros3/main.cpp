@@ -1,19 +1,11 @@
-/* =============================================================
-	INTRODUCTION TO GAME PROGRAMMING SE102
-
-	SAMPLE 02 - SPRITE AND ANIMATION
-
-	This sample illustrates how to:
-
-		1/ Render a sprite (within a sprite sheet)
-		2/ How to manage sprites/animations in a game
-		3/ Enhance CGameObject with sprite animation
-================================================================ */
-
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
 
+#pragma once
+#include <sstream>
+#include <fstream>
+#include <string>
 #include "debug.h"
 #include "Game.h"
 #include "Textures.h"
@@ -125,9 +117,40 @@ void LoadResources()
 	animations->Add(510, ani);
 	*/
 
-	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
-}
+	fstream file;
+	file.open("data/mario-animation.txt", ios::in);
+	if (file.is_open()) {
+		string line;
+		while (getline(file, line)) {
+			stringstream ssin(line);
+			int id, type, left, top, right, bottom;
+			ssin >> id;
+			ssin >> type;
+			ssin >> left;
+			ssin >> top;
+			ssin >> right;
+			ssin >> bottom;
+			sprites->Add(id, left, top, right, bottom, texMario);
+		}
+		file.close();
+	}
 
+	ani = new CAnimation(1000);
+	ani->Add(1001);
+	ani->Add(1002);
+	//ani->Add(20003);
+	animations->Add(503, ani);
+	ani = new CAnimation(1000);
+	ani->Add(1002);
+	ani->Add(1001);
+	//ani->Add(20003);
+	animations->Add(504, ani);
+
+
+	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
+
+}
+ 
 /*
 	Update world status for this frame
 	dt: time period between beginning of last frame and beginning of this frame

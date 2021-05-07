@@ -73,7 +73,7 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 /*
 	Utility function to load texture
 */
-LPDIRECT3DTEXTURE9 CGame::LoadTexture(LPCWSTR texturePath)
+LPDIRECT3DTEXTURE9 CGame::LoadTexture(LPCWSTR texturePath, D3DCOLOR transparentColor)
 {
 	D3DXIMAGE_INFO info;
 	LPDIRECT3DTEXTURE9 texture;
@@ -98,8 +98,7 @@ LPDIRECT3DTEXTURE9 CGame::LoadTexture(LPCWSTR texturePath)
 		D3DPOOL_DEFAULT,
 		D3DX_DEFAULT,
 		D3DX_DEFAULT,
-		//TODO: Fix color later
-		D3DCOLOR_XRGB(68, 145, 190),			// Transparent color
+		transparentColor,			// Transparent color
 		&info,
 		NULL,
 		&texture);								// Created texture pointer

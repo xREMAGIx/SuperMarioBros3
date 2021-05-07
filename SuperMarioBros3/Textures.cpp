@@ -22,7 +22,7 @@ CTextures* CTextures::GetInstance()
 
 void CTextures::Add(int id, LPCWSTR filePath, D3DCOLOR transparentColor)
 {
-	textures[id] = CGame::GetInstance()->LoadTexture(filePath);
+	textures[id] = CGame::GetInstance()->LoadTexture(filePath, transparentColor);
 }
 
 LPDIRECT3DTEXTURE9 CTextures::Get(unsigned int i)
