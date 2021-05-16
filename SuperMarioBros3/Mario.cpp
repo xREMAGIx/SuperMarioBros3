@@ -31,7 +31,7 @@ void CMario::Render()
 	LPANIMATION ani;
 
 	//[RED FLAG][TODO]: Student needs to think about how to associate this animation/asset to Mario!!
-	if (vx > 0) ani = CAnimations::GetInstance()->Get(503);
+	if (vx > 0) ani = CAnimations::GetInstance()->Get(505);
 	else ani = CAnimations::GetInstance()->Get(504);
 
 	ani->Render(x, y);

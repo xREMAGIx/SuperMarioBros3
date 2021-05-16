@@ -13,6 +13,30 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
+    <Filter Include="Header Files\Intro">
+      <UniqueIdentifier>{e08d4644-d01d-4c42-b4a1-9c9c079eae18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Characters">
+      <UniqueIdentifier>{48c23e86-5053-4440-ad07-4d93259559a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Enemies">
+      <UniqueIdentifier>{a8a4f9cf-62b9-4a3d-8297-d003d5590dd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Miscs">
+      <UniqueIdentifier>{50d5b442-577c-440e-a786-f03dc49f01f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Charaters">
+      <UniqueIdentifier>{65591c6d-6e3f-4b86-a76e-df368ad1bcfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Enemies">
+      <UniqueIdentifier>{72a30a3c-08d9-4339-a3da-947c0d83dd84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Intro">
+      <UniqueIdentifier>{da61d809-f97d-4d29-b4d1-6bf2df496b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Miscs">
+      <UniqueIdentifier>{09e3e416-31ea-4a4e-8dec-ca51e015ef16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -27,14 +51,14 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mario.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Sprites.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Textures.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Mario.cpp">
+      <Filter>Source Files\Charaters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -52,14 +76,14 @@
     <ClInclude Include="GameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Mario.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Sprites.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Textures.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mario.h">
+      <Filter>Header Files\Characters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

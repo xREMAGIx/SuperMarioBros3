@@ -25,8 +25,11 @@
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
+#define ID_TEX_HUD 30
+#define ID_TEX_INTRO 40
 
 CMario* mario;
+CGameObject* test;
 #define MARIO_START_X 10.0f
 #define MARIO_START_Y 130.0f
 #define MARIO_START_VX 0.001f
@@ -52,73 +55,22 @@ void LoadResources()
 {
 	CTextures* textures = CTextures::GetInstance();
 
-	//textures->Add(ID_TEX_MARIO, L"textures\\mario.png", D3DCOLOR_XRGB(176, 224, 248));
-	//me
 	textures->Add(ID_TEX_MARIO, L"textures\\mario-luigi.png", D3DCOLOR_XRGB(68, 145, 190));
-
-	//textures->Add(ID_ENEMY_TEXTURE, L"textures\\enemies.png", D3DCOLOR_XRGB(156, 219, 239));
-	//textures->Add(ID_TEX_MISC, L"textures\\misc.png", D3DCOLOR_XRGB(156, 219, 239));
-
+	textures->Add(ID_TEX_MISC, L"textures\\npc-misc.png", D3DCOLOR_XRGB(166, 185, 255));
+	textures->Add(ID_TEX_MISC, L"textures\\npc-misc.png", D3DCOLOR_XRGB(166, 185, 255));
+	textures->Add(ID_TEX_INTRO, L"textures\\intro.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	CSprites* sprites = CSprites::GetInstance();
 
 	LPDIRECT3DTEXTURE9 texMario = textures->Get(ID_TEX_MARIO);
-
-	// readline => id, left, top, right 
-	sprites->Add(10001, 246, 154, 259, 181, texMario);
-	sprites->Add(10002, 275, 154, 290, 181, texMario);
-	sprites->Add(10003, 304, 154, 321, 181, texMario);
-
-	sprites->Add(10011, 186, 154, 199, 181, texMario);
-	sprites->Add(10012, 155, 154, 170, 181, texMario);
-	sprites->Add(10013, 125, 154, 140, 181, texMario);
-
-	//(me assum) readline => id, left, top, right+1, bottom+1
-	//small mario walk
-	sprites->Add(20001, 2, 16, 15, 32, texMario);
-	sprites->Add(20002, 20, 16, 35, 32, texMario);
-	sprites->Add(20003, 37, 16, 52, 32, texMario);
-
-
-	/*LPDIRECT3DTEXTURE9 texMisc = textures->Get(ID_TEX_MISC);
-	sprites->Add(20001, 300, 117, 315, 132, texMisc);
-	sprites->Add(20002, 318, 117, 333, 132, texMisc);
-	sprites->Add(20003, 336, 117, 351, 132, texMisc);
-	sprites->Add(20004, 354, 117, 369, 132, texMisc);*/
-
+	LPDIRECT3DTEXTURE9 texMisc = textures->Get(ID_TEX_MISC);
+	LPDIRECT3DTEXTURE9 texIntro = textures->Get(ID_TEX_INTRO);
 
 	CAnimations* animations = CAnimations::GetInstance();
 	LPANIMATION ani;
 
-	ani = new CAnimation(100);
-	ani->Add(10001);
-	ani->Add(10002);
-	ani->Add(10003);
-	animations->Add(500, ani);
-
-	ani = new CAnimation(100);
-	ani->Add(10011);
-	ani->Add(10012);
-	ani->Add(10013);
-	animations->Add(501, ani);
-
-	ani = new CAnimation(1000);
-	ani->Add(20001);
-	ani->Add(20002);
-	//ani->Add(20003);
-	animations->Add(502, ani);
-
-	/*
-	ani = new CAnimation(100);
-	ani->Add(20001,1000);
-	ani->Add(20002);
-	ani->Add(20003);
-	ani->Add(20004);
-	animations->Add(510, ani);
-	*/
-
 	fstream file;
-	file.open("data/mario-animation.txt", ios::in);
+	file.open("data/character-sprite.txt", ios::in);
 	if (file.is_open()) {
 		string line;
 		while (getline(file, line)) {
@@ -135,6 +87,42 @@ void LoadResources()
 		file.close();
 	}
 
+	file.open("data/misc-sprite.txt", ios::in);
+	if (file.is_open()) {
+		string line;
+		while (getline(file, line)) {
+			stringstream ssin(line);
+			int id, type, left, top, right, bottom;
+			ssin >> id;
+			ssin >> type;
+			ssin >> left;
+			ssin >> top;
+			ssin >> right;
+			ssin >> bottom;
+			sprites->Add(id, left, top, right, bottom, texMisc);
+		}
+		file.close();
+	}
+
+	file.open("data/intro-sprite.txt", ios::in);
+	if (file.is_open()) {
+		string line;
+		while (getline(file, line)) {
+			stringstream ssin(line);
+			int id, type, left, top, right, bottom;
+			ssin >> id;
+			ssin >> type;
+			ssin >> left;
+			ssin >> top;
+			ssin >> right;
+			ssin >> bottom;
+			sprites->Add(id, left, top, right, bottom, texIntro);
+		}
+		file.close();
+	}
+
+
+
 	ani = new CAnimation(1000);
 	ani->Add(12001);
 	ani->Add(12002);
@@ -148,9 +136,14 @@ void LoadResources()
 	//ani->Add(20003);
 	animations->Add(504, ani);
 
+	ani = new CAnimation(1000);
+	ani->Add(20001);
+	ani->Add(20002);
+	//ani->Add(20003);
+	animations->Add(505, ani);
 
 	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
-
+	test = new CMario(0, 0, 0);
 }
  
 /*
