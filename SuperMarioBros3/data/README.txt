@@ -13,8 +13,8 @@ Sprite ID
 10: question
 12: block
 13: brick
-14: groomba
-15: red groomba
+14: goomba
+15: red goomba
 16: big wing
 17: small wing
 18: green koopa
@@ -29,3 +29,7 @@ Sprite ID
 27: alphabets
 28: points
 29: hud 
+
+Animations ID
+
+31401 : goomba move

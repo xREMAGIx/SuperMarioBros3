@@ -7,13 +7,15 @@
 #include <fstream>
 #include <string>
 #include "debug.h"
+#include "helpers.h"
 #include "Game.h"
 #include "Textures.h"
 #include "Mario.h"
+#include "Goomba.h"
 
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
-#define MAIN_WINDOW_TITLE L"02 - Sprite animation"
+#define MAIN_WINDOW_TITLE L"Super Mario Bros 3"
 #define WINDOW_ICON_PATH L"mario.ico"
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(200, 200, 255)
@@ -29,6 +31,7 @@
 #define ID_TEX_INTRO 40
 
 CMario* mario;
+CGoomba* goomba;
 CGameObject* test;
 #define MARIO_START_X 10.0f
 #define MARIO_START_Y 130.0f
@@ -56,71 +59,26 @@ void LoadResources()
 	CTextures* textures = CTextures::GetInstance();
 
 	textures->Add(ID_TEX_MARIO, L"textures\\mario-luigi.png", D3DCOLOR_XRGB(68, 145, 190));
-	textures->Add(ID_TEX_MISC, L"textures\\npc-misc.png", D3DCOLOR_XRGB(166, 185, 255));
+	textures->Add(ID_TEX_ENEMY, L"textures\\enemies.png", D3DCOLOR_XRGB(68, 145, 190));
 	textures->Add(ID_TEX_MISC, L"textures\\npc-misc.png", D3DCOLOR_XRGB(166, 185, 255));
 	textures->Add(ID_TEX_INTRO, L"textures\\intro.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	CSprites* sprites = CSprites::GetInstance();
 
 	LPDIRECT3DTEXTURE9 texMario = textures->Get(ID_TEX_MARIO);
+	LPDIRECT3DTEXTURE9 texEnemies = textures->Get(ID_TEX_ENEMY);
 	LPDIRECT3DTEXTURE9 texMisc = textures->Get(ID_TEX_MISC);
 	LPDIRECT3DTEXTURE9 texIntro = textures->Get(ID_TEX_INTRO);
 
 	CAnimations* animations = CAnimations::GetInstance();
 	LPANIMATION ani;
 
-	fstream file;
-	file.open("data/character-sprite.txt", ios::in);
-	if (file.is_open()) {
-		string line;
-		while (getline(file, line)) {
-			stringstream ssin(line);
-			int id, type, left, top, right, bottom;
-			ssin >> id;
-			ssin >> type;
-			ssin >> left;
-			ssin >> top;
-			ssin >> right;
-			ssin >> bottom;
-			sprites->Add(id, left, top, right, bottom, texMario);
-		}
-		file.close();
-	}
+	LoadSprites(sprites, "data/character-sprite.txt", texMario);
+	LoadSprites(sprites, "data/enemies-sprite.txt", texEnemies);
+	LoadSprites(sprites, "data/misc-sprite.txt", texMisc);
+	LoadSprites(sprites, "data/intro-sprite.txt", texIntro);
 
-	file.open("data/misc-sprite.txt", ios::in);
-	if (file.is_open()) {
-		string line;
-		while (getline(file, line)) {
-			stringstream ssin(line);
-			int id, type, left, top, right, bottom;
-			ssin >> id;
-			ssin >> type;
-			ssin >> left;
-			ssin >> top;
-			ssin >> right;
-			ssin >> bottom;
-			sprites->Add(id, left, top, right, bottom, texMisc);
-		}
-		file.close();
-	}
-
-	file.open("data/intro-sprite.txt", ios::in);
-	if (file.is_open()) {
-		string line;
-		while (getline(file, line)) {
-			stringstream ssin(line);
-			int id, type, left, top, right, bottom;
-			ssin >> id;
-			ssin >> type;
-			ssin >> left;
-			ssin >> top;
-			ssin >> right;
-			ssin >> bottom;
-			sprites->Add(id, left, top, right, bottom, texIntro);
-		}
-		file.close();
-	}
-
+	LoadAnimations(animations, "data/enemies-animation.txt");
 
 
 	ani = new CAnimation(1000);
@@ -143,6 +101,7 @@ void LoadResources()
 	animations->Add(505, ani);
 
 	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
+	goomba = new CGoomba(MARIO_START_X, MARIO_START_Y);
 	test = new CMario(0, 0, 0);
 }
  
@@ -153,6 +112,7 @@ void LoadResources()
 void Update(DWORD dt)
 {
 	mario->Update(dt);
+	goomba->Update(dt);
 }
 
 /*
@@ -173,8 +133,7 @@ void Render()
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
 		mario->Render();
-
-		DebugOutTitle(L"01 - Sprite %0.1f %0.1f", mario->GetX(), mario->GetY());
+		goomba->Render();
 
 		//
 		// TEST SPRITE DRAW
