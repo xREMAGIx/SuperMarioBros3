@@ -151,7 +151,9 @@
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="Sprites.cpp" />
+    <ClCompile Include="SuperLeaf.cpp" />
     <ClCompile Include="Textures.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,7 +166,9 @@
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="Sprites.h" />
+    <ClInclude Include="SuperLeaf.h" />
     <ClInclude Include="Textures.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

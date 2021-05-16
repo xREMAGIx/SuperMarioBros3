@@ -12,6 +12,8 @@
 #include "Textures.h"
 #include "Mario.h"
 #include "Goomba.h"
+#include "QuestionBlock.h"
+#include "SuperLeaf.h"
 
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -32,7 +34,9 @@
 
 CMario* mario;
 CGoomba* goomba;
-CGameObject* test;
+CQuestionBlock* questionBlock;
+CSuperLeaf* superLeaf;
+
 #define MARIO_START_X 10.0f
 #define MARIO_START_Y 130.0f
 #define MARIO_START_VX 0.001f
@@ -79,6 +83,7 @@ void LoadResources()
 	LoadSprites(sprites, "data/intro-sprite.txt", texIntro);
 
 	LoadAnimations(animations, "data/enemies-animation.txt");
+	LoadAnimations(animations, "data/misc-animation.txt");
 
 
 	ani = new CAnimation(1000);
@@ -102,7 +107,9 @@ void LoadResources()
 
 	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
 	goomba = new CGoomba(MARIO_START_X, MARIO_START_Y);
-	test = new CMario(0, 0, 0);
+	questionBlock = new CQuestionBlock(100, 100); 
+	superLeaf = new CSuperLeaf(300, 300);
+
 }
  
 /*
@@ -113,6 +120,7 @@ void Update(DWORD dt)
 {
 	mario->Update(dt);
 	goomba->Update(dt);
+	superLeaf->Update(dt);
 }
 
 /*
@@ -134,6 +142,8 @@ void Render()
 
 		mario->Render();
 		goomba->Render();
+		questionBlock->Render();
+		superLeaf->Render();
 
 		//
 		// TEST SPRITE DRAW

@@ -26,6 +26,31 @@ void CSprite::Draw(float x, float y)
 	game->Draw(x, y, texture, left, top, right, bottom);
 }
 
+void CSprite::DrawFlipX(float x, float y) {
+	DebugOut(L"[INFO] Rotate");
+
+	LPD3DXSPRITE spriteHandler = CGame::GetInstance()->GetSpriteHandler();
+
+	D3DXMATRIX oldMt;
+	spriteHandler->GetTransform(&oldMt);
+	D3DXMATRIX newMt;
+
+	D3DXVECTOR2 top_left = D3DXVECTOR2(x, y);
+
+	D3DXVECTOR2 rotate = D3DXVECTOR2(-1, 1);
+
+	D3DXMatrixTransformation2D(&newMt, &top_left, 0.0f, &rotate, NULL, 0.0f, NULL);
+	D3DXMATRIX finalMt = newMt * oldMt;
+
+	spriteHandler->SetTransform(&finalMt);
+
+	x -= (right - left);
+
+	CGame::GetInstance()->DrawFlipX(x, y, texture, left, top, right, bottom);
+
+	spriteHandler->SetTransform(&oldMt);
+}
+
 void CSprites::Add(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
 	LPSPRITE s = new CSprite(id, left, top, right, bottom, tex);
