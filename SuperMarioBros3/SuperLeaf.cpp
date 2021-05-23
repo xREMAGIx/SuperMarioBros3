@@ -11,7 +11,8 @@ void CSuperLeaf::Update(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-
+	/*
+	
 	int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
 	if (x <= 100 || x >= 150) {
 		vx = -vx;
@@ -37,6 +38,7 @@ void CSuperLeaf::Update(DWORD dt)
 			y = (float)(BackBufferHeight - SUPER_LEAF_HEIGHT);
 		}
 	}
+	*/
 }
 
 void CSuperLeaf::Render()

@@ -27,8 +27,6 @@ void CSprite::Draw(float x, float y)
 }
 
 void CSprite::DrawFlipX(float x, float y) {
-	DebugOut(L"[INFO] Rotate");
-
 	LPD3DXSPRITE spriteHandler = CGame::GetInstance()->GetSpriteHandler();
 
 	D3DXMATRIX oldMt;
@@ -94,8 +92,35 @@ void CAnimation::Render(float x, float y)
 		}
 
 	}
-
 	frames[currentFrame]->GetSprite()->Draw(x, y);
+}
+
+void CAnimation::Render(float x, float y, float direction)
+{
+	DWORD now = GetTickCount();
+	if (currentFrame == -1)
+	{
+		currentFrame = 0;
+		lastFrameTime = now;
+	}
+	else
+	{
+		DWORD t = frames[currentFrame]->GetTime();
+		if (now - lastFrameTime > t)
+		{
+			currentFrame++;
+			lastFrameTime = now;
+			if (currentFrame == frames.size()) currentFrame = 0;
+			//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
+		}
+
+	}
+	if (direction < 0) {
+		frames[currentFrame]->GetSprite()->Draw(x, y);
+	}
+	else {
+		frames[currentFrame]->GetSprite()->DrawFlipX(x, y);
+	}
 }
 
 CAnimations* CAnimations::__instance = NULL;

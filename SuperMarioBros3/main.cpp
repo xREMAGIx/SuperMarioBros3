@@ -32,6 +32,7 @@
 #define ID_TEX_HUD 30
 #define ID_TEX_INTRO 40
 
+CGame* game;
 CMario* mario;
 CGoomba* goomba;
 CQuestionBlock* questionBlock;
@@ -40,6 +41,40 @@ CSuperLeaf* superLeaf;
 #define MARIO_START_X 10.0f
 #define MARIO_START_Y 130.0f
 #define MARIO_START_VX 0.001f
+
+class CSampleKeyHander : public CKeyEventHandler
+{
+	virtual void KeyState(BYTE* states);
+	virtual void OnKeyDown(int KeyCode);
+	virtual void OnKeyUp(int KeyCode);
+};
+
+CSampleKeyHander* keyHandler;
+
+void CSampleKeyHander::OnKeyDown(int KeyCode)
+{
+	DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	switch (KeyCode)
+	{
+	case DIK_SPACE:
+		mario->SetState(MARIO_STATE_JUMP);
+		break;
+	}
+}
+
+void CSampleKeyHander::OnKeyUp(int KeyCode)
+{
+	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+}
+
+void CSampleKeyHander::KeyState(BYTE* states)
+{
+	if (game->IsKeyDown(DIK_RIGHT))
+		mario->SetState(MARIO_STATE_WALKING_RIGHT);
+	else if (game->IsKeyDown(DIK_LEFT))
+		mario->SetState(MARIO_STATE_WALKING_LEFT);
+	else mario->SetState(MARIO_STATE_IDLE);
+}
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -82,6 +117,7 @@ void LoadResources()
 	LoadSprites(sprites, "data/misc-sprite.txt", texMisc);
 	LoadSprites(sprites, "data/intro-sprite.txt", texIntro);
 
+	LoadAnimations(animations, "data/character-animation.txt");
 	LoadAnimations(animations, "data/enemies-animation.txt");
 	LoadAnimations(animations, "data/misc-animation.txt");
 
@@ -105,7 +141,10 @@ void LoadResources()
 	//ani->Add(20003);
 	animations->Add(505, ani);
 
-	mario = new CMario(MARIO_START_X, MARIO_START_Y, MARIO_START_VX);
+	mario = new CMario();
+	CMario::AddAnimation(10101);		// idle left
+	CMario::AddAnimation(10102);		// walk left
+	mario->SetPosition(0.0f, 100.0f);
 	goomba = new CGoomba(MARIO_START_X, MARIO_START_Y);
 	questionBlock = new CQuestionBlock(100, 100); 
 	superLeaf = new CSuperLeaf(300, 300);
@@ -145,22 +184,6 @@ void Render()
 		questionBlock->Render();
 		superLeaf->Render();
 
-		//
-		// TEST SPRITE DRAW
-		//
-
-		/*
-		CTextures *textures = CTextures::GetInstance();
-
-		D3DXVECTOR3 p(20, 20, 0);
-		RECT r;
-		r.left = 274;
-		r.top = 234;
-		r.right = 292;
-		r.bottom = 264;
-		spriteHandler->Draw(textures->Get(ID_TEX_MARIO), &r, NULL, &p, D3DCOLOR_XRGB(255, 255, 255));
-		*/
-
 		spriteHandler->End();
 		d3ddv->EndScene();
 	}
@@ -180,7 +203,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	wc.lpfnWndProc = (WNDPROC)WinProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hIcon = (HICON)LoadImage(hInstance, WINDOW_ICON_PATH, IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+	wc.hIcon = NULL;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 	wc.lpszMenuName = NULL;
@@ -205,15 +228,13 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 
 	if (!hWnd)
 	{
+		OutputDebugString(L"[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
-		DebugOut(L"[ERROR] CreateWindow failed! ErrCode: %d\nAt: %s %d \n", ErrCode, _W(__FILE__), __LINE__);
-		return 0;
+		return FALSE;
 	}
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
-
-	SetDebugWindow(hWnd);
 
 	return hWnd;
 }
@@ -244,6 +265,9 @@ int Run()
 		if (dt >= tickPerFrame)
 		{
 			frameStart = now;
+
+			game->ProcessKeyboard();
+
 			Update(dt);
 			Render();
 		}
@@ -258,8 +282,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	CGame* game = CGame::GetInstance();
+	game = CGame::GetInstance();
 	game->Init(hWnd);
+
+	keyHandler = new CSampleKeyHander();
+	game->InitKeyboard(keyHandler);
+
 
 	LoadResources();
 	Run();

@@ -9,7 +9,7 @@ CGoomba::CGoomba(float x, float y) :CGameObject(x, y)
 void CGoomba::Update(DWORD dt)
 {
 	x += vx * dt;
-
+	/*
 	int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
 	if (x <= 0 || x >= BackBufferWidth - GOOMBA_WIDTH) {
 
@@ -24,6 +24,7 @@ void CGoomba::Update(DWORD dt)
 			x = (float)(BackBufferWidth - GOOMBA_WIDTH);
 		}
 	}
+	*/
 }
 
 void CGoomba::Render()

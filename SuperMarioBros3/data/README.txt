@@ -30,6 +30,8 @@ Sprite ID
 28: points
 29: hud 
 
-Animations ID
+Animations ID (id time [..spriteId])
+10101: small mario idle left
+10102: small mario walk left
 21001: question block 
 31401: goomba move
