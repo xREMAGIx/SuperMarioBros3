@@ -72,6 +72,9 @@
     <ClCompile Include="SuperLeaf.cpp">
       <Filter>Source Files\Miscs</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -107,6 +110,12 @@
       <Filter>Header Files\Miscs</Filter>
     </ClInclude>
     <ClInclude Include="SuperLeaf.h">
+      <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEventHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
       <Filter>Header Files\Miscs</Filter>
     </ClInclude>
   </ItemGroup>

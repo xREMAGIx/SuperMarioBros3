@@ -7,38 +7,32 @@ CSuperLeaf::CSuperLeaf(float x, float y) :CGameObject(x, y)
 	this->vy = SUPER_LEAF_SPEED_Y;
 };
 
-void CSuperLeaf::Update(DWORD dt)
+void CSuperLeaf::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	x += vx * dt;
-	y += vy * dt;
-	/*
-	
-	int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
-	if (x <= 100 || x >= 150) {
-		vx = -vx;
-		if (x <= 100)
-		{
-			x = 100;
-		}
-		else if (x >= 150)
-		{
-			x = (float)(150);
-		}
+	left = x;
+	top = y;
+	right = x + SUPER_LEAF_BBOX_WIDTH;
+	bottom = y + SUPER_LEAF_BBOX_HEIGHT;
+}
+
+void CSuperLeaf::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CGameObject::Update(dt, coObjects);
+
+	//
+	// TO-DO: make sure Goomba can interact with the world and to each of them too!
+	// 
+
+	x += dx;
+	y += dy;
+
+	if (vx < 0 && x < 0) {
+		x = 0; vx = -vx;
 	}
 
-	int BackBufferHeight = CGame::GetInstance()->GetBackBufferHeight();
-	if (y <= 0 || y >= BackBufferHeight - SUPER_LEAF_WIDTH) {
-		vy = -vy;
-		if (y <= 0)
-		{
-			y = 0;
-		}
-		else if (y >= BackBufferHeight - SUPER_LEAF_HEIGHT)
-		{
-			y = (float)(BackBufferHeight - SUPER_LEAF_HEIGHT);
-		}
+	if (vx > 0 && x > 290) {
+		x = 290; vx = -vx;
 	}
-	*/
 }
 
 void CSuperLeaf::Render()
@@ -51,6 +45,9 @@ void CSuperLeaf::Render()
 	else {
 		sprite->Draw(x, y);
 	}
-	
+}
+
+void CSuperLeaf::SetState(int state)
+{
 
 }

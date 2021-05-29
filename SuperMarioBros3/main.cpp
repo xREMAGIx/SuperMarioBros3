@@ -14,6 +14,8 @@
 #include "Goomba.h"
 #include "QuestionBlock.h"
 #include "SuperLeaf.h"
+#include "Block.h"
+
 
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -34,13 +36,11 @@
 
 CGame* game;
 CMario* mario;
-CGoomba* goomba;
 CQuestionBlock* questionBlock;
 CSuperLeaf* superLeaf;
+CGoomba* goomba;
 
-#define MARIO_START_X 10.0f
-#define MARIO_START_Y 130.0f
-#define MARIO_START_VX 0.001f
+vector<LPGAMEOBJECT> objects;
 
 class CSampleKeyHander : public CKeyEventHandler
 {
@@ -123,13 +123,47 @@ void LoadResources()
 
 
 	mario = new CMario();
-	CMario::AddAnimation(10101);		// idle left
-	CMario::AddAnimation(10102);		// walk left
-	CMario::AddAnimation(10103);		// walk left
-	mario->SetPosition(0.0f, 100.0f);
-	goomba = new CGoomba(MARIO_START_X, MARIO_START_Y);
+	mario->AddAnimation(10101);		// idle left
+	mario->AddAnimation(10102);		// walk left
+	mario->AddAnimation(10103);		// walk left
+	mario->SetPosition(50.0f, 0);
+	objects.push_back(mario);	
+	
+	for (int i = 0; i < 5; i++)
+	{
+		CBlock* brick = new CBlock();
+		brick->SetPosition(100.0f + i * 60.0f, 74.0f);
+		objects.push_back(brick);
+
+		brick = new CBlock();
+		brick->SetPosition(100.0f + i * 60.0f, 90.0f);
+		objects.push_back(brick);
+
+		brick = new CBlock();
+		brick->SetPosition(84.0f + i * 60.0f, 90.0f);
+		objects.push_back(brick);
+	}
+
+	for (int i = 0; i < 30; i++)
+	{
+		CBlock* brick = new CBlock();
+		brick->SetPosition(0 + i * 16.0f, 150);
+		objects.push_back(brick);
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		goomba = new CGoomba();
+		goomba->AddAnimation(31401);	//walking left
+		goomba->AddAnimation(31402);	//walking left
+
+		goomba->SetPosition(200 + i * 60, 135);
+		goomba->SetState(GOOMBA_STATE_WALKING);
+		objects.push_back(goomba);
+	}
+	/*
 	questionBlock = new CQuestionBlock(100, 100); 
 	superLeaf = new CSuperLeaf(300, 300);
+	*/
 
 }
  
@@ -139,9 +173,28 @@ void LoadResources()
 */
 void Update(DWORD dt)
 {
-	mario->Update(dt);
-	goomba->Update(dt);
-	superLeaf->Update(dt);
+	// TO-DO: This is a "dirty" way, need a more organized way 
+
+	vector<LPGAMEOBJECT> coObjects;
+	for (int i = 1; i < objects.size(); i++)
+	{
+		coObjects.push_back(objects[i]);
+	}
+
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Update(dt, &coObjects);
+	}
+
+
+	// Update camera to follow mario
+	float cx, cy;
+	mario->GetPosition(cx, cy);
+
+	cx -= SCREEN_WIDTH / 2;
+	cy -= SCREEN_HEIGHT / 2;
+
+	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
 }
 
 /*
@@ -161,10 +214,16 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
+		for (int i = 0; i < objects.size(); i++)
+			objects[i]->Render();
+
+		/*
+
 		mario->Render();
 		goomba->Render();
 		questionBlock->Render();
 		superLeaf->Render();
+		*/
 
 		spriteHandler->End();
 		d3ddv->EndScene();

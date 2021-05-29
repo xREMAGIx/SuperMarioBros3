@@ -1,39 +1,60 @@
 #include "Game.h"
 #include "Goomba.h"
 
-CGoomba::CGoomba(float x, float y) :CGameObject(x, y)
+void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	this->vx = GOOMBA_SPEED;
-};
+	left = x;
+	top = y;
+	right = x + GOOMBA_BBOX_WIDTH;
 
-void CGoomba::Update(DWORD dt)
+	if (state == GOOMBA_STATE_DIE)
+		bottom = y + GOOMBA_BBOX_HEIGHT_DIE;
+	else
+		bottom = y + GOOMBA_BBOX_HEIGHT;
+}
+
+void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	x += vx * dt;
-	/*
-	int BackBufferWidth = CGame::GetInstance()->GetBackBufferWidth();
-	if (x <= 0 || x >= BackBufferWidth - GOOMBA_WIDTH) {
+	CGameObject::Update(dt, coObjects);
 
-		vx = -vx;
+	//
+	// TO-DO: make sure Goomba can interact with the world and to each of them too!
+	// 
 
-		if (x <= 0)
-		{
-			x = 0;
-		}
-		else if (x >= BackBufferWidth - GOOMBA_WIDTH)
-		{
-			x = (float)(BackBufferWidth - GOOMBA_WIDTH);
-		}
+	x += dx;
+	y += dy;
+
+	if (vx < 0 && x < 0) {
+		x = 0; vx = -vx;
 	}
-	*/
+
+	if (vx > 0 && x > 290) {
+		x = 290; vx = -vx;
+	}
 }
 
 void CGoomba::Render()
 {
-	LPANIMATION ani;
 
-	//[RED FLAG][TODO]: Student needs to think about how to associate this animation/asset to Mario!!
-	if (vx > 0) ani = CAnimations::GetInstance()->Get(31401);
-	else ani = CAnimations::GetInstance()->Get(504);
+	int ani = GOOMBA_ANI_WALKING;
+	if (state == GOOMBA_STATE_DIE) {
+		ani = GOOMBA_ANI_DIE;
+	}
+	animations[ani]->Render(x, y);
 
-	ani->Render(x, y);
+}
+
+void CGoomba::SetState(int state)
+{
+	CGameObject::SetState(state);
+	switch (state)
+	{
+	case GOOMBA_STATE_DIE:
+		y += GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE + 1;
+		vx = 0;
+		vy = 0;
+		break;
+	case GOOMBA_STATE_WALKING:
+		vx = -GOOMBA_SPEED;
+	}
 }

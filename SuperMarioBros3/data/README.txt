@@ -11,8 +11,8 @@ Sprite ID
 8: coin
 9: button
 10: question
-12: block
-13: brick
+11: block
+12: brick
 14: goomba
 15: red goomba
 16: big wing
