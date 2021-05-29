@@ -122,28 +122,10 @@ void LoadResources()
 	LoadAnimations(animations, "data/misc-animation.txt");
 
 
-	ani = new CAnimation(1000);
-	ani->Add(12001);
-	ani->Add(12002);
-	ani->Add(12003);
-	ani->Add(12004);
-	//ani->Add(20003);
-	animations->Add(503, ani);
-	ani = new CAnimation(1000);
-	ani->Add(10002);
-	ani->Add(10001);
-	//ani->Add(20003);
-	animations->Add(504, ani);
-
-	ani = new CAnimation(1000);
-	ani->Add(20001);
-	ani->Add(20002);
-	//ani->Add(20003);
-	animations->Add(505, ani);
-
 	mario = new CMario();
 	CMario::AddAnimation(10101);		// idle left
 	CMario::AddAnimation(10102);		// walk left
+	CMario::AddAnimation(10103);		// walk left
 	mario->SetPosition(0.0f, 100.0f);
 	goomba = new CGoomba(MARIO_START_X, MARIO_START_Y);
 	questionBlock = new CQuestionBlock(100, 100); 

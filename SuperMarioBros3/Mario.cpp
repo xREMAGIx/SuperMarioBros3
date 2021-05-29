@@ -37,6 +37,9 @@ void CMario::Render()
 		ani = MARIO_ANI_IDLE_LEFT;
 	}
 	else ani = MARIO_ANI_WALKING_LEFT;
+	if (y < 100) {
+		ani = MARIO_ANI_JUMPING_LEFT;
+	}
 	animations[ani]->Render(x, y, nx);
 
 }
