@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Mario.h"
 #include "Goomba.h"
+#include "Block.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -83,6 +84,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
+
+			//Jump touch block
+			if (dynamic_cast<CBlock*>(e->obj)) // if e->obj is Block 
+			{
+				CBlock* block = dynamic_cast<CBlock*>(e->obj);
+				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				{
+					SetState(MARIO_STATE_IDLE);
+				}
+			}
 		}
 	}
 
@@ -93,13 +104,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::Render()
 {
 	int ani;
-	if (vx == 0)
+	if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
 	{
-		ani = MARIO_ANI_IDLE_LEFT;
-	}
-	else ani = MARIO_ANI_WALKING_LEFT;
-	if (y < 100) {
 		ani = MARIO_ANI_JUMPING_LEFT;
+	}
+	else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
+		ani = MARIO_ANI_WALKING_LEFT;
+	}
+	else {
+		ani = MARIO_ANI_IDLE_LEFT;
 	}
 	animations[ani]->Render(x, y, nx);
 
@@ -110,21 +123,26 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case MARIO_STATE_WALKING_RIGHT:
+	case MARIO_STATE_WALKING_RIGHT: 
+	case MARIO_STATE_JUMP_RIGHT:
+	{
 		vx = MARIO_WALKING_SPEED;
 		nx = 1;
 		break;
+	}
 	case MARIO_STATE_WALKING_LEFT:
+	case MARIO_STATE_JUMP_LEFT:
+	{
 		vx = -MARIO_WALKING_SPEED;
 		nx = -1;
 		break;
+	}
 	case MARIO_STATE_JUMP:
 		if (y == 100)
 			vy = -MARIO_JUMP_SPEED_Y;
 	case MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
-
 	case MARIO_STATE_IDLE:
 		vx = 0;
 		break;

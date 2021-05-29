@@ -57,7 +57,9 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		mario->SetState(MARIO_STATE_JUMP);
+		if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
+			mario->SetState(MARIO_STATE_JUMP);
+		}
 		break;
 	}
 }
@@ -69,11 +71,24 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 
 void CSampleKeyHander::KeyState(BYTE* states)
 {
-	if (game->IsKeyDown(DIK_RIGHT))
-		mario->SetState(MARIO_STATE_WALKING_RIGHT);
-	else if (game->IsKeyDown(DIK_LEFT))
-		mario->SetState(MARIO_STATE_WALKING_LEFT);
-	else mario->SetState(MARIO_STATE_IDLE);
+	if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
+		if (game->IsKeyDown(DIK_RIGHT)) {
+			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		} 
+		else if (game->IsKeyDown(DIK_LEFT)) {
+			mario->SetState(MARIO_STATE_WALKING_LEFT);
+		}
+		else 
+			mario->SetState(MARIO_STATE_IDLE);
+	}
+	else {
+		if (game->IsKeyDown(DIK_RIGHT)) {
+			mario->SetState(MARIO_STATE_JUMP_RIGHT);
+		}
+		else if (game->IsKeyDown(DIK_LEFT)) {
+			mario->SetState(MARIO_STATE_JUMP_LEFT);
+		}
+	}
 }
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
