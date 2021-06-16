@@ -75,6 +75,12 @@
     <ClCompile Include="Block.cpp">
       <Filter>Source Files\Miscs</Filter>
     </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -117,6 +123,12 @@
     </ClInclude>
     <ClInclude Include="Block.h">
       <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMap.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

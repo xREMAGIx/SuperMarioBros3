@@ -15,6 +15,7 @@
 #include "QuestionBlock.h"
 #include "SuperLeaf.h"
 #include "Block.h"
+#include "GameMap.h"
 
 
 
@@ -39,6 +40,14 @@ CMario* mario;
 CQuestionBlock* questionBlock;
 CSuperLeaf* superLeaf;
 CGoomba* goomba;
+GameMap* map;
+
+void LoadMap()
+{
+	// load map
+	map = new GameMap();
+	map->LoadMap("mapfiles\\map1-1.txt");
+}
 
 vector<LPGAMEOBJECT> objects;
 
@@ -141,28 +150,30 @@ void LoadResources()
 	mario->AddAnimation(10101);		// idle left
 	mario->AddAnimation(10102);		// walk left
 	mario->AddAnimation(10103);		// walk left
-	mario->SetPosition(50.0f, 0);
+	mario->SetPosition(50.0f, 450.0f);
 	objects.push_back(mario);	
 	
+
+
 	for (int i = 0; i < 5; i++)
 	{
 		CBlock* brick = new CBlock();
-		brick->SetPosition(100.0f + i * 60.0f, 74.0f);
+		brick->SetPosition(100.0f + i * 60.0f, 74.0f + 450.0f);
 		objects.push_back(brick);
 
 		brick = new CBlock();
-		brick->SetPosition(100.0f + i * 60.0f, 90.0f);
+		brick->SetPosition(100.0f + i * 60.0f, 90.0f + 450.0f);
 		objects.push_back(brick);
 
 		brick = new CBlock();
-		brick->SetPosition(84.0f + i * 60.0f, 90.0f);
+		brick->SetPosition(84.0f + i * 60.0f, 90.0f + 450.0f);
 		objects.push_back(brick);
 	}
 
 	for (int i = 0; i < 30; i++)
 	{
 		CBlock* brick = new CBlock();
-		brick->SetPosition(0 + i * 16.0f, 150);
+		brick->SetPosition(0 + i * 16.0f, 150 + 450.0f);
 		objects.push_back(brick);
 	}
 	for (int i = 0; i < 4; i++)
@@ -171,9 +182,20 @@ void LoadResources()
 		goomba->AddAnimation(31401);	//walking left
 		goomba->AddAnimation(31402);	//walking left
 
-		goomba->SetPosition(200 + i * 60, 135);
+		goomba->SetPosition(200 + i * 60, 135 + 450.0f);
 		goomba->SetState(GOOMBA_STATE_WALKING);
 		objects.push_back(goomba);
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		questionBlock = new CQuestionBlock();
+		questionBlock->AddAnimation(21001);	//idle
+		questionBlock->AddAnimation(21002);	//opened
+
+		questionBlock->SetPosition(200 + i * 60, 30 + 450.0f);
+		questionBlock->SetState(QUESTION_BLOCK_STATE_IDLE);
+		objects.push_back(questionBlock);
 	}
 	/*
 	questionBlock = new CQuestionBlock(100, 100); 
@@ -208,8 +230,7 @@ void Update(DWORD dt)
 
 	cx -= SCREEN_WIDTH / 2;
 	cy -= SCREEN_HEIGHT / 2;
-
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, cy /*cy*/);
 }
 
 /*
@@ -229,6 +250,7 @@ void Render()
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 
+
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
 
@@ -239,7 +261,7 @@ void Render()
 		questionBlock->Render();
 		superLeaf->Render();
 		*/
-
+		map->DrawMap();
 		spriteHandler->End();
 		d3ddv->EndScene();
 	}
@@ -346,6 +368,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 	LoadResources();
+	LoadMap();
 	Run();
 
 	return 0;

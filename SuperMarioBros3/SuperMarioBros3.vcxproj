@@ -147,11 +147,13 @@
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
@@ -163,12 +165,14 @@
   <ItemGroup>
     <ClInclude Include="debug.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="Mushroom.h" />
     <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="SuperLeaf.h" />

@@ -5,6 +5,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Block.h"
+#include "QuestionBlock.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -64,6 +65,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (goomba->GetState() != GOOMBA_STATE_DIE)
 					{
 						goomba->SetState(GOOMBA_STATE_DIE);
+						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
@@ -81,6 +83,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							else
 								SetState(MARIO_STATE_DIE);
 						}
+					}
+				}
+			}
+
+			//Touch Question Block
+			if (dynamic_cast<CQuestionBlock*>(e->obj)) 
+			{
+				CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
+				if (e->ny > 0)
+				{
+					if (questionBlock->GetState() == QUESTION_BLOCK_STATE_IDLE)
+					{
+						questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);
 					}
 				}
 			}

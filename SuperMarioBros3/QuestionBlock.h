@@ -1,13 +1,19 @@
 #pragma once
 #include "GameObject.h"
 
-#define QUESTION_BLOCK_WIDTH 16
-#define QUESTION_BLOCK_HEIGHT 16
+//State
+#define QUESTION_BLOCK_STATE_IDLE  0
+#define QUESTION_BLOCK_STATE_OPENED  1
+//Animate
+#define QUESTION_BLOCK_ANI_IDLE		0
+#define QUESTION_BLOCK_ANI_OPENED		1
+//Collision
+#define QUESTION_BLOCK_BBOX_WIDTH	16
+#define QUESTION_BLOCK_BBOX_HEIGHT	16
 
 class CQuestionBlock : public CGameObject
 {
 public:
-	CQuestionBlock(float x, float y);
-	void Update(DWORD dt);
-	void Render();
+	virtual void Render();
+	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
