@@ -1,8 +1,35 @@
 #include "helpers.h"
 #include "debug.h"
+#include "Animations.h"
 
-void LoadSprites(CSprites* sprites, const char* fileDir, LPDIRECT3DTEXTURE9 texture) {
-	std::fstream file;
+void LoadSprites(LPCWSTR line, LPDIRECT3DTEXTURE9 texture) {
+	CSprites* sprites = CSprites::GetInstance();
+
+	ifstream f;
+	f.open(line);
+	char str[4096];
+
+	while (f.getline(str, 4096))
+	{
+		string line(str);
+
+		if (line[0] == '#') continue;	// skip comment lines	
+
+		vector<string> tokens = split(line);
+		if (tokens.size() < 6) return; // skip invalid lines
+
+		int id = atoi(tokens[0].c_str());
+		int type = atoi(tokens[1].c_str());
+		int left = atoi(tokens[2].c_str());
+		int top = atoi(tokens[3].c_str());
+		int right = atoi(tokens[4].c_str());
+		int bottom = atoi(tokens[5].c_str());
+
+		sprites->Add(id, left, top, right, bottom, texture);
+	}
+
+	f.close();
+	/*
 	file.open(fileDir, ios::in);
 	if (file.is_open()) {
 		std::string line;
@@ -19,9 +46,46 @@ void LoadSprites(CSprites* sprites, const char* fileDir, LPDIRECT3DTEXTURE9 text
 		}
 		file.close();
 	}
+	*/
+
 }
 
-void LoadAnimations(CAnimations* animations, const char* fileDir) {
+void LoadAnimations(LPCWSTR line) {
+	CAnimations* animations = CAnimations::GetInstance();
+
+	ifstream f;
+	f.open(line);
+	char str[2048];
+
+	while (f.getline(str, 2048))
+	{
+		string line(str);
+
+		if (line[0] == '#') continue;	// skip comment lines	
+		vector<string> tokens = split(line);
+
+		if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
+
+		int id = atoi(tokens[0].c_str());
+		DebugOut(L"[INFO] Load animation id %d\n", id);
+
+		int time = atoi(tokens[1].c_str());
+		LPANIMATION ani = new CAnimation();
+		DebugOut(L"[INFO] Load token size %d\n", tokens.size());
+
+		for (int i = 2; i < tokens.size(); i++ )
+		{
+			int sprite_id = atoi(tokens[i].c_str());
+
+			ani->Add(sprite_id, time);
+		}
+		animations->Add(id, ani);
+
+	}
+
+	f.close();
+	/*
+	DebugOut(L"[INFO] FILEDIR: %d", line);
 	std::fstream file;
 	LPANIMATION ani;
 	file.open(fileDir, ios::in);
@@ -29,7 +93,6 @@ void LoadAnimations(CAnimations* animations, const char* fileDir) {
 		std::string line;
 		while (getline(file, line)) {
 			stringstream ssin(line);
-			DebugOut(L"[INFO] NEWLINE\n");
 			int spriteId;
 			int id, time;
 			ssin >> id;
@@ -40,13 +103,13 @@ void LoadAnimations(CAnimations* animations, const char* fileDir) {
 				ssin >> spriteId;
 				if (!ssin)
 					break;
-				DebugOut(L"[INFO] RUN: %d", spriteId);
 				ani->Add(spriteId);
 			}
 			animations->Add(id, ani);
 		}
 		file.close();
 	}
+	*/
 }
 
 void DebugOut(wchar_t* fmt, ...)

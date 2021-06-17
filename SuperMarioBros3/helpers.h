@@ -16,10 +16,28 @@
 #include <stdlib.h>
 #include <vector>
 
+//CONSTANTS
+#define WINDOW_CLASS_NAME L"SampleWindow"
+#define MAIN_WINDOW_TITLE L"Super Mario Bros 3"
+#define WINDOW_ICON_PATH L"mario.ico"
+
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(200, 200, 255)
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
+#define MAX_FRAME_RATE 60
+
+#define ID_TEX_MARIO 0
+#define ID_TEX_ENEMY 10
+#define ID_TEX_MISC 20
+#define ID_TEX_HUD 30
+#define ID_TEX_INTRO 40
+
+//END-CONSTANTS
 
 using namespace std;
-void LoadSprites(CSprites* sprites, const char* fileDir, LPDIRECT3DTEXTURE9 texture);
-void LoadAnimations(CAnimations* animations, const char* fileDir);
+void LoadSprites(LPCWSTR line, LPDIRECT3DTEXTURE9 texture);
+void LoadAnimations(LPCWSTR line);
 
 void DebugOut(wchar_t* fmt, ...);
 

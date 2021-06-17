@@ -40,24 +40,6 @@ void GameMap::LoadMap(const char* filepath)
 			inFile >> listTile[i][j];
 		}
 	}
-	/*
-	std::ifstream  file;
-	file.open(filepath, ios::in);
-	if (file.is_open()) {
-		for (int i = 0; i < 155; i++)
-		{
-			for (int j = 0; j < 27; j++) 
-			{
-				int id;
-				file >> id;
-				listTile[i][j] = id;
-				DebugOut(L"[INFO] LOADMAP: %d", id);
-			}
-		}
-
-		file.close();
-	}
-	*/
 
 	CTextures* textures = CTextures::GetInstance();
 	textures->Add(1, L"mapfiles\\stagetiles.png", D3DCOLOR_XRGB(224, 163, 216));

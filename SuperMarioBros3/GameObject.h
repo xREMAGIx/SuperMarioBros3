@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "Sprites.h"
-
+#include "Animations.h"
 
 using namespace std;
 
@@ -47,6 +47,7 @@ public:
 	int state;
 
 	DWORD dt;
+	LPANIMATION_SET animation_set;
 
 	vector<LPANIMATION> animations;
 
@@ -79,6 +80,7 @@ public:
 
 	//Animation
 	void AddAnimation(int aniId);
+	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
 
 	CGameObject();
 

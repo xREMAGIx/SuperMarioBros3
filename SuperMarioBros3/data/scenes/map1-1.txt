@@ -1,0 +1,75 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\mario-luigi.png	68	145	190
+10	textures\enemies.png	68	145	190
+20	textures\npc-misc.png	166	185	255
+
+# id	file_path	texture_id
+[SPRITES]
+0	data\character-sprite.txt	0
+10	data\enemies-sprite.txt	10
+20	data\misc-sprite.txt	20
+						
+# ani_id	file_path	
+[ANIMATIONS]
+0	data\character-animation.txt
+10	data\enemies-animation.txt
+20	data\misc-animation.txt
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# MARIO
+1	10101	10102	10103
+# GOOMBA
+2	31401	31402
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 0 = Mario , 1 = Block, 2 = Goomba
+# MARIO
+0	50.0	400.0	1
+
+# GOOMBA
+2	200	400.0	2
+2	260	400.0	2
+2	320	400.0	2
+2	480	400.0	2
+2	500	400.0	2
+
+# BRICK 
+# --- platform (hint: I created the list using Excel!) ----
+1	0	432	2
+1	16	432	2
+1	32	432	2
+1	48	432	2
+1	64	432	2
+1	80	432	2
+1	96	432	2
+1	112	432	2
+1	128	432	2
+1	144	432	2
+1	160	432	2
+1	176	432	2
+1	192	432	2
+1	208	432	2
+1	224	432	2
+1	240	432	2
+1	256	432	2
+1	272	432	2
+1	288	432	2
+1	304	432	2
+1	320	432	2
+1	336	432	2
+1	352	432	2
+1	368	432	2
+1	384	432	2
+1	400	432	2
+1	416	432	2
+1	432	432	2
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+50	300	98	1	316	150	1
+

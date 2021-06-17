@@ -40,8 +40,7 @@ void CGoomba::Render()
 	if (state == GOOMBA_STATE_DIE) {
 		ani = GOOMBA_ANI_DIE;
 	}
-	animations[ani]->Render(x, y);
-
+	animation_set->at(ani)->Render(x, y, -1, 255);
 }
 
 void CGoomba::SetState(int state)

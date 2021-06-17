@@ -129,8 +129,7 @@ void CMario::Render()
 	else {
 		ani = MARIO_ANI_IDLE_LEFT;
 	}
-	animations[ani]->Render(x, y, nx);
-
+	animation_set->at(ani)->Render(x, y, nx, 255);
 }
 
 void CMario::SetState(int state)

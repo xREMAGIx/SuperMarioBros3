@@ -20,13 +20,13 @@ CSprites* CSprites::GetInstance()
 	return __instance;
 }
 
-void CSprite::Draw(float x, float y)
+void CSprite::Draw(float x, float y, int alpha)
 {
 	CGame* game = CGame::GetInstance();
-	game->Draw(x, y, texture, left, top, right, bottom);
+	game->Draw(x, y, texture, left, top, right, bottom, alpha);
 }
 
-void CSprite::DrawFlipX(float x, float y) {
+void CSprite::DrawFlipX(float x, float y, int alpha) {
 	LPD3DXSPRITE spriteHandler = CGame::GetInstance()->GetSpriteHandler();
 
 	D3DXMATRIX oldMt;
@@ -44,7 +44,7 @@ void CSprite::DrawFlipX(float x, float y) {
 
 	x -= (right - left);
 
-	CGame::GetInstance()->DrawFlipX(x, y, texture, left, top, right, bottom);
+	CGame::GetInstance()->DrawFlipX(x, y, texture, left, top, right, bottom, alpha);
 
 	spriteHandler->SetTransform(&oldMt);
 }
@@ -60,83 +60,16 @@ LPSPRITE CSprites::Get(int id)
 	return sprites[id];
 }
 
-
-
-void CAnimation::Add(int spriteId, DWORD time)
+/*
+	Clear all loaded textures
+*/
+void CSprites::Clear()
 {
-	int t = time;
-	if (time == 0) t = this->defaultTime;
-
-	LPSPRITE sprite = CSprites::GetInstance()->Get(spriteId);
-	LPANIMATION_FRAME frame = new CAnimationFrame(sprite, t);
-	frames.push_back(frame);
-}
-
-void CAnimation::Render(float x, float y)
-{
-	DWORD now = GetTickCount();
-	if (currentFrame == -1)
+	for (auto x : sprites)
 	{
-		currentFrame = 0;
-		lastFrameTime = now;
+		LPSPRITE s = x.second;
+		delete s;
 	}
-	else
-	{
-		DWORD t = frames[currentFrame]->GetTime();
-		if (now - lastFrameTime > t)
-		{
-			currentFrame++;
-			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
-			//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
-		}
 
-	}
-	frames[currentFrame]->GetSprite()->Draw(x, y);
-}
-
-void CAnimation::Render(float x, float y, float direction)
-{
-	DWORD now = GetTickCount();
-	if (currentFrame == -1)
-	{
-		currentFrame = 0;
-		lastFrameTime = now;
-	}
-	else
-	{
-		DWORD t = frames[currentFrame]->GetTime();
-		if (now - lastFrameTime > t)
-		{
-			currentFrame++;
-			lastFrameTime = now;
-			if (currentFrame == frames.size()) currentFrame = 0;
-			//DebugOut(L"now: %d, lastFrameTime: %d, t: %d\n", now, lastFrameTime, t);
-		}
-
-	}
-	if (direction < 0) {
-		frames[currentFrame]->GetSprite()->Draw(x, y);
-	}
-	else {
-		frames[currentFrame]->GetSprite()->DrawFlipX(x, y);
-	}
-}
-
-CAnimations* CAnimations::__instance = NULL;
-
-CAnimations* CAnimations::GetInstance()
-{
-	if (__instance == NULL) __instance = new CAnimations();
-	return __instance;
-}
-
-void CAnimations::Add(int id, LPANIMATION ani)
-{
-	animations[id] = ani;
-}
-
-LPANIMATION CAnimations::Get(int id)
-{
-	return animations[id];
+	sprites.clear();
 }

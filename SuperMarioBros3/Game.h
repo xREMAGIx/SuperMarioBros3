@@ -2,10 +2,19 @@
 #include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <unordered_map>
+#include <iostream>
+#include <fstream>
+
 #include "KeyEventHandler.h"
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#include "Scene.h"
+#include "PlayScene.h"
+#include "helpers.h"
+
+using namespace std;
 
 #define KEYBOARD_BUFFER_SIZE 1024
 
@@ -34,20 +43,32 @@ class CGame
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 
+	//Screen
+	int screen_width = SCREEN_WIDTH;
+	int screen_height = SCREEN_HEIGHT;
+
+	//Scene
+	unordered_map<int, LPSCENE> scenes;
+	int current_scene;
+	void _ParseSection_SETTINGS(string line);
+	void _ParseSection_SCENES(string line);
+
+
 public:
 	//Sprite
 	void Init(HWND hWnd);
-	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom);
-	void DrawFlipX(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom);
+	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha);
+	void DrawFlipX(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha);
 	LPDIRECT3DTEXTURE9 LoadTexture(LPCWSTR texturePath, D3DCOLOR transparentColor);
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
 	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
 
 	//Input
-	void InitKeyboard(LPKEYEVENTHANDLER handler);
+	void InitKeyboard();
 	int IsKeyDown(int KeyCode);
 	void ProcessKeyboard();
 	LPDIRECT3DDEVICE9 GetDirect3DDevice() { return this->d3ddv; }
+	void SetKeyHandler(LPKEYEVENTHANDLER handler) { keyHandler = handler; }
 
 	//Collision
 	static void SweptAABB(
@@ -80,6 +101,17 @@ public:
 		return D3DXVECTOR2(cam_x, cam_y);
 	}
 	static CGame* GetInstance();
+
+	//Load Data
+	void Load(LPCWSTR gameFile);
+
+	//Scene
+	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	void SwitchScene(int scene_id);
+
+	//Screen
+	int GetScreenWidth() { return screen_width; }
+	int GetScreenHeight() { return screen_height; }
 
 	~CGame();
 };

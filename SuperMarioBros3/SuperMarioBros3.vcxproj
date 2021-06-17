@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -151,10 +152,14 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="helpers.cpp" />
+    <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="Mushroom.cpp" />
+    <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="Portal.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -163,6 +168,7 @@
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animations.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameMap.h" />
@@ -173,7 +179,10 @@
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Mushroom.h" />
+    <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="Portal.h" />
     <ClInclude Include="QuestionBlock.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Sprites.h" />
     <ClInclude Include="SuperLeaf.h" />
     <ClInclude Include="Textures.h" />
