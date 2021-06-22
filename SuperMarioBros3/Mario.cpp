@@ -5,6 +5,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Block.h"
+#include "Brick.h"
 #include "QuestionBlock.h"
 #include "InvisibleBlock.h"
 
@@ -101,7 +102,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Jump touch block
 			if (dynamic_cast<CBlock*>(e->obj)) // if e->obj is Block 
 			{
+				if (ny != 0) vy = 0;
+				if (nx != 0) vx = 0;
 				CBlock* block = dynamic_cast<CBlock*>(e->obj);
+				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				{
+					SetState(MARIO_STATE_IDLE);
+				}
+			}
+
+			//Jump touch block
+			if (dynamic_cast<CBrick*>(e->obj)) // if e->obj is Block 
+			{
+				if (ny != 0) vy = 0;
+				if (nx != 0) vx = 0;
+				CBrick* block = dynamic_cast<CBrick*>(e->obj);
 				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
 					SetState(MARIO_STATE_IDLE);
