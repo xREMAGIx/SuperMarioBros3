@@ -6,6 +6,7 @@
 #include "Goomba.h"
 #include "Block.h"
 #include "QuestionBlock.h"
+#include "InvisibleBlock.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -46,9 +47,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// block 
 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.4f;
-
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
 
 		// Collision logic with Goombas
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -107,6 +105,24 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
 					SetState(MARIO_STATE_IDLE);
+				}
+			}
+
+			//Walk on invisible block
+			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
+			{
+				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
+				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				{
+					if (nx != 0) vx = 0;
+					if (ny != 0) vy = 0;
+					SetState(MARIO_STATE_IDLE);
+				}
+
+				if (e->ny > 0)
+				{
+					x += dx;
+					y += dy;
 				}
 			}
 		}

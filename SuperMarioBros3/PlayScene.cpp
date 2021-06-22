@@ -27,6 +27,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_OBJECTS	6
 
 #define OBJECT_TYPE_MARIO	0
+#define OBJECT_TYPE_INVISIBLE_BLOCK 4
 #define OBJECT_TYPE_BRICK	1
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_KOOPAS	3
@@ -156,6 +157,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 	}
+	case OBJECT_TYPE_INVISIBLE_BLOCK: 
+	{
+		int width = atof(tokens[4].c_str());
+		obj = new CInvisibleBlock(width);
+	}
 	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -247,6 +253,9 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
+
+	//place update position camera at final 
+	if (cx > 1678) cx = 1678;
 
 	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
 }

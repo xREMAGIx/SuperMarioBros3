@@ -13,9 +13,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Header Files\Intro">
-      <UniqueIdentifier>{e08d4644-d01d-4c42-b4a1-9c9c079eae18}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Characters">
       <UniqueIdentifier>{48c23e86-5053-4440-ad07-4d93259559a4}</UniqueIdentifier>
     </Filter>
@@ -31,11 +28,14 @@
     <Filter Include="Source Files\Enemies">
       <UniqueIdentifier>{72a30a3c-08d9-4339-a3da-947c0d83dd84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Intro">
-      <UniqueIdentifier>{da61d809-f97d-4d29-b4d1-6bf2df496b58}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Miscs">
       <UniqueIdentifier>{09e3e416-31ea-4a4e-8dec-ca51e015ef16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Invisibles">
+      <UniqueIdentifier>{da61d809-f97d-4d29-b4d1-6bf2df496b58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Invisibles">
+      <UniqueIdentifier>{e08d4644-d01d-4c42-b4a1-9c9c079eae18}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="Animations.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InvisibleBlock.cpp">
+      <Filter>Source Files\Invisibles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +159,9 @@
     </ClInclude>
     <ClInclude Include="Animations.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="InvisibleBlock.h">
+      <Filter>Header Files\Invisibles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
