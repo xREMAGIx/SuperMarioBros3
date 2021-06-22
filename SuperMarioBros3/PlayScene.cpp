@@ -27,7 +27,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_OBJECTS	6
 
 #define OBJECT_TYPE_MARIO	0
-#define OBJECT_TYPE_BRICK	1
+#define OBJECT_TYPE_BLOCK	1
 #define OBJECT_TYPE_GOOMBA	2
 #define OBJECT_TYPE_QUESTION_BLOCK	3
 #define OBJECT_TYPE_INVISIBLE_BLOCK 4
@@ -149,7 +149,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
-	case OBJECT_TYPE_BRICK: obj = new CBlock(); break;
+	case OBJECT_TYPE_BLOCK: obj = new CBlock(); break;
 	case OBJECT_TYPE_QUESTION_BLOCK: obj = new CQuestionBlock(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
