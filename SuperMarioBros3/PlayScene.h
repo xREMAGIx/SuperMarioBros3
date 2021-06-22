@@ -7,6 +7,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "InvisibleBlock.h"
+#include "QuestionBlock.h"
 #include "helpers.h"
 
 

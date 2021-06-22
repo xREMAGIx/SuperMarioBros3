@@ -114,7 +114,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
 				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
-					if (nx != 0) vx = 0;
 					if (ny != 0) vy = 0;
 					SetState(MARIO_STATE_IDLE);
 				}

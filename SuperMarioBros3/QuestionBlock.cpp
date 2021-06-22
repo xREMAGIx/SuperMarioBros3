@@ -11,7 +11,7 @@ void CQuestionBlock::Render()
 	else {
 		ani = QUESTION_BLOCK_ANI_IDLE;
 	}
-	animations[ani]->Render(x, y, nx);
+	animation_set->at(ani)->Render(x, y, nx, 255);
 }
 
 void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
