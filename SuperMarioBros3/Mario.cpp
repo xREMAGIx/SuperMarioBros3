@@ -8,6 +8,8 @@
 #include "Brick.h"
 #include "QuestionBlock.h"
 #include "InvisibleBlock.h"
+#include "Cloud.h"
+
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -122,6 +124,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(MARIO_STATE_IDLE);
 				}
 			}
+
+			//Jump touch block
+			if (dynamic_cast<CCloud*>(e->obj)) // if e->obj is Block 
+			{
+				if (ny != 0) vy = 0;
+				if (nx != 0) vx = 0;
+				CCloud* block = dynamic_cast<CCloud*>(e->obj);
+				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				{
+					SetState(MARIO_STATE_IDLE);
+				}
+			}
+
+
 
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 

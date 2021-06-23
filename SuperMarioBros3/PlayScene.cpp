@@ -32,6 +32,9 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_QUESTION_BLOCK	3
 #define OBJECT_TYPE_INVISIBLE_BLOCK 4
 #define OBJECT_TYPE_BRICK 5
+#define OBJECT_TYPE_COIN 6
+#define OBJECT_TYPE_CLOUD 7
+
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -153,6 +156,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BLOCK: obj = new CBlock(); break;
 	case OBJECT_TYPE_QUESTION_BLOCK: obj = new CQuestionBlock(); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
+	case OBJECT_TYPE_COIN: obj = new CCoin(); break;
+	case OBJECT_TYPE_CLOUD: obj = new CCloud(); break;
+
+
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());

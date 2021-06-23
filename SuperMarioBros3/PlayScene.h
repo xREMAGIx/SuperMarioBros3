@@ -9,6 +9,8 @@
 #include "InvisibleBlock.h"
 #include "QuestionBlock.h"
 #include "Brick.h"
+#include "Coin.h"
+#include "Cloud.h"
 #include "helpers.h"
 
 
@@ -42,7 +44,7 @@ class CPlayScenceKeyHandler : public CScenceKeyHandler
 {
 public:
 	virtual void KeyState(BYTE* states);
-	virtual void OnKeyDown(int KeyCode);
+	virtual void OnKeyDown(int KeyCode); 
 	virtual void OnKeyUp(int KeyCode) {};
 	CPlayScenceKeyHandler(CScene* s) :CScenceKeyHandler(s) {};
 };

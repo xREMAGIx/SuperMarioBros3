@@ -102,6 +102,12 @@
     <ClCompile Include="Brick.cpp">
       <Filter>Source Files\Miscs</Filter>
     </ClCompile>
+    <ClCompile Include="Coin.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
+    <ClCompile Include="Cloud.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -167,6 +173,12 @@
       <Filter>Header Files\Invisibles</Filter>
     </ClInclude>
     <ClInclude Include="Brick.h">
+      <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="Cloud.h">
       <Filter>Header Files\Miscs</Filter>
     </ClInclude>
   </ItemGroup>
