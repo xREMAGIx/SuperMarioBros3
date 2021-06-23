@@ -9,6 +9,7 @@
 #include "QuestionBlock.h"
 #include "InvisibleBlock.h"
 #include "Cloud.h"
+#include "GreenKoopa.h"
 
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -75,6 +76,38 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (untouchable == 0)
 					{
 						if (goomba->GetState() != GOOMBA_STATE_DIE)
+						{
+							if (level > MARIO_LEVEL_SMALL)
+							{
+								level = MARIO_LEVEL_SMALL;
+								StartUntouchable();
+							}
+							else
+								SetState(MARIO_STATE_DIE);
+						}
+					}
+				}
+			}
+
+			if (dynamic_cast<CGreenKoopa*>(e->obj)) // if e->obj is Goomba 
+			{
+				CGreenKoopa* greenKoopa = dynamic_cast<CGreenKoopa*>(e->obj);
+
+				// jump on top >> kill Goomba and deflect a bit 
+				if (e->ny < 0)
+				{
+					if (greenKoopa->GetState() != GREEN_KOOPA_STATE_DIE)
+					{
+						greenKoopa->SetState(GREEN_KOOPA_STATE_DIE);
+						SetState(MARIO_STATE_IDLE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+					}
+				}
+				else if (e->nx != 0)
+				{
+					if (untouchable == 0)
+					{
+						if (greenKoopa->GetState() != GREEN_KOOPA_STATE_DIE)
 						{
 							if (level > MARIO_LEVEL_SMALL)
 							{

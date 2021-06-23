@@ -108,6 +108,9 @@
     <ClCompile Include="Cloud.cpp">
       <Filter>Source Files\Miscs</Filter>
     </ClCompile>
+    <ClCompile Include="GreenKoopa.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -180,6 +183,9 @@
     </ClInclude>
     <ClInclude Include="Cloud.h">
       <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenKoopa.h">
+      <Filter>Header Files\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

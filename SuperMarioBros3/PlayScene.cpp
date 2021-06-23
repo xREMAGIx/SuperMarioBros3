@@ -34,7 +34,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_BRICK 5
 #define OBJECT_TYPE_COIN 6
 #define OBJECT_TYPE_CLOUD 7
-
+#define OBJECT_TYPE_GREEN_KOOPA 8
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -158,6 +158,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(); break;
 	case OBJECT_TYPE_CLOUD: obj = new CCloud(); break;
+	case OBJECT_TYPE_GREEN_KOOPA: obj = new CGreenKoopa(); break;
 
 
 	case OBJECT_TYPE_PORTAL:

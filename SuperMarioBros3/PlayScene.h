@@ -11,6 +11,7 @@
 #include "Brick.h"
 #include "Coin.h"
 #include "Cloud.h"
+#include "GreenKoopa.h"
 #include "helpers.h"
 
 
