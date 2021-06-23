@@ -4,6 +4,8 @@
 #define GOOMBA_WIDTH 16
 #define GOOMBA_HEIGHT 16
 #define GOOMBA_SPEED 0.05f
+#define GOOMBA_GRAVITY	0.001f
+
 
 #define GOOMBA_BBOX_WIDTH 16
 #define GOOMBA_BBOX_HEIGHT 15
@@ -22,5 +24,6 @@ class CGoomba : public CGameObject
 	virtual void Render();
 
 public:
+	CGoomba();
 	virtual void SetState(int state);
 };
