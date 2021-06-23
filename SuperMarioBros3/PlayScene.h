@@ -12,6 +12,7 @@
 #include "Coin.h"
 #include "Cloud.h"
 #include "GreenKoopa.h"
+#include "RedKoopa.h"
 #include "helpers.h"
 
 

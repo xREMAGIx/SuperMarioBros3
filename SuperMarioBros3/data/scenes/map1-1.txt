@@ -32,7 +32,8 @@
 208	20801
 # GREEN KOOPA
 318	31801
-
+# RED KOOPA
+320	32001
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -46,9 +47,10 @@
 # 6 = Coin
 # 7 = Cloud
 # 8 = Green Koopa
+# 9 = Red Koopa
 
 # MARIO
-0	1450	100	101
+0	100	100	101
 
 # BLOCK
 1	1504	336	0
@@ -172,6 +174,10 @@
 
 #GREEN KOOPA
 8	1472	385	318
+
+#RED KOOPA
+9	577	356	320
+9	2096	357	320
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
