@@ -51,10 +51,10 @@
 # 8 = Green Koopa
 # 9 = Red Koopa
 # 10 = Para Goomba
-
+# 11 = Para Koopa
 
 # MARIO
-0	100	100	101
+0	1300	100	101
 
 # BLOCK
 1	1504	336	0
@@ -185,6 +185,11 @@
 
 #PARA GOOMBA
 10	946	380	315
+
+#PARA KOOPA
+11	1328	293	318
+11	1376	293	318
+11	1424	293	318
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

@@ -15,6 +15,8 @@
 #include "GreenKoopa.h"
 #include "RedKoopa.h"
 #include "ParaGoomba.h"
+#include "ParaKoopa.h"
+
 #include "helpers.h"
 
 
