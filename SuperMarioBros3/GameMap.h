@@ -12,12 +12,11 @@
 
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
-#define ID_TEX_MAP1 1
+#define ID_TEX_MAP1 11
 #define TILE_SIZE 16
 #define BRICK_SIZE 16
 
 using namespace std;
-
 
 class GameMap
 {
@@ -25,27 +24,30 @@ public:
 	GameMap();
 	~GameMap();
 
-	int scene;
+	int tilesetId;
 
-	int width;
-	int height;
-	int col;
-	int row;
 	int listTile[200][200];
 
 	int numTilesCols, spacing;
 	int numRows, numCols;
 	int id, cellW, cellH;
+	int currentRow;
 
 	RECT GetSourceRect(int index);
-	void LoadMap(const char* filepath);
-	void DrawMap();
+	void LoadMap(string line);
+	void Render();
 	int getRows() { return numRows; }
 	int getCols() { return numCols; }
 	int getTileW() { return cellW; }
 	int getTileH() { return cellH; }
 
+	void _ParseSection_READDATA(string line);
+	void _ParseSection_MAP(string line);
+
+	static GameMap* GetInstance();
+
 private:
+	static GameMap* __instance;
 	int getTitle(int x, int y);
 };
 

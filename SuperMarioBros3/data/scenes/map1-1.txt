@@ -183,3 +183,7 @@
 # type	l	t	ani_set_id	r	b	scene_id
 50	300	98	1	316	150	1
 
+[MAP]
+0	mapfiles\map1-1.txt
+
+

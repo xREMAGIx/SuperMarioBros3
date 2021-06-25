@@ -25,6 +25,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_ANIMATIONS 4
 #define SCENE_SECTION_ANIMATION_SETS	5
 #define SCENE_SECTION_OBJECTS	6
+#define SCENE_SECTION_MAP	7
 
 #define OBJECT_TYPE_MARIO	0
 #define OBJECT_TYPE_BLOCK	1
@@ -41,6 +42,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 #define MAX_SCENE_LINE 1024
 
+GameMap* map;
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
@@ -191,6 +193,26 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	objects.push_back(obj);
 }
 
+
+void CPlayScene::_ParseSection_MAP(string line)
+{
+	DebugOut(L"[INFO] [RUN MAP]\n");
+
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 2) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
+
+	LPANIMATION ani = new CAnimation();
+
+	int ani_id = atoi(tokens[0].c_str());
+	wstring path = ToWSTR(tokens[1]);
+
+	map = new GameMap();
+	map->LoadMap("mapfiles\\map1-1.txt");
+
+	DebugOut(L"[INFO] Load file map resources %s\n", path.c_str());
+}
+
 void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", sceneFilePath);
@@ -221,6 +243,9 @@ void CPlayScene::Load()
 		if (line == "[OBJECTS]") {
 			section = SCENE_SECTION_OBJECTS; continue;
 		}
+		if (line == "[MAP]") {
+			section = SCENE_SECTION_MAP; continue;
+		}
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -233,6 +258,7 @@ void CPlayScene::Load()
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		case SCENE_SECTION_ANIMATION_SETS: _ParseSection_ANIMATION_SETS(line); break;
 		case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
+		case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
 		}
 	}
 
@@ -276,8 +302,11 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
+	map->Render();
+
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+
 }
 
 /*
@@ -292,7 +321,7 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
-
+	map = NULL;
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
