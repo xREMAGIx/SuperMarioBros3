@@ -1,0 +1,42 @@
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+30	mapfiles\world1.png	3	26	110
+
+# id	file_path	texture_id
+[SPRITES]
+30	data\worldmap-sprite.txt	30
+						
+# ani_id	file_path	
+[ANIMATIONS]
+30	data\worldmap-animation.txt
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# MARIO
+430	43001 
+# TREE
+431	43101	
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 
+# 0 = Mario 
+# 100 = Tree
+
+# MARIO
+0	100	100	430
+
+# TREE
+100	200	200	431
+
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+50	300	98	1	316	150	1	2
+
+[MAP]
+1	mapfiles\world1.txt
+
+

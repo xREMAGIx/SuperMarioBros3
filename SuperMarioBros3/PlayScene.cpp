@@ -208,7 +208,7 @@ void CPlayScene::_ParseSection_MAP(string line)
 	wstring path = ToWSTR(tokens[1]);
 
 	map = new GameMap();
-	map->LoadMap("mapfiles\\map1-1.txt");
+	map->LoadMap(path.c_str());
 
 	DebugOut(L"[INFO] Load file map resources %s\n", path.c_str());
 }

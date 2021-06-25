@@ -34,7 +34,7 @@ public:
 	int currentRow;
 
 	RECT GetSourceRect(int index);
-	void LoadMap(string line);
+	void LoadMap(LPCWSTR filepath);
 	void Render();
 	int getRows() { return numRows; }
 	int getCols() { return numCols; }

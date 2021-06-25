@@ -1,5 +1,6 @@
 [SETTINGS]
-start	1
+start	2
 #scene list
 [SCENES]
-1	data\scenes\map1-1.txt
+1	data\scenes\world1.txt
+2	data\scenes\map1-1.txt

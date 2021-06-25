@@ -19,17 +19,6 @@
 
 CGame* game;
 
-//GameMap* map;
-/*
-void LoadMap()
-{
-	// load map
-	map = new GameMap();
-	map->LoadMap("mapfiles\\map1-1.txt");
-}
-*/
-
-
 vector<LPGAMEOBJECT> objects;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -70,7 +59,6 @@ void Render()
 		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
-		//map->Render();
 		CGame::GetInstance()->GetCurrentScene()->Render();
 
 		spriteHandler->End();
@@ -176,7 +164,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard();
 
 	game->Load(L"data/source.txt");
-	//LoadMap();
 
 	Run();
 

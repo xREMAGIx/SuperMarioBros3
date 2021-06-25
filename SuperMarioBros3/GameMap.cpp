@@ -70,7 +70,7 @@ void GameMap::_ParseSection_MAP(string line)
 	currentRow += 1;
 }
 
-void GameMap::LoadMap(string filepath)
+void GameMap::LoadMap(LPCWSTR filepath)
 {
 	/*
 	
