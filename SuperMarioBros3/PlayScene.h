@@ -14,6 +14,7 @@
 #include "Cloud.h"
 #include "GreenKoopa.h"
 #include "RedKoopa.h"
+#include "ParaGoomba.h"
 #include "helpers.h"
 
 

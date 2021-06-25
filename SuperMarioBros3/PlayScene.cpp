@@ -37,6 +37,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_CLOUD 7
 #define OBJECT_TYPE_GREEN_KOOPA 8
 #define OBJECT_TYPE_RED_KOOPA 9
+#define OBJECT_TYPE_PARA_GOOMBA 10
+
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -163,6 +165,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_CLOUD: obj = new CCloud(); break;
 	case OBJECT_TYPE_GREEN_KOOPA: obj = new CGreenKoopa(); break;
 	case OBJECT_TYPE_RED_KOOPA: obj = new CRedKoopa(); break;
+	case OBJECT_TYPE_PARA_GOOMBA: obj = new CParaGoomba(); break;
 
 	case OBJECT_TYPE_PORTAL:
 	{

@@ -34,6 +34,8 @@
 318	31801
 # RED KOOPA
 320	32001
+# PARA GOOMBA
+315	31501	31502
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -48,6 +50,8 @@
 # 7 = Cloud
 # 8 = Green Koopa
 # 9 = Red Koopa
+# 10 = Para Goomba
+
 
 # MARIO
 0	100	100	101
@@ -178,6 +182,9 @@
 #RED KOOPA
 9	577	356	320
 9	2096	357	320
+
+#PARA GOOMBA
+10	946	380	315
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
