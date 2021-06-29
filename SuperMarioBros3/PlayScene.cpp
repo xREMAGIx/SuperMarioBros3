@@ -39,6 +39,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_RED_KOOPA 9
 #define OBJECT_TYPE_PARA_GOOMBA 10
 #define OBJECT_TYPE_PARA_KOOPA 11
+#define OBJECT_TYPE_INVISIBLE_WALL 12
 
 
 #define OBJECT_TYPE_PORTAL	50
@@ -46,6 +47,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define MAX_SCENE_LINE 1024
 
 GameMap* map;
+Quadtree* quadtree;
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
@@ -169,18 +171,25 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_PARA_GOOMBA: obj = new CParaGoomba(); break;
 	case OBJECT_TYPE_PARA_KOOPA: obj = new CParaKoopa(); break;
 
-
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = atof(tokens[4].c_str());
 		float b = atof(tokens[5].c_str());
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
 	}
 	case OBJECT_TYPE_INVISIBLE_BLOCK: 
 	{
 		int width = atof(tokens[4].c_str());
 		obj = new CInvisibleBlock(width);
+		break;
+	}
+	case OBJECT_TYPE_INVISIBLE_WALL:
+	{
+		int height = atof(tokens[4].c_str());
+		obj = new CInvisibleWall(height);
+		break;
 	}
 	break;
 	default:
@@ -270,7 +279,10 @@ void CPlayScene::Load()
 
 	f.close();
 
+
+
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+	//quadtree->CreateQuadTree(objects);
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -283,6 +295,29 @@ void CPlayScene::Update(DWORD dt)
 	{
 		coObjects.push_back(objects[i]);
 	}
+
+	/*
+
+	vector<CGameObject*>* return_objects_list = new vector<CGameObject*>();
+
+		for (int i = 0; i < coObjects.size(); i++)
+		{
+			//Get all objects that can collide with current entity
+			quadtree->Retrieve(return_objects_list, coObjects[i]);
+
+			for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
+			{
+				objects[i]->Update(dt, return_objects_list);
+			}
+
+			return_objects_list->clear();
+		}
+
+	quadtree->Clear();
+
+	delete return_objects_list;
+	delete quadtree;
+	*/
 
 	for (size_t i = 0; i < objects.size(); i++)
 	{

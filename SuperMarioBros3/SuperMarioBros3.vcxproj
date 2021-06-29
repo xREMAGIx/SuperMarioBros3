@@ -156,6 +156,7 @@
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="InvisibleBlock.cpp" />
+    <ClCompile Include="InvisibleWall.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="GreenKoopa.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="ParaKoopa.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
+    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="RedKoopa.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="Block.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="InvisibleBlock.h" />
+    <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="GreenKoopa.h" />
     <ClInclude Include="Mario.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="ParaKoopa.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
+    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="RedKoopa.h" />
     <ClInclude Include="Scene.h" />

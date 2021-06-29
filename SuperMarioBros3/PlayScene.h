@@ -3,7 +3,6 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "GameMap.h"
-#include "GameObject.h"
 #include "Block.h"
 #include "Mario.h"
 #include "Goomba.h"
@@ -16,7 +15,8 @@
 #include "RedKoopa.h"
 #include "ParaGoomba.h"
 #include "ParaKoopa.h"
-
+#include "QuadTree.h"
+#include "InvisibleWall.h"
 #include "helpers.h"
 
 
@@ -25,7 +25,6 @@ class CPlayScene : public CScene
 protected:
 	CMario* player;					// A play scene has to have player, right? 
 
-	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
@@ -35,6 +34,7 @@ protected:
 	void _ParseSection_MAP(string line);
 
 public:
+	vector<LPGAMEOBJECT> objects;
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
@@ -43,6 +43,7 @@ public:
 	virtual void Unload();
 
 	CMario* GetPlayer() { return player; }
+	vector<LPGAMEOBJECT> GetObjectList() { return this->objects; }
 
 };
 

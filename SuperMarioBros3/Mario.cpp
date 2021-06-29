@@ -170,7 +170,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
-
+			//Touch invisible wall
+			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
+			{
+				CInvisibleWall* block = dynamic_cast<CInvisibleWall*>(e->obj);
+				if (e->nx != 0)
+				{
+					x += 0;
+				}
+			}
 
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
