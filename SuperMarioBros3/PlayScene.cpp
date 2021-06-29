@@ -40,7 +40,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_PARA_GOOMBA 10
 #define OBJECT_TYPE_PARA_KOOPA 11
 #define OBJECT_TYPE_INVISIBLE_WALL 12
-
+#define OBJECT_TYPE_CHIMNEY 13
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -191,6 +191,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CInvisibleWall(height);
 		break;
 	}
+	case OBJECT_TYPE_CHIMNEY:
+	{
+		int width = atof(tokens[4].c_str());
+		int height = atof(tokens[5].c_str());
+		obj = new CChimney(width, height);
+		break;
+	}
+
 	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);

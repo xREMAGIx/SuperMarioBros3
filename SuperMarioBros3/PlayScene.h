@@ -17,6 +17,7 @@
 #include "ParaKoopa.h"
 #include "QuadTree.h"
 #include "InvisibleWall.h"
+#include "Chimney.h"
 #include "helpers.h"
 
 

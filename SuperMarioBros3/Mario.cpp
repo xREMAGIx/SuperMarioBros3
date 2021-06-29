@@ -49,8 +49,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// block 
-		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.4f;
+		x += min_tx * dx + nx * 0.5f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		y += min_ty * dy + ny * 0.5f;
 
 		// Collision logic with Goombas
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -170,14 +170,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
+
 			//Touch invisible wall
 			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleWall* block = dynamic_cast<CInvisibleWall*>(e->obj);
-				if (e->nx != 0)
-				{
-					x += 0;
-				}
+				if (nx != 0) vx = 0;
 			}
 
 			//Walk on invisible block
@@ -190,11 +188,24 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(MARIO_STATE_IDLE);
 				}
 
-				if (e->ny > 0)
+				if (e->ny > 0 || e->nx != 0)
 				{
 					x += dx;
 					y += dy;
 				}
+			}
+
+			//Interact with chimney
+			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
+			{
+				if (ny != 0) vy = 0;
+				if (nx != 0) vx = 0;
+				CChimney* block = dynamic_cast<CChimney*>(e->obj);
+				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				{
+					SetState(MARIO_STATE_IDLE);
+				}
+
 			}
 		}
 	}
