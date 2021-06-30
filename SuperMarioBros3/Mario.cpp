@@ -69,6 +69,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						goomba->SetState(GOOMBA_STATE_DIE);
 						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						break;
 					}
 				}
 				else if (e->nx != 0)
@@ -170,21 +171,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
-
-			//Touch invisible wall
-			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
-			{
-				CInvisibleWall* block = dynamic_cast<CInvisibleWall*>(e->obj);
-				if (nx != 0) vx = 0;
-			}
-
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
 				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
-					if (ny != 0) vy = 0;
 					SetState(MARIO_STATE_IDLE);
 				}
 
@@ -193,6 +185,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					x += dx;
 					y += dy;
 				}
+			}
+
+
+			//Touch invisible wall
+			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
+			{
+				CInvisibleWall* block = dynamic_cast<CInvisibleWall*>(e->obj);
 			}
 
 			//Interact with chimney
@@ -206,6 +205,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					SetState(MARIO_STATE_IDLE);
 				}
 
+			}
+
+			//Interact with CEnemyWall
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
+			{
+				x += dx;
+				y += dy;
 			}
 		}
 	}

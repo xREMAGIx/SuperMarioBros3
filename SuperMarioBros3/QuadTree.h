@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "GameObject.h"
+#include "PlayScene.h"
 #include "helpers.h"
 
 #define MAX_LEVEL                5
@@ -19,6 +20,7 @@ private:
     int regionBottom;
     vector<CGameObject*>* m_objects_list;
     Quadtree** m_nodes;
+    CScene* scence;
 
     bool           IsContain(CGameObject* entity);
     void           Split();
@@ -28,5 +30,5 @@ public:
     void           Clear();
     void           Insert(CGameObject* entity);
     void Retrieve(vector<CGameObject*>* return_objects_list, CGameObject* entity);
-    Quadtree* CreateQuadTree(vector<CGameObject*> objects);
+    Quadtree* CreateQuadTree();
 };

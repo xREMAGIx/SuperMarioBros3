@@ -25,6 +25,7 @@ class CGame
 
 	LPDIRECT3D9 d3d = NULL;						// Direct3D handle
 	LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
+	D3DPRESENT_PARAMETERS d3dpp;
 
 	LPDIRECT3DSURFACE9 backBuffer = NULL;
 	LPD3DXSPRITE spriteHandler = NULL;			// Sprite helper library to help us draw 2D image on the screen 
@@ -57,10 +58,15 @@ class CGame
 public:
 	//Sprite
 	void Init(HWND hWnd);
+	void ReInit(int scene_width, int scene_height);
 	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha);
 	void DrawFlipX(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha);
 	LPDIRECT3DTEXTURE9 LoadTexture(LPCWSTR texturePath, D3DCOLOR transparentColor);
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
+	D3DPRESENT_PARAMETERS GetParameters() { return d3dpp; }
+	HWND GetHWND() { return hWnd; }
+	LPDIRECT3D9 GetDirectHandle() { return d3d; }
+
 	LPD3DXSPRITE GetSpriteHandler() { return this->spriteHandler; }
 
 	//Input
@@ -95,6 +101,7 @@ public:
 			cam_x = 0;
 		if (cam_y < 0)
 			cam_y = 0;
+
 	}
 	D3DXVECTOR2 GetCamPos()
 	{

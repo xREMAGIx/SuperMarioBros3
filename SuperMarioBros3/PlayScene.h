@@ -18,6 +18,7 @@
 #include "QuadTree.h"
 #include "InvisibleWall.h"
 #include "Chimney.h"
+#include "EnemyWall.h"
 #include "helpers.h"
 
 
@@ -25,8 +26,11 @@ class CPlayScene : public CScene
 {
 protected:
 	CMario* player;					// A play scene has to have player, right? 
+	vector<LPGAMEOBJECT> objects;
+	float max_cam_x = 0.0f;
+	float max_cam_y = 0.0f;
 
-
+	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -35,7 +39,6 @@ protected:
 	void _ParseSection_MAP(string line);
 
 public:
-	vector<LPGAMEOBJECT> objects;
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();
@@ -44,7 +47,7 @@ public:
 	virtual void Unload();
 
 	CMario* GetPlayer() { return player; }
-	vector<LPGAMEOBJECT> GetObjectList() { return this->objects; }
+	vector<LPGAMEOBJECT> GetObjectList() { return objects; }
 
 };
 

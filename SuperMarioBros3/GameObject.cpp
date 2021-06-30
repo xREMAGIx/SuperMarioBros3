@@ -139,6 +139,10 @@ void CGameObject::AddAnimation(int aniId)
 	animations.push_back(ani);
 }
 
+void CGameObject::Clear()
+{
+}
+
 CGameObject::~CGameObject()
 {
 }

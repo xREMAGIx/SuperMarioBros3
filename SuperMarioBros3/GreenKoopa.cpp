@@ -85,9 +85,22 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CGreenKoopa* block = dynamic_cast<CGreenKoopa*>(e->obj);
 				if (e->nx != 0)
 				{
+					nx = -nx;
 					vx = -vx;
 				}
 			}
+
+
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
+			{
+				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
+				if (e->nx != 0)
+				{
+					nx = -nx;
+					vx = -vx;
+				}
+			}
+
 		}
 	}
 

@@ -45,8 +45,9 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// block 
-		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.4f;
+		x += min_tx * dx + nx * 0.5f;		// nx*0.5f : need to push out a bit to avoid overlapping next frame
+		y += min_ty * dy + ny * 0.5f; 
+
 
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -79,10 +80,9 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			}
 
-			//Touch other Goomba
-			if (dynamic_cast<CParaKoopa*>(e->obj)) // if e->obj is Block 
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
-				CParaKoopa* block = dynamic_cast<CParaKoopa*>(e->obj);
+				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 				if (e->nx != 0)
 				{
 					vx = -vx;

@@ -1,3 +1,7 @@
+#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y
+[SETTINGS]
+400	300	0	200	2480	132
+
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\mario-luigi.png	68	145	190
@@ -54,9 +58,10 @@
 # 11 = Para Koopa
 # 12 = Invisible Wall
 # 13 = Chimney
+# 14 = Enemy Wall
 
 # MARIO
-0	2000	100	101
+0	50	50	101
 
 # BLOCK
 1	1504	336	0
@@ -86,7 +91,7 @@
 
 #INVISIBLE_BLOCK
 4	0	416	0	624
-4	624	400	0	464
+4	640	400	0	464
 4	1152	416	0	352
 4	1536	416	0	80
 4	1664	416	0	576
@@ -195,8 +200,8 @@
 
 #INVISIBLE_WALL
 12	-16	0	0	800
-12	624	416	0	32
-12	2464	300	0	800
+12	624	400	0	32
+12	2480	300	0	800
 
 #CHIMNEY
 13	352	368	0	32	48
@@ -205,6 +210,13 @@
 13	2256	112	0	32	192
 13	2256	384	0	32	32
 13	2320	384	0	32	32
+
+#ENEMY_WALL
+14	1088	337	0	64
+14	1136	353	0	64
+14	1504	289	0	128
+14	1520	289	0	128
+14	2240	369	0	48
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

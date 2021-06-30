@@ -119,8 +119,10 @@ void Quadtree::Retrieve(vector<CGameObject*>* return_objects_list, CGameObject* 
 }
 
 
-Quadtree* Quadtree::CreateQuadTree(vector<CGameObject*> objects)
+Quadtree* Quadtree::CreateQuadTree()
 {
+    vector<CGameObject*> objects = ((CPlayScene*)scence)->GetObjectList();
+
     DebugOut(L"[INFO] [RUN QUADTREE]\n");
     // Init base game region for detecting collision
     Quadtree* quadtree = new Quadtree(1, 0, 0, 800, 600);

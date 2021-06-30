@@ -24,7 +24,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 
-	vy += GOOMBA_GRAVITY * dt;
 	//
 	// TO-DO: make sure Goomba can interact with the world and to each of them too!
 	// 
@@ -32,8 +31,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
-
-	CalcPotentialCollisions(coObjects, coEvents);
+	if (state != GOOMBA_STATE_DIE)
+	{
+		vy += GOOMBA_GRAVITY * dt;
+		CalcPotentialCollisions(coObjects, coEvents);
+	}
 
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -85,6 +87,16 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					vx = -vx;
 				}
 			}
+
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
+			{
+				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
+				if (e->nx != 0)
+				{
+					vx = -vx;
+				}
+			}
+
 		}
 	}
 

@@ -20,6 +20,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 */
 
 #define SCENE_SECTION_UNKNOWN -1
+#define SCENE_SECTION_SETTINGS 1
 #define SCENE_SECTION_TEXTURES 2
 #define SCENE_SECTION_SPRITES 3
 #define SCENE_SECTION_ANIMATIONS 4
@@ -41,6 +42,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_PARA_KOOPA 11
 #define OBJECT_TYPE_INVISIBLE_WALL 12
 #define OBJECT_TYPE_CHIMNEY 13
+#define OBJECT_TYPE_ENEMY_WALL 14
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -48,6 +50,28 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 GameMap* map;
 Quadtree* quadtree;
+
+void CPlayScene::_ParseSection_SETTINGS(string line)
+{
+	DebugOut(L"[INFO] [RUN SETTINGS]\n");
+
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 6) return; // skip invalid lines
+
+	int scene_width = atoi(tokens[0].c_str());
+	int scene_height = atoi(tokens[1].c_str());
+	int cam_x = atoi(tokens[2].c_str());
+	int cam_y = atoi(tokens[3].c_str());
+	int maxCamX = atoi(tokens[4].c_str());
+	int maxCamY = atoi(tokens[5].c_str());
+
+	max_cam_x = maxCamX;
+	max_cam_y = maxCamY;
+
+	CGame::GetInstance()->ReInit(scene_width, scene_height);
+	CGame::GetInstance()->SetCamPos(cam_x, cam_y);
+}
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
@@ -198,7 +222,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CChimney(width, height);
 		break;
 	}
-
+	case OBJECT_TYPE_ENEMY_WALL:
+	{
+		int height = atof(tokens[4].c_str());
+		obj = new CEnemyWall(height);
+		break;
+	}
 	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -253,6 +282,7 @@ void CPlayScene::Load()
 
 		if (line[0] == '#') continue;	// skip comment lines	
 
+		if (line == "[SETTINGS]") { section = SCENE_SECTION_SETTINGS; continue; }
 		if (line == "[TEXTURES]") { section = SCENE_SECTION_TEXTURES; continue; }
 		if (line == "[SPRITES]") {
 			section = SCENE_SECTION_SPRITES; continue;
@@ -276,6 +306,7 @@ void CPlayScene::Load()
 		//
 		switch (section)
 		{
+		case SCENE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
 		case SCENE_SECTION_TEXTURES: _ParseSection_TEXTURES(line); break;
 		case SCENE_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
 		case SCENE_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
@@ -290,7 +321,7 @@ void CPlayScene::Load()
 
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
-	//quadtree->CreateQuadTree(objects);
+	//quadtree->CreateQuadTree();
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -304,8 +335,8 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
+	
 	/*
-
 	vector<CGameObject*>* return_objects_list = new vector<CGameObject*>();
 
 		for (int i = 0; i < coObjects.size(); i++)
@@ -315,7 +346,7 @@ void CPlayScene::Update(DWORD dt)
 
 			for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
 			{
-				objects[i]->Update(dt, return_objects_list);
+				coObjects[i]->Update(dt, return_objects_list);
 			}
 
 			return_objects_list->clear();
@@ -326,11 +357,13 @@ void CPlayScene::Update(DWORD dt)
 	delete return_objects_list;
 	delete quadtree;
 	*/
-
+	
+	
 	for (size_t i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(dt, &coObjects);
 	}
+	
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
@@ -344,9 +377,16 @@ void CPlayScene::Update(DWORD dt)
 	cy -= game->GetScreenHeight() / 2;
 
 	//place update position camera at final 
-	if (cx > 1678) cx = 1678;
+	if (cx > max_cam_x - game->GetScreenWidth()) {
+		cx = max_cam_x - game->GetScreenWidth();
+	}
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+
+	if (cy > max_cam_y) {
+		cy = max_cam_y;
+	}
+
+	CGame::GetInstance()->SetCamPos(cx, cy);
 }
 
 void CPlayScene::Render()
