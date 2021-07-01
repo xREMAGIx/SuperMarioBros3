@@ -132,6 +132,9 @@
     <ClCompile Include="EnemyWall.cpp">
       <Filter>Source Files\Invisibles</Filter>
     </ClCompile>
+    <ClCompile Include="TreeWorld.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -228,6 +231,9 @@
     </ClInclude>
     <ClInclude Include="EnemyWall.h">
       <Filter>Header Files\Invisibles</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeWorld.h">
+      <Filter>Header Files\Miscs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

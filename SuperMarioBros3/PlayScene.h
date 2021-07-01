@@ -19,6 +19,7 @@
 #include "InvisibleWall.h"
 #include "Chimney.h"
 #include "EnemyWall.h"
+#include "TreeWorld.h"
 #include "helpers.h"
 
 

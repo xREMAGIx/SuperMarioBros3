@@ -1,6 +1,6 @@
 [READDATA]
 #id	tileset			r	g	b	numRows	numCols	numTilesCols	cellW	cellH	spacing
-101	mapfiles\world1.png	3	26	110	11	15	15	16	16	0
+101	mapfiles\world1.png	3	26	110	12	15	15	16	16	0
 [MAP]
 15	16	26	26	26	26	26	26	26	26	26	26	27	28	29
 30	31	32	33	34	35	36	37	38	39	40	41	42	43	44

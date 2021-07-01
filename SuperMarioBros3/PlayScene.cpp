@@ -46,6 +46,9 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 #define OBJECT_TYPE_PORTAL	50
 
+#define OBJECT_TYPE_TREE_WORLD 100
+
+
 #define MAX_SCENE_LINE 1024
 
 GameMap* map;
@@ -228,6 +231,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CEnemyWall(height);
 		break;
 	}
+	case OBJECT_TYPE_TREE_WORLD: obj = new CTreeWorld(); break;
+
 	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
