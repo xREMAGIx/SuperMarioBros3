@@ -20,6 +20,7 @@
 #include "Chimney.h"
 #include "EnemyWall.h"
 #include "TreeWorld.h"
+#include "MarioWorld.h"
 #include "helpers.h"
 
 
@@ -28,6 +29,8 @@ class CPlayScene : public CScene
 protected:
 	CMario* player;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
+	CMarioWorld* marioWorld;
+
 	float max_cam_x = 0.0f;
 	float max_cam_y = 0.0f;
 
@@ -48,6 +51,7 @@ public:
 	virtual void Unload();
 
 	CMario* GetPlayer() { return player; }
+	CMarioWorld* GetMarioWorld() { return marioWorld; }
 	vector<LPGAMEOBJECT> GetObjectList() { return objects; }
 
 };

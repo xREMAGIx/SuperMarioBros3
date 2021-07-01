@@ -135,6 +135,9 @@
     <ClCompile Include="TreeWorld.cpp">
       <Filter>Source Files\Miscs</Filter>
     </ClCompile>
+    <ClCompile Include="MarioWorld.cpp">
+      <Filter>Source Files\Charaters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -234,6 +237,9 @@
     </ClInclude>
     <ClInclude Include="TreeWorld.h">
       <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioWorld.h">
+      <Filter>Header Files\Characters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

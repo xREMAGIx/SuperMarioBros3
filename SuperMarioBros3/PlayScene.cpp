@@ -47,6 +47,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define OBJECT_TYPE_PORTAL	50
 
 #define OBJECT_TYPE_TREE_WORLD 100
+#define OBJECT_TYPE_MARIO_WORLD 101
 
 
 #define MAX_SCENE_LINE 1024
@@ -187,6 +188,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
+	case OBJECT_TYPE_MARIO_WORLD:
+		if (player != NULL)
+		{
+			DebugOut(L"[ERROR] MARIO WORLD was created before!\n");
+			return;
+		}
+		obj = new CMarioWorld();
+		obj->SetPosition(x, y);
+		marioWorld = (CMarioWorld*)obj;
+
+		DebugOut(L"[INFO] MARIO WORLD object created!\n");
+		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BLOCK: obj = new CBlock(); break;
 	case OBJECT_TYPE_QUESTION_BLOCK: obj = new CQuestionBlock(); break;
@@ -323,8 +336,6 @@ void CPlayScene::Load()
 
 	f.close();
 
-
-
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 	//quadtree->CreateQuadTree();
 }
@@ -423,20 +434,41 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
-	switch (KeyCode)
-	{
-	case DIK_SPACE:
-		if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
-			mario->SetState(MARIO_STATE_JUMP);
+	CMarioWorld* mario_world = ((CPlayScene*)scence)->GetMarioWorld();
+	if (mario_world != NULL) {
+		switch (KeyCode)
+		{
+			case DIK_RIGHT:
+			{
+				mario_world->SetPosition(100,100);
+				break;
+			}
 		}
-		break;
+	}
+	else {
+		switch (KeyCode)
+		{
+		case DIK_SPACE:
+			if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
+				mario->SetState(MARIO_STATE_JUMP);
+			}
+			break;
+		}
 	}
 }
 
 void CPlayScenceKeyHandler::KeyState(BYTE* states)
 {
 	CGame* game = CGame::GetInstance();
+	CMarioWorld* mario_world = ((CPlayScene*)scence)->GetMarioWorld();
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
+
+	if (mario_world != NULL) {
+		mario_world->SetState(MARIO_WORLD_STATE_SMALL);
+	}
+	else {
+
+	
 
 	// disable control key when Mario die 
 	if (mario->GetState() == MARIO_STATE_DIE) return;
@@ -457,5 +489,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 		else if (game->IsKeyDown(DIK_LEFT)) {
 			mario->SetState(MARIO_STATE_JUMP_LEFT);
 		}
+	}
+
 	}
 }

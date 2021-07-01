@@ -26,11 +26,11 @@
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
 # type: 
-# 0 = Mario 
+# 101 = Mario 
 # 100 = Tree
 
 # MARIO
-0	100	100	430	
+101	24	47	430
 
 # TREE
 100	8	15	431

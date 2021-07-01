@@ -36,7 +36,6 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	DWORD untouchable_start;
-
 public:
 	CMario() : CGameObject()
 	{

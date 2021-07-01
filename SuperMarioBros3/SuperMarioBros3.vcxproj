@@ -163,6 +163,7 @@
     <ClCompile Include="GreenKoopa.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="MarioWorld.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="ParaGoomba.cpp" />
     <ClCompile Include="ParaKoopa.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="GreenKoopa.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="MarioWorld.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="ParaGoomba.h" />
     <ClInclude Include="ParaKoopa.h" />
