@@ -162,6 +162,7 @@
     <ClCompile Include="KeyEventHandler.cpp" />
     <ClCompile Include="GreenKoopa.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MapPoint.cpp" />
     <ClCompile Include="Mario.cpp" />
     <ClCompile Include="MarioWorld.cpp" />
     <ClCompile Include="Mushroom.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="GreenKoopa.h" />
+    <ClInclude Include="MapPoint.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="MarioWorld.h" />
     <ClInclude Include="Mushroom.h" />

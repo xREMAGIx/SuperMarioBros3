@@ -21,6 +21,7 @@
 #include "EnemyWall.h"
 #include "TreeWorld.h"
 #include "MarioWorld.h"
+#include "MapPoint.h"
 #include "helpers.h"
 
 
@@ -30,6 +31,9 @@ protected:
 	CMario* player;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
 	CMarioWorld* marioWorld;
+	vector<CMapPoint*> mapPoints;
+
+	int currentMapPoint = 0;
 
 	float max_cam_x = 0.0f;
 	float max_cam_y = 0.0f;
@@ -53,6 +57,9 @@ public:
 	CMario* GetPlayer() { return player; }
 	CMarioWorld* GetMarioWorld() { return marioWorld; }
 	vector<LPGAMEOBJECT> GetObjectList() { return objects; }
+	vector<CMapPoint*> GetMapPoints() { return mapPoints; }
+	int GetCurrentMapPoint() { return currentMapPoint; }
+	void SetCurrentMapPoint(int index) { this->currentMapPoint = index; }
 
 };
 

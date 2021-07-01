@@ -48,6 +48,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 #define OBJECT_TYPE_TREE_WORLD 100
 #define OBJECT_TYPE_MARIO_WORLD 101
+#define OBJECT_TYPE_MAP_POINT 102
 
 
 #define MAX_SCENE_LINE 1024
@@ -245,6 +246,21 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_TREE_WORLD: obj = new CTreeWorld(); break;
+	case OBJECT_TYPE_MAP_POINT:
+	{
+		CMapPoint* point = NULL;
+		int id = atof(tokens[4].c_str());
+		int dTop = atof(tokens[5].c_str());
+		int dRight = atof(tokens[6].c_str());
+		int dBottom = atof(tokens[7].c_str());
+		int dLeft = atof(tokens[8].c_str());
+
+		point = new CMapPoint(id, dTop, dRight, dBottom, dLeft);
+		point->SetPosition(x, y);
+		mapPoints.push_back(point);
+
+		return;
+	}
 
 	break;
 	default:
@@ -258,8 +274,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	{
 		LPANIMATION_SET ani_set = animation_sets->Get(ani_set_id);
 		obj->SetAnimationSet(ani_set);
-	}
-	
+	}	
 	objects.push_back(obj);
 }
 
@@ -411,7 +426,6 @@ void CPlayScene::Render()
 
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-
 }
 
 /*
@@ -427,6 +441,12 @@ void CPlayScene::Unload()
 	objects.clear();
 	player = NULL;
 	map = NULL;
+	marioWorld = NULL;
+
+	for (int i = 0; i < mapPoints.size(); i++)
+		delete mapPoints[i];
+
+	mapPoints.clear();
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
@@ -435,13 +455,61 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 	CMarioWorld* mario_world = ((CPlayScene*)scence)->GetMarioWorld();
+	vector<CMapPoint*> map_points = ((CPlayScene*)scence)->GetMapPoints();
+
+	int current_point = ((CPlayScene*)scence)->GetCurrentMapPoint();
+
+
 	if (mario_world != NULL) {
 		switch (KeyCode)
 		{
 			case DIK_RIGHT:
 			{
-				mario_world->SetPosition(100,100);
-				break;
+				CMapPoint* point = map_points.at(current_point);
+				
+				if (point->GetDRight() != -1) {
+					CMapPoint* nextPoint = map_points.at(point->GetDRight());
+
+					mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDRight());
+					break;
+				}
+			}
+			case DIK_LEFT:
+			{
+				CMapPoint* point = map_points.at(current_point);
+
+				if (point->GetDLeft() != -1) {
+					CMapPoint* nextPoint = map_points.at(point->GetDLeft());
+
+					mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDLeft());
+					break;
+				}
+			}
+			case DIK_DOWN:
+			{
+				CMapPoint* point = map_points.at(current_point);
+
+				if (point->GetDBottom() != -1) {
+					CMapPoint* nextPoint = map_points.at(point->GetDBottom());
+
+					mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDBottom());
+					break;
+				}
+			}
+			case DIK_UP:
+			{
+				CMapPoint* point = map_points.at(current_point);
+
+				if (point->GetDTop() != -1) {
+					CMapPoint* nextPoint = map_points.at(point->GetDTop());
+
+					mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDTop());
+					break;
+				}
 			}
 		}
 	}
