@@ -3,6 +3,7 @@
 
 CParaKoopa::CParaKoopa()
 {
+	this->wing = new CBigWing(this->x + PARA_KOOPA_WING_X, this->y + PARA_KOOPA_WING_Y);
 	SetState(PARA_KOOPA_STATE_WALKING);
 }
 
@@ -62,11 +63,7 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					vy = 0;
 				}
-				if (e->nx != 0)
-				{
-					x += dx;
-					y += dy;
-				}
+				x += dx;
 			}
 
 			//Touch question block
@@ -75,7 +72,8 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 
 			}
@@ -85,14 +83,40 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
+
+			if (dynamic_cast<CParaKoopa*>(e->obj)) // if e->obj is Block 
+			{
+				CParaKoopa* block = dynamic_cast<CParaKoopa*>(e->obj);
+				x += dx;
+				y += dy;
+			}
+
+			if (dynamic_cast<CGreenKoopa*>(e->obj)) // if e->obj is Block 
+			{
+				CGreenKoopa* block = dynamic_cast<CGreenKoopa*>(e->obj);
+				x += dx;
+				y += dy;
+			}
+
 		}
 	}
 
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+	wing->nx = nx;
+	if (nx < 0) {
+		wing->x = x + 0;
+		wing->y = y + PARA_KOOPA_WING_Y;
+	}
+	else {
+		wing->x = x + PARA_KOOPA_WING_X;
+		wing->y = y + PARA_KOOPA_WING_Y;
+	}
 }
 
 void CParaKoopa::Render()
@@ -103,6 +127,7 @@ void CParaKoopa::Render()
 		ani = PARA_KOOPA_ANI_DIE;
 	}
 	animation_set->at(ani)->Render(x, y, -nx, 255);
+	wing->Render();
 }
 
 void CParaKoopa::SetState(int state)

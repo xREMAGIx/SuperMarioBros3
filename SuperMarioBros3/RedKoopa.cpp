@@ -75,6 +75,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					vx = -vx;
+					nx = -nx;
 				}
 
 			}
@@ -86,6 +87,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					vx = -vx;
+					nx = -nx;
 				}
 			}
 
@@ -94,7 +96,8 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 
@@ -103,7 +106,8 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CChimney* block = dynamic_cast<CChimney*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 		}

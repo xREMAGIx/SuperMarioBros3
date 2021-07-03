@@ -75,6 +75,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					vx = -vx;
+					nx = -nx;
 				}
 			}
 
@@ -85,6 +86,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					vx = -vx;
+					nx = -nx;
 				}
 			}
 
@@ -94,6 +96,27 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					vx = -vx;
+					nx = -nx;
+				}
+			}
+
+			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
+			{
+				CChimney* block = dynamic_cast<CChimney*>(e->obj);
+				if (e->nx != 0)
+				{
+					vx = -vx;
+					nx = -nx;
+				}
+			}
+
+			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
+			{
+				CInvisibleWall* block = dynamic_cast<CInvisibleWall*>(e->obj);
+				if (e->nx != 0)
+				{
+					vx = -vx;
+					nx = -nx;
 				}
 			}
 

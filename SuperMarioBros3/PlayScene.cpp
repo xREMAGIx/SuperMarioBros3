@@ -209,7 +209,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_CLOUD: obj = new CCloud(); break;
 	case OBJECT_TYPE_GREEN_KOOPA: obj = new CGreenKoopa(); break;
 	case OBJECT_TYPE_RED_KOOPA: obj = new CRedKoopa(); break;
-	case OBJECT_TYPE_PARA_GOOMBA: obj = new CParaGoomba(); break;
+	case OBJECT_TYPE_PARA_GOOMBA: {
+		obj = new CParaGoomba(x, y);
+		break;
+	} 
 	case OBJECT_TYPE_PARA_KOOPA: obj = new CParaKoopa(); break;
 
 	case OBJECT_TYPE_PORTAL:
@@ -472,8 +475,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 					mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDRight());
-					break;
 				}
+				break;
 			}
 			case DIK_LEFT:
 			{
@@ -484,8 +487,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 					mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDLeft());
-					break;
 				}
+				break;
 			}
 			case DIK_DOWN:
 			{
@@ -496,8 +499,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 					mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDBottom());
-					break;
 				}
+				break;
 			}
 			case DIK_UP:
 			{
@@ -508,8 +511,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 					mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDTop());
-					break;
 				}
+				break;
 			}
 		}
 	}

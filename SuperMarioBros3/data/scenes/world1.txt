@@ -107,7 +107,7 @@
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id
-50	300	98	1	316	150	1	2
+50	56	15	0	71	30	2
 
 [MAP]
 1	mapfiles\world1.txt

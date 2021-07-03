@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	2
 #scene list	path
 [SCENES]
 1	data\scenes\world1.txt

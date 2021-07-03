@@ -4,7 +4,7 @@
 
 #define MARIO_WIDTH 14
 #define MARIO_WALKING_SPEED		0.1f
-#define MARIO_JUMP_SPEED_Y		0.6f
+#define MARIO_JUMP_SPEED_Y		0.4f
 #define MARIO_GRAVITY			0.0015f
 
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f

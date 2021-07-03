@@ -2,8 +2,11 @@
 #include "ParaGoomba.h"
 #include "InvisibleBlock.h"
 
-CParaGoomba::CParaGoomba()
+CParaGoomba::CParaGoomba(float x, float y)
 {
+	this->leftWing = new CSmallWing(this->x + PARA_GOOMBA_LEFT_WING_X, this->y + PARA_GOOMBA_LEFT_WING_Y);
+	this->rightWing = new CSmallWing(this->x + PARA_GOOMBA_RIGHT_WING_X, this->y + PARA_GOOMBA_RIGHT_WING_Y);
+	rightWing->nx = -1;
 	SetState(PARA_GOOMBA_STATE_WALKING);
 }
 
@@ -35,6 +38,7 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CalcPotentialCollisions(coObjects, coEvents);
 
+
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -62,7 +66,17 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
 				if (e->ny < 0)
 				{
-					vy = 0;
+					if (jumpCount == 12) {
+						SetState(PARA_GOOMBA_STATE_JUMP_BIG);
+						jumpCount = 0;
+					}
+					else if(jumpCount == 4 || jumpCount == 8) {
+						SetState(PARA_GOOMBA_STATE_JUMP_SMALL);
+						jumpCount++;
+					}
+					else {
+						jumpCount++; 
+					}
 				}
 			}
 
@@ -72,7 +86,8 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 
@@ -82,17 +97,18 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CParaGoomba* block = dynamic_cast<CParaGoomba*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 
-			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Block 
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
-				CGoomba* block = dynamic_cast<CGoomba*>(e->obj);
+				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 				if (e->nx != 0)
 				{
-					nx = -nx;
-					vx = -vx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 		}
@@ -100,16 +116,23 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
+	leftWing->x = x + PARA_GOOMBA_LEFT_WING_X;
+	leftWing->y = y + PARA_GOOMBA_LEFT_WING_Y;
+
+	rightWing->x = x + PARA_GOOMBA_RIGHT_WING_X;
+	rightWing->y = y + PARA_GOOMBA_RIGHT_WING_Y;
 }
 
 void CParaGoomba::Render()
 {
-
 	int ani = PARA_GOOMBA_ANI_WALKING;
 	if (state == PARA_GOOMBA_STATE_DIE) {
 		ani = PARA_GOOMBA_ANI_DIE;
 	}
 	animation_set->at(ani)->Render(x, y, -nx, 255);
+	leftWing->Render();
+	rightWing->Render();
 }
 
 void CParaGoomba::SetState(int state)
@@ -122,7 +145,14 @@ void CParaGoomba::SetState(int state)
 		vx = 0;
 		vy = 0;
 		break;
+	case PARA_GOOMBA_STATE_JUMP_SMALL:
+		vy = -PARA_GOOMBA_JUMP_SPEED;
+		break;
+	case PARA_GOOMBA_STATE_JUMP_BIG:
+		vy = -PARA_GOOMBA_JUMP_SPEED * 3;
+		break;
 	case PARA_GOOMBA_STATE_WALKING:
 		vx = -PARA_GOOMBA_SPEED;
 	}
+
 }
