@@ -5,6 +5,7 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
+#include "Grid.h"
 
 using namespace std;
 
@@ -54,6 +55,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define MAX_SCENE_LINE 1024
 
 GameMap* map;
+Grid* grid;
 Quadtree* quadtree;
 
 void CPlayScene::_ParseSection_SETTINGS(string line)
@@ -355,49 +357,11 @@ void CPlayScene::Load()
 	f.close();
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
-	//quadtree->CreateQuadTree();
+	grid = Grid::GetInstance();
 }
 
 void CPlayScene::Update(DWORD dt)
 {
-	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
-	// TO-DO: This is a "dirty" way, need a more organized way 
-
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
-
-	
-	/*
-	vector<CGameObject*>* return_objects_list = new vector<CGameObject*>();
-
-		for (int i = 0; i < coObjects.size(); i++)
-		{
-			//Get all objects that can collide with current entity
-			quadtree->Retrieve(return_objects_list, coObjects[i]);
-
-			for (auto x = return_objects_list->begin(); x != return_objects_list->end(); x++)
-			{
-				coObjects[i]->Update(dt, return_objects_list);
-			}
-
-			return_objects_list->clear();
-		}
-
-	quadtree->Clear();
-
-	delete return_objects_list;
-	delete quadtree;
-	*/
-	
-	
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &coObjects);
-	}
-	
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (player == NULL) return;
@@ -409,6 +373,34 @@ void CPlayScene::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
+
+
+	// We know that Mario is the first object in the list hence we won't add him into the colliable object list
+	// TO-DO: This is a "dirty" way, need a more organized way 
+
+	vector<LPGAMEOBJECT> coObjects;
+	for (size_t i = 1; i < objects.size(); i++)
+	{
+		coObjects.push_back(objects[i]);
+	}
+
+	DebugOut(L"[INFO] BEFORE: %d\n", coObjects.size());
+
+	grid->GetListObject(coObjects, cx, cy);
+
+	DebugOut(L"[INFO] AFTER: %d\n", coObjects.size());
+	
+	//Mario
+	objects[0]->Update(dt, &coObjects);
+
+	if (!objects.empty()) {
+		for (size_t i = 0; i < coObjects.size(); i++)
+		{
+			coObjects[i]->Update(dt, &coObjects);
+		}
+	}
+	
+
 
 	//place update position camera at final 
 	if (cx > max_cam_x - game->GetScreenWidth()) {

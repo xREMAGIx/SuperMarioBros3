@@ -153,6 +153,9 @@
     <ClCompile Include="BigWing.cpp">
       <Filter>Source Files\EnemiesItems</Filter>
     </ClCompile>
+    <ClCompile Include="Grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -264,6 +267,9 @@
     </ClInclude>
     <ClInclude Include="BigWing.h">
       <Filter>Header Files\EnemiesItems</Filter>
+    </ClInclude>
+    <ClInclude Include="Grid.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

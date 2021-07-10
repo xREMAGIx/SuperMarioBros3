@@ -157,6 +157,7 @@
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
+    <ClCompile Include="Grid.cpp" />
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="InvisibleBlock.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="Block.h" />
+    <ClInclude Include="Grid.h" />
     <ClInclude Include="helpers.h" />
     <ClInclude Include="InvisibleBlock.h" />
     <ClInclude Include="InvisibleWall.h" />

@@ -484,3 +484,8 @@ void CGame::ReInit(int scene_width, int scene_height)
 
 	OutputDebugString(L"[INFO] InitGame done;\n");
 }
+
+bool CGame::isCollision(RECT r1, RECT r2)
+{
+	return !(r1.right < r2.left || r1.left > r2.right || r1.top > r2.bottom || r1.bottom < r2.top);
+}

@@ -109,6 +109,8 @@ public:
 	}
 	static CGame* GetInstance();
 
+	bool isCollision(RECT r1, RECT r2);
+
 	//Load Data
 	void Load(LPCWSTR gameFile);
 

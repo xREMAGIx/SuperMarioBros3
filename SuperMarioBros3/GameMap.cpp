@@ -72,31 +72,6 @@ void GameMap::_ParseSection_MAP(string line)
 
 void GameMap::LoadMap(LPCWSTR filepath)
 {
-	/*
-	
-	ifstream inFile;
-	inFile.open(filepath);
-
-	inFile >> numRows;
-	inFile >> numCols;
-	inFile >> numTilesCols;
-	inFile >> cellW;
-	inFile >> cellH;
-	inFile >> spacing;
-
-	for (int i = 0; i < numRows; i++)
-	{
-		for (int j = 0; j < numCols; j++)
-		{
-			inFile >> listTile[i][j];
-		}
-	}
-
-	CTextures* textures = CTextures::GetInstance();
-	textures->Add(1, L"mapfiles\\stagetiles.png", D3DCOLOR_XRGB(224, 163, 216));
-	int index = 0;
-	*/
-
 	ifstream f;
 	f.open(filepath);
 
@@ -153,26 +128,6 @@ int GameMap::getTitle(int x, int y)
 
 void GameMap::Render()
 {
-	/*
-	int rowCam = CGame::GetInstance()->GetCamPos().y / 16;
-	int colCam = CGame::GetInstance()->GetCamPos().x / 16;
-
-	int x = (int)CGame::GetInstance()->GetCamPos().x % 16;
-	int y = (int)CGame::GetInstance()->GetCamPos().y % 16;
-
-	for (int i = 0; i < SCREEN_HEIGHT / 16; i++)
-	{
-		for (int j = 0; j < SCREEN_WIDTH / 16 + 1; j++)
-		{
-			//DebugOut(L"[INFO] RECT: %d %d\n", i + rowCam, j + colCam);
-			RECT rect = GetSourceRect(listTile[i + rowCam][j + colCam]);
-			//DebugOut(L"[INFO] DRAWPLACE: %d %d\n", j * 16 - x, i * 16 - y + 32);
-			CGame::GetInstance()->Draw(j * 16 - x, i * 16 - y, CTextures::GetInstance()->Get(ID_TEX_MAP1), rect.left, rect.top, rect.right, rect.bottom);
-			//CGame::GetInstance()->Draw(j * 16 - x, i * 16 - y, CTextures::GetInstance()->Get(ID_TEX_MAP1), 16, 16, 32, 32);
-		}
-	}
-	*/
-
 	for (int i = 0; i < numRows; i++)
 	{
 		for (int j = 0; j < numCols; j++)
