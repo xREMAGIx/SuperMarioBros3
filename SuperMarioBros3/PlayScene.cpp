@@ -377,12 +377,8 @@ void CPlayScene::Update(DWORD dt)
 		coObjects.push_back(objects[i]);
 	}
 
-	DebugOut(L"[INFO] BEFORE: %d\n", coObjects.size());
-
 	grid->GetListObject(coObjects, cx, cy);
 
-	DebugOut(L"[INFO] AFTER: %d\n", coObjects.size());
-	
 	//Mario
 	objects[0]->Update(dt, &coObjects);
 

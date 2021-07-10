@@ -81,11 +81,7 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
 				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
-				if (e->nx != 0)
-				{
-					this->vx = -vx;
-					this->nx = -nx;
-				}
+				if (nx != 0) vx = 0;
 			}
 
 			if (dynamic_cast<CParaKoopa*>(e->obj)) // if e->obj is Block 

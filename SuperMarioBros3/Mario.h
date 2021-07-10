@@ -37,6 +37,7 @@ class CMario : public CGameObject
 	int untouchable;
 	DWORD untouchable_start;
 public:
+
 	CMario() : CGameObject()
 	{
 		level = MARIO_LEVEL_SMALL;

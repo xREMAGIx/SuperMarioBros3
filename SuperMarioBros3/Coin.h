@@ -11,7 +11,7 @@
 #define COIN_STATE_EARNED 200
 
 #define COIN_ANI_IDLE 0
-#define COIN_ANI_EARNED 1
+#define COIN_ANI_EARNED -1
 
 class CCoin : public CGameObject
 {
@@ -20,5 +20,6 @@ class CCoin : public CGameObject
 	virtual void Render();
 
 public:
+	CCoin();
 	virtual void SetState(int state);
 };

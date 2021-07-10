@@ -1,12 +1,19 @@
 #include "Game.h"
 #include "Coin.h"
 
+CCoin::CCoin()
+{
+	SetState(COIN_STATE_IDLE);
+}
+
 void CCoin::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	left = x;
-	top = y;
-	right = x + COIN_BBOX_WIDTH;
-	bottom = y + COIN_BBOX_HEIGHT;
+	if (state == COIN_STATE_IDLE) {
+		left = x;
+		top = y;
+		right = x + COIN_BBOX_WIDTH;
+		bottom = y + COIN_BBOX_HEIGHT;
+	}
 }
 
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -21,7 +28,9 @@ void CCoin::Render()
 	if (state == COIN_STATE_EARNED) {
 		ani = COIN_ANI_EARNED;
 	}
-	animation_set->at(ani)->Render(x, y, -1);
+	if (ani != -1) {
+		animation_set->at(ani)->Render(x, y, -1);
+	}
 }
 
 void CCoin::SetState(int state)
