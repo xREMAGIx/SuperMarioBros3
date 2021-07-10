@@ -26,10 +26,10 @@ bool Grid::IsOutOfCamera(float cam_x, float cam_y, LPGAMEOBJECT obj)
 	CGame* game = CGame::GetInstance();
 
 	// CAM
-	float l = cam_x - 16,
+	float l = cam_x - 80,
 		t = cam_y,
-		r = cam_x + game->GetScreenWidth() + 16,
-		b = cam_y + game->GetScreenHeight();
+		r = cam_x + game->GetScreenWidth() + 80,
+		b = cam_y + game->GetScreenHeight() + 160;
 
 	rectThis.left = (int)l;
 	rectThis.top = (int)t;

@@ -13,20 +13,29 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 	left = x;
 	top = y;
 	right = x + GOOMBA_BBOX_WIDTH;
+	bottom = y + GOOMBA_BBOX_HEIGHT;
+	
 
-	if (state == GOOMBA_STATE_DIE)
+	if (state == GOOMBA_STATE_DIE) {
 		bottom = y + GOOMBA_BBOX_HEIGHT_DIE;
-	else
-		bottom = y + GOOMBA_BBOX_HEIGHT;
+	}
+
+	if (dt_die != 0 &&  GetTickCount() - dt_die > TIME_GOOMBA_DIE)
+	{
+		left = 0;
+		top = 0;
+		right = 0;
+		bottom = 0;
+	}
+	
 }
 
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 
-	//
-	// TO-DO: make sure Goomba can interact with the world and to each of them too!
-	// 
+
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -134,7 +143,13 @@ void CGoomba::Render()
 	if (state == GOOMBA_STATE_DIE) {
 		ani = GOOMBA_ANI_DIE;
 	}
-	animation_set->at(ani)->Render(x, y, -nx, 255);
+	if (dt_die != 0 && GetTickCount() - dt_die > TIME_GOOMBA_DIE)
+	{
+		ani = -1;
+	}
+	if (ani != -1) {
+		animation_set->at(ani)->Render(x, y, -nx, 255);
+	}
 }
 
 void CGoomba::SetState(int state)

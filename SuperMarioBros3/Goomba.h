@@ -6,6 +6,7 @@
 #define GOOMBA_SPEED 0.05f
 #define GOOMBA_GRAVITY	0.001f
 
+#define TIME_GOOMBA_DIE 1000
 
 #define GOOMBA_BBOX_WIDTH 16
 #define GOOMBA_BBOX_HEIGHT 15
@@ -19,6 +20,8 @@
 
 class CGoomba : public CGameObject
 {
+	DWORD dt_die;
+
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -26,4 +29,6 @@ class CGoomba : public CGameObject
 public:
 	CGoomba();
 	virtual void SetState(int state);
+	void StartDie() { dt_die = GetTickCount(); }
+
 };
