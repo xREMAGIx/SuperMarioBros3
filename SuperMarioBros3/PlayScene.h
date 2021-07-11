@@ -56,7 +56,10 @@ public:
 
 	CMario* GetPlayer() { return player; }
 	CMarioWorld* GetMarioWorld() { return marioWorld; }
+
 	vector<LPGAMEOBJECT> GetObjectList() { return objects; }
+	void SetObjectList(vector<LPGAMEOBJECT> objects) { objects = this->objects;}
+
 	vector<CMapPoint*> GetMapPoints() { return mapPoints; }
 	int GetCurrentMapPoint() { return currentMapPoint; }
 	void SetCurrentMapPoint(int index) { this->currentMapPoint = index; }

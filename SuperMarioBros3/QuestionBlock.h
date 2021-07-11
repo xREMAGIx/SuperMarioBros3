@@ -19,11 +19,14 @@ class CQuestionBlock : public CGameObject
 	CGameObject* item;
 
 public:
-	CQuestionBlock(int _id_item = 6);
+	CQuestionBlock(int _id_item = 6, int ani_set_id = 208);
 
 	virtual void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void SetState(int state);
 
+	CGameObject* GetItem() {
+		return this->item;
+	}
 };

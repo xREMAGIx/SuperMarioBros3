@@ -173,7 +173,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BLOCK: obj = new CBlock(); break;
-	case OBJECT_TYPE_QUESTION_BLOCK: obj = new CQuestionBlock(); break;
+	case OBJECT_TYPE_QUESTION_BLOCK: { 
+		int itemId = atof(tokens[4].c_str());
+		int aniSetId = atof(tokens[5].c_str());
+		obj = new CQuestionBlock(itemId, aniSetId);
+		break; 
+	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(); break;
 	case OBJECT_TYPE_CLOUD: obj = new CCloud(); break;

@@ -239,6 +239,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				coin->SetState(COIN_STATE_EARNED);
 			}
+
+			//Interact with mushroom
+			if (dynamic_cast<CMushroom*>(e->obj)) // if e->obj is Block 
+			{
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
+				CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
+				SetState(MARIO_LEVEL_BIG);
+			}
+
 		}
 	}
 
@@ -249,16 +259,35 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::Render()
 {
 	int ani;
-	if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
+	switch (level)
 	{
-		ani = MARIO_ANI_JUMPING_LEFT;
+	case MARIO_LEVEL_BIG: {
+		if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
+		{
+			ani = MARIO_ANI_BIG_JUMPING_LEFT;
+		}
+		else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
+			ani = MARIO_ANI_BIG_WALKING_LEFT;
+		}
+		else {
+			ani = MARIO_ANI_BIG_IDLE_LEFT;
+		}
+		break;
 	}
-	else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
-		ani = MARIO_ANI_WALKING_LEFT;
+	default:
+		if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
+		{
+			ani = MARIO_ANI_JUMPING_LEFT;
+		}
+		else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
+			ani = MARIO_ANI_WALKING_LEFT;
+		}
+		else {
+			ani = MARIO_ANI_IDLE_LEFT;
+		}
+		break;
 	}
-	else {
-		ani = MARIO_ANI_IDLE_LEFT;
-	}
+
 	animation_set->at(ani)->Render(x, y, nx, 255);
 }
 
@@ -300,10 +329,8 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 
 	if (level == MARIO_LEVEL_BIG)
 	{
-		/*
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;
-		*/
 	}
 	else
 	{

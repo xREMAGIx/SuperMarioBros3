@@ -30,7 +30,5 @@ public:
 	virtual void Render();
 	void SetState(int state);
 
-	void StartJump() {
-		DebugOut(L"[INFO] START TIMER\n");
-		dt_jump = GetTickCount(); }
+	void StartJump() { dt_jump = GetTickCount(); }
 };

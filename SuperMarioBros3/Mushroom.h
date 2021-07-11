@@ -1,12 +1,18 @@
 #pragma once
 #include "GameObject.h"
+#include "InvisibleBlock.h"
+#include "QuestionBlock.h"
+#include "Chimney.h"
+#include "Mario.h"
+#include "Game.h"
 
 
 #define MUSHSHROOM_SPEED 0.05f
+#define MUSHSHROOM_GRAVITY	0.001f
 
 //State
 #define MUSHSHROOM_STATE_WALKING 1
-#define MUSHSHROOM_STATE_DIE 2
+#define MUSHSHROOM_STATE_EARNED 2
 //Collision
 #define MUSHSHROOM_BBOX_WIDTH  16
 #define MUSHSHROOM_BBOX_HEIGHT 16
