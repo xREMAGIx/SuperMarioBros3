@@ -20,39 +20,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	See scene1.txt, scene2.txt for detail format specification
 */
 
-#define SCENE_SECTION_UNKNOWN -1
-#define SCENE_SECTION_SETTINGS 1
-#define SCENE_SECTION_TEXTURES 2
-#define SCENE_SECTION_SPRITES 3
-#define SCENE_SECTION_ANIMATIONS 4
-#define SCENE_SECTION_ANIMATION_SETS	5
-#define SCENE_SECTION_OBJECTS	6
-#define SCENE_SECTION_MAP	7
-
-#define OBJECT_TYPE_MARIO	0
-#define OBJECT_TYPE_BLOCK	1
-#define OBJECT_TYPE_GOOMBA	2
-#define OBJECT_TYPE_QUESTION_BLOCK	3
-#define OBJECT_TYPE_INVISIBLE_BLOCK 4
-#define OBJECT_TYPE_BRICK 5
-#define OBJECT_TYPE_COIN 6
-#define OBJECT_TYPE_CLOUD 7
-#define OBJECT_TYPE_GREEN_KOOPA 8
-#define OBJECT_TYPE_RED_KOOPA 9
-#define OBJECT_TYPE_PARA_GOOMBA 10
-#define OBJECT_TYPE_PARA_KOOPA 11
-#define OBJECT_TYPE_INVISIBLE_WALL 12
-#define OBJECT_TYPE_CHIMNEY 13
-#define OBJECT_TYPE_ENEMY_WALL 14
-
-#define OBJECT_TYPE_PORTAL	50
-
-#define OBJECT_TYPE_TREE_WORLD 100
-#define OBJECT_TYPE_MARIO_WORLD 101
-#define OBJECT_TYPE_MAP_POINT 102
-
-
-#define MAX_SCENE_LINE 1024
 
 GameMap* map;
 Grid* grid;
@@ -177,6 +144,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	CGameObject* obj = NULL;
 
+
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
@@ -274,6 +242,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 
 	// General object setup
+	obj->SetId(object_type);
 	obj->SetPosition(x, y);
 	if (ani_set_id != 0)
 	{

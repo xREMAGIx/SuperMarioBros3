@@ -32,6 +32,7 @@ struct CCollisionEvent
 class CGameObject
 {
 public:
+	int id;
 
 	float x;
 	float y;
@@ -64,6 +65,11 @@ public:
 	void SetState(int state) { this->state = state; }
 	int GetState() { return this->state; }	
 
+	void SetId(int id) { this->id = id; }
+	int GetId() {
+		return this->id;
+	}
+
 	//Collision
 	void RenderBoundingBox();
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
@@ -84,8 +90,8 @@ public:
 
 	CGameObject();
 
-	float GetX() { return x; }
-	float GetY() { return y; }
+	float GetX() { return  this->x; }
+	float GetY() { return  this->y; }
 
 	//Actions
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;

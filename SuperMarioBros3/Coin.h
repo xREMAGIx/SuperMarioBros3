@@ -9,17 +9,28 @@
 
 #define COIN_STATE_IDLE 100
 #define COIN_STATE_EARNED 200
+#define COIN_STATE_JUMP 300
+
+#define COIN_JUMP_SPEED 0.1f
 
 #define COIN_ANI_IDLE 0
 #define COIN_ANI_EARNED -1
 
+#define TIME_COIN_JUMP 500
+
+
 class CCoin : public CGameObject
 {
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-	virtual void Render();
+	DWORD dt_jump;
 
 public:
 	CCoin();
-	virtual void SetState(int state);
+	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Render();
+	void SetState(int state);
+
+	void StartJump() {
+		DebugOut(L"[INFO] START TIMER\n");
+		dt_jump = GetTickCount(); }
 };

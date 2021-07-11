@@ -18,12 +18,20 @@ void CCoin::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
+	CGameObject::Update(dt);
+	
+	if (GetTickCount() - dt_jump > TIME_COIN_JUMP)
+	{
+		SetState(COIN_STATE_EARNED);
+	}
+	
+
+	x += dx;
+	y += dy;
 }
 
 void CCoin::Render()
 {
-
 	int ani = COIN_ANI_IDLE;
 	if (state == COIN_STATE_EARNED) {
 		ani = COIN_ANI_EARNED;
@@ -36,4 +44,16 @@ void CCoin::Render()
 void CCoin::SetState(int state)
 {
 	CGameObject::SetState(state);
+
+	switch (state)
+	{
+		case COIN_STATE_JUMP:
+			StartJump();
+			vy = -COIN_JUMP_SPEED;
+			break;
+		case COIN_STATE_EARNED:
+			break;
+		case COIN_STATE_IDLE:
+			break;
+	}
 }

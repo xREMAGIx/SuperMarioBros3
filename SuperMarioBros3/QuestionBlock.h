@@ -1,5 +1,8 @@
 #pragma once
 #include "GameObject.h"
+#include "helpers.h"
+#include "Mushroom.h"
+#include "Coin.h"
 
 //State
 #define QUESTION_BLOCK_STATE_IDLE  0
@@ -13,9 +16,14 @@
 
 class CQuestionBlock : public CGameObject
 {
-	
+	CGameObject* item;
 
 public:
+	CQuestionBlock(int _id_item = 6);
+
 	virtual void Render();
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	void SetState(int state);
+
 };
