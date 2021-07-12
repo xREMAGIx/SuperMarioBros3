@@ -239,7 +239,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		return;
 	}
-
+	case OBJECT_TYPE_INTRO_3_FONT: {
+		obj = new CThirdFont();
+		break;
+	}
+	case OBJECT_TYPE_INTRO_PLAYER_FONT: {
+		obj = new CPlayerFont();
+		break;
+	}
 	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -471,7 +478,6 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			}
 			case DIK_Z:
 			{
-				DebugOut(L"[INFO] [z]\n");
 				CMapPoint* point = map_points.at(current_point);
 
 				if (point->GetSceneId() != -1) {

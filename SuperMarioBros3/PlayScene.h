@@ -22,12 +22,15 @@
 #include "TreeWorld.h"
 #include "MarioWorld.h"
 #include "MapPoint.h"
+#include "ThirdFont.h"
+#include "PlayerFont.h"
 #include "helpers.h"
 
 
 class CPlayScene : public CScene
 {
 protected:
+	CPlayerFont choosePlayer;
 	CMario* player;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
 	CMarioWorld* marioWorld;

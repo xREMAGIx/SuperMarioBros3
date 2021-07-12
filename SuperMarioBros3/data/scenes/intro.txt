@@ -1,0 +1,40 @@
+#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y
+[SETTINGS]
+254	226	0	0	254	0
+
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+100	mapfiles\intro-bg.png	255	219	161
+101	textures\intro-font.png	255	255	255
+
+# id	file_path	texture_id
+[SPRITES]
+101	data\intro-sprite.txt	101
+						
+# ani_id	file_path	
+[ANIMATIONS]
+101	data\intro-animation.txt
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# 3 FONT
+530	53001
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 
+# 500 = 3 FONT
+# 501 = CHOOSE PLAYER FONT
+
+# CHOOSE PLAYER FONT
+501	8	15	0
+
+# 3 FONT
+500	8	15	530
+
+[MAP]
+0	mapfiles\intro.txt
+
+

@@ -43,6 +43,12 @@
     <Filter Include="Source Files\EnemiesItems">
       <UniqueIdentifier>{14b8f9fc-4a70-41fa-a1ce-aa1a613352b3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Intro">
+      <UniqueIdentifier>{6f1b4348-fdd1-4580-b604-bb830d214cc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Intro">
+      <UniqueIdentifier>{206e2aef-13fc-4af5-8cc5-e123a752feba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -155,6 +161,12 @@
     </ClCompile>
     <ClCompile Include="Grid.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdFont.cpp">
+      <Filter>Source Files\Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerFont.cpp">
+      <Filter>Source Files\Intro</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -270,6 +282,12 @@
     </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdFont.h">
+      <Filter>Header Files\Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerFont.h">
+      <Filter>Header Files\Intro</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -170,6 +170,7 @@
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="ParaGoomba.cpp" />
     <ClCompile Include="ParaKoopa.cpp" />
+    <ClCompile Include="PlayerFont.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="QuadTree.cpp" />
@@ -180,6 +181,7 @@
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="ThirdFont.cpp" />
     <ClCompile Include="TreeWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,8 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="EnemyWall.h" />
+    <ClInclude Include="PlayerFont.h" />
+    <ClInclude Include="ThirdFont.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="GameObject.h" />
