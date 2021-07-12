@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "Point.h"
 
 #define GOOMBA_WIDTH 16
 #define GOOMBA_HEIGHT 16
@@ -21,6 +22,7 @@
 class CGoomba : public CGameObject
 {
 	DWORD dt_die;
+	CPoint* score;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

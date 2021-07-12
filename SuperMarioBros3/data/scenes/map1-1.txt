@@ -7,18 +7,21 @@
 0	textures\mario-luigi.png	68	145	190
 10	textures\enemies.png	68	145	190
 20	textures\npc-misc.png	166	185	255
+50	textures\hud-font.png	81	255	191
 
 # id	file_path	texture_id
 [SPRITES]
 0	data\character-sprite.txt	0
 10	data\enemies-sprite.txt	10
 20	data\misc-sprite.txt	20
+50	data\hud-sprite.txt	50
 						
 # ani_id	file_path	
 [ANIMATIONS]
 0	data\character-animation.txt
 10	data\enemies-animation.txt
 20	data\misc-animation.txt
+50	data\hud-animation.txt
 
 #
 # id	ani1	ani2	ani3

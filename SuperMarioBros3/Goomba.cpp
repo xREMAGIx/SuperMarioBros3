@@ -5,6 +5,8 @@
 CGoomba::CGoomba()
 {
 	SetState(GOOMBA_STATE_WALKING);
+	score = new CPoint();
+	score->SetPointId(POINT_ID_100);
 }
 
 
@@ -42,6 +44,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		vy += GOOMBA_GRAVITY * dt;
 		CalcPotentialCollisions(coObjects, coEvents);
+	}
+
+	if (state == GOOMBA_STATE_DIE) {
+		score->Update(dt, coObjects);
 	}
 
 	// No collision occured, proceed normally
@@ -140,6 +146,7 @@ void CGoomba::Render()
 	int ani = GOOMBA_ANI_WALKING;
 	if (state == GOOMBA_STATE_DIE) {
 		ani = GOOMBA_ANI_DIE;
+		score->Render();
 	}
 	if (dt_die != 0 && GetTickCount() - dt_die > TIME_GOOMBA_DIE)
 	{
@@ -156,6 +163,8 @@ void CGoomba::SetState(int state)
 	switch (state)
 	{
 	case GOOMBA_STATE_DIE:
+		score->SetPosition(x, y - 18);
+		score->SetState(POINT_STATE_SHOW);
 		y += GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE + 1;
 		vx = 0;
 		vy = 0;

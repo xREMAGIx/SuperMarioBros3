@@ -153,6 +153,7 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="EnemyWall.cpp" />
+    <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="ParaKoopa.cpp" />
     <ClCompile Include="PlayerFont.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Portal.cpp" />
     <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
@@ -196,7 +198,9 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="EnemyWall.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="PlayerFont.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="ThirdFont.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameMap.h" />

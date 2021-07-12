@@ -49,6 +49,12 @@
     <Filter Include="Header Files\Intro">
       <UniqueIdentifier>{206e2aef-13fc-4af5-8cc5-e123a752feba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Hud">
+      <UniqueIdentifier>{00b6a438-9920-46ff-83f8-1d6bd9b8ef7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Hud">
+      <UniqueIdentifier>{27a02166-1293-4300-94b2-2bd60e341731}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -167,6 +173,12 @@
     </ClCompile>
     <ClCompile Include="PlayerFont.cpp">
       <Filter>Source Files\Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files\Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>Source Files\Hud</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +300,12 @@
     </ClInclude>
     <ClInclude Include="PlayerFont.h">
       <Filter>Header Files\Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Header Files\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Header Files\Hud</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
