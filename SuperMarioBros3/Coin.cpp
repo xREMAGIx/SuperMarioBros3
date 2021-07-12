@@ -20,7 +20,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	
-	if (GetTickCount() - dt_jump > TIME_COIN_JUMP)
+	if (dt_jump	!=0 && (GetTickCount() - dt_jump > TIME_COIN_JUMP))
 	{
 		SetState(COIN_STATE_EARNED);
 	}

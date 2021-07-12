@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
+#include "Portal.h"
 
 #define MARIO_WORLD_STATE_SMALL		0
 

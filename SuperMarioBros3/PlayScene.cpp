@@ -232,8 +232,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int dRight = atof(tokens[6].c_str());
 		int dBottom = atof(tokens[7].c_str());
 		int dLeft = atof(tokens[8].c_str());
-
-		point = new CMapPoint(id, dTop, dRight, dBottom, dLeft);
+		int scene_id = atof(tokens[9].c_str());
+		point = new CMapPoint(id, dTop, dRight, dBottom, dLeft, scene_id);
 		point->SetPosition(x, y);
 		mapPoints.push_back(point);
 
@@ -466,6 +466,16 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 					mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDTop());
+				}
+				break;
+			}
+			case DIK_Z:
+			{
+				DebugOut(L"[INFO] [z]\n");
+				CMapPoint* point = map_points.at(current_point);
+
+				if (point->GetSceneId() != -1) {
+					CGame::GetInstance()->SwitchScene(point->GetSceneId());
 				}
 				break;
 			}

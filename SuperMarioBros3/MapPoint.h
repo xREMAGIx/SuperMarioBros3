@@ -8,8 +8,10 @@ class CMapPoint : public CGameObject
 	int dRight;
 	int dBottom;
 	int dLeft;
+	int scene_id;
+
 public:
-	CMapPoint(int id, int dTop, int dRight, int dBottom, int dLeft);
+	CMapPoint(int id, int dTop, int dRight, int dBottom, int dLeft, int scene_id);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 
@@ -18,4 +20,5 @@ public:
 	int GetDRight() { return dRight; }
 	int GetDBottom() { return dBottom; }
 	int GetDLeft() { return dLeft; }
+	int GetSceneId() { return scene_id; }
 };

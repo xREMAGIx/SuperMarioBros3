@@ -33,6 +33,7 @@ protected:
 	CMarioWorld* marioWorld;
 	vector<CMapPoint*> mapPoints;
 
+
 	int currentMapPoint = 0;
 
 	float max_cam_x = 0.0f;
