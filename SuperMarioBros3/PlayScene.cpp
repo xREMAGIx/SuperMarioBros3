@@ -20,10 +20,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	See scene1.txt, scene2.txt for detail format specification
 */
 
-
 GameMap* map;
 Grid* grid;
-Quadtree* quadtree;
 
 void CPlayScene::_ParseSection_SETTINGS(string line)
 {

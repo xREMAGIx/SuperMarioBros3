@@ -15,7 +15,6 @@
 #include "RedKoopa.h"
 #include "ParaGoomba.h"
 #include "ParaKoopa.h"
-#include "QuadTree.h"
 #include "InvisibleWall.h"
 #include "Chimney.h"
 #include "EnemyWall.h"

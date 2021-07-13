@@ -12,11 +12,19 @@ void CRedKoopa::GetBoundingBox(float& left, float& top, float& right, float& bot
 	left = x;
 	top = y;
 	right = x + RED_KOOPA_BBOX_WIDTH;
+	bottom = y + RED_KOOPA_BBOX_HEIGHT;
 
-	if (state == RED_KOOPA_STATE_DIE)
-		bottom = y + RED_KOOPA_BBOX_HEIGHT_DIE;
-	else
+	switch (state)
+	{
+	case RED_KOOPA_STATE_SHELL:
+	case RED_KOOPA_STATE_SHELL_SCROLL: {
+		bottom = y + RED_KOOPA_BBOX_SHELL_HEIGHT;
+		break;
+	}
+	default:
 		bottom = y + RED_KOOPA_BBOX_HEIGHT;
+		break;
+	}
 }
 
 void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -52,6 +60,13 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			//Walk on invisible wall
+			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
+			{
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
+			}
 
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
@@ -93,11 +108,17 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
-				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
-				if (e->nx != 0)
-				{
-					this->vx = -vx;
-					this->nx = -nx;
+				if (state != RED_KOOPA_STATE_SHELL_SCROLL) {
+					CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
+					if (e->nx != 0)
+					{
+						this->vx = -vx;
+						this->nx = -nx;
+					}
+				}
+				else {
+					x += dx;
+					y += dy;
 				}
 			}
 
@@ -119,11 +140,31 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CRedKoopa::Render()
 {
-
-	int ani = RED_KOOPA_ANI_WALKING;
-	if (state == RED_KOOPA_STATE_DIE) {
-		ani = RED_KOOPA_ANI_DIE;
+	int ani ;
+	
+	switch (state)
+	{
+		case RED_KOOPA_STATE_RESPAWN:
+		{
+			ani = RED_KOOPA_ANI_RESPAWN;
+			break;
+		}
+		case RED_KOOPA_STATE_SHELL:
+		{
+			ani = RED_KOOPA_ANI_SHELL;
+			break;
+		}
+		case RED_KOOPA_STATE_SHELL_SCROLL:
+		{
+			ani = RED_KOOPA_ANI_SHELL_SCROLL;
+			break;
+		}
+		default:
+			ani = RED_KOOPA_ANI_WALKING;
+			break;
 	}
+	
+	
 	animation_set->at(ani)->Render(x, y, -nx, 255);
 }
 
@@ -132,10 +173,17 @@ void CRedKoopa::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case RED_KOOPA_STATE_DIE:
-		y += RED_KOOPA_BBOX_HEIGHT - RED_KOOPA_BBOX_HEIGHT_DIE + 1;
+	case RED_KOOPA_STATE_RESPAWN:
+		y += - RED_KOOPA_BBOX_HEIGHT + RED_KOOPA_BBOX_SHELL_HEIGHT + 1;
 		vx = 0;
 		vy = 0;
+		break;
+	case RED_KOOPA_STATE_SHELL: 
+		vx = 0;
+		vy = 0;
+		break;
+	case RED_KOOPA_STATE_SHELL_SCROLL:
+		vx = nx* RED_KOOPA_SCROLL;
 		break;
 	case RED_KOOPA_STATE_WALKING:
 		vx = -RED_KOOPA_SPEED;

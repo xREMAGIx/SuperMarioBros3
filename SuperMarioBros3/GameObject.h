@@ -70,6 +70,9 @@ public:
 		return this->id;
 	}
 
+	void SetDirection(int nx) { this->nx = nx; }
+	int GetDirection() { return this->nx; }
+
 	//Collision
 	void RenderBoundingBox();
 	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);

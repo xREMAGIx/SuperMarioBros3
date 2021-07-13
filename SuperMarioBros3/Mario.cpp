@@ -128,6 +128,48 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
+			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Goomba 
+			{
+	
+				CRedKoopa* redKoopa = dynamic_cast<CRedKoopa*>(e->obj);
+				// jump on top >> kill Goomba and deflect a bit 
+				if (e->ny < 0)
+				{
+					if (redKoopa->GetState() == RED_KOOPA_STATE_WALKING)
+					{
+						redKoopa->SetState(RED_KOOPA_STATE_SHELL);
+						SetState(MARIO_STATE_IDLE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						break;
+					}
+				}
+				else if (e->nx != 0)
+				{
+					if (untouchable == 0)
+					{
+						switch (redKoopa->GetState())
+						{
+						case RED_KOOPA_STATE_SHELL: {
+							redKoopa->SetDirection(-nx);
+							redKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+							break;
+						}
+						case RED_KOOPA_STATE_WALKING: {
+							if (level > MARIO_LEVEL_SMALL)
+							{
+								level = MARIO_LEVEL_SMALL;
+								StartUntouchable();
+							}
+							else
+								SetState(MARIO_STATE_DIE);
+						}
+						default:
+							break;
+						}
+					}
+				}
+			}
+
 			//Touch Question Block
 			if (dynamic_cast<CQuestionBlock*>(e->obj)) 
 			{

@@ -74,6 +74,8 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>D:\Game code project\Source Game\SuperMarioBros3\DirectX9\Include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\Game code project\Source Game\SuperMarioBros3\DirectX9\Lib;$(LibraryPath)</LibraryPath>
+    <SourcePath>D:\Game code project\Source Game\SuperMarioBros3\DirectX9\Sound;$(SourcePath)</SourcePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -175,11 +177,11 @@
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Portal.cpp" />
-    <ClCompile Include="QuadTree.cpp" />
     <ClCompile Include="QuestionBlock.cpp" />
     <ClCompile Include="RedKoopa.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SmallWing.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Sprites.cpp" />
     <ClCompile Include="SuperLeaf.cpp" />
     <ClCompile Include="Textures.cpp" />
@@ -201,6 +203,7 @@
     <ClInclude Include="Font.h" />
     <ClInclude Include="PlayerFont.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="Sound.h" />
     <ClInclude Include="ThirdFont.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameMap.h" />
@@ -221,7 +224,6 @@
     <ClInclude Include="ParaKoopa.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />
-    <ClInclude Include="QuadTree.h" />
     <ClInclude Include="QuestionBlock.h" />
     <ClInclude Include="RedKoopa.h" />
     <ClInclude Include="Scene.h" />
