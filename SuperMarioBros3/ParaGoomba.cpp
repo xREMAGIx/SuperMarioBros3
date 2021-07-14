@@ -130,9 +130,9 @@ void CParaGoomba::Render()
 	if (state == PARA_GOOMBA_STATE_DIE) {
 		ani = PARA_GOOMBA_ANI_DIE;
 	}
-	animation_set->at(ani)->Render(x, y, -nx, 255);
 	leftWing->Render();
 	rightWing->Render();
+	animation_set->at(ani)->Render(x, y, -nx, 255);
 }
 
 void CParaGoomba::SetState(int state)

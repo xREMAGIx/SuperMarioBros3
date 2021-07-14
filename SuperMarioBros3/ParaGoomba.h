@@ -22,9 +22,9 @@
 #define PARA_GOOMBA_ANI_DIE 1
 
 #define PARA_GOOMBA_LEFT_WING_X 10
-#define PARA_GOOMBA_LEFT_WING_Y 2
+#define PARA_GOOMBA_LEFT_WING_Y -2
 #define PARA_GOOMBA_RIGHT_WING_X -2
-#define PARA_GOOMBA_RIGHT_WING_Y 2
+#define PARA_GOOMBA_RIGHT_WING_Y -2
 
 class CParaGoomba : public CGameObject
 {
