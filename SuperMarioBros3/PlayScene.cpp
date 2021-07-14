@@ -410,8 +410,6 @@ void CPlayScene::Update(DWORD dt)
 			}
 		}
 	
-
-
 		//place update position camera at final 
 		if (cx > max_cam_x - game->GetScreenWidth()) {
 			cx = max_cam_x - game->GetScreenWidth();

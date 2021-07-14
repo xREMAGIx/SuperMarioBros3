@@ -16,6 +16,10 @@ using namespace std;
 
 #define FONT_SPACING 8
 
+#define FONT_PLAY_CHARACTER 40047
+#define FONT_ARROW_BLACK 40051
+#define FONT_P_BLACK 40052
+
 class CFont
 {
 private:
@@ -23,5 +27,6 @@ private:
 public:
 
 	void DrawNumber(int max, float x, float y, int s = 0);
+	void DrawCharacter(int id, float x, float y);
 	int convert(char c);
 };

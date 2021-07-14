@@ -23,6 +23,12 @@ void CFont::DrawNumber(int max, float x, float y, int s)
 	
 }
 
+void CFont::DrawCharacter(int id, float x, float y)
+{
+	CSprites* sprites = CSprites::GetInstance();
+	sprites->Get(id)->Draw(x, y);
+}
+
 int CFont::convert(char c)
 {
 	return c - '0';
