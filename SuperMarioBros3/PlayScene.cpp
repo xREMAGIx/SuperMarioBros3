@@ -22,6 +22,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 
 GameMap* map;
 Grid* grid;
+CBoard* gameBoard;
 
 void CPlayScene::_ParseSection_SETTINGS(string line)
 {
@@ -337,6 +338,7 @@ void CPlayScene::Load()
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 	grid = Grid::GetInstance();
+	gameBoard = CBoard::GetInstance();
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -422,14 +424,16 @@ void CPlayScene::Update(DWORD dt)
 
 		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
+	gameBoard->Update(dt);
 }
 
 void CPlayScene::Render()
 {
 	map->Render();
-
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	gameBoard->Render();
+
 }
 
 /*

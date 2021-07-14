@@ -23,6 +23,7 @@
 #include "MapPoint.h"
 #include "ThirdFont.h"
 #include "PlayerFont.h"
+#include "GameBoard.h"
 #include "helpers.h"
 
 
@@ -34,7 +35,6 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 	CMarioWorld* marioWorld;
 	vector<CMapPoint*> mapPoints;
-
 
 	int currentMapPoint = 0;
 

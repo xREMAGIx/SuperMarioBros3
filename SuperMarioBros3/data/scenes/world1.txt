@@ -5,11 +5,13 @@
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]
 30	mapfiles\world1.png	3	26	110
+50	textures\hud-font.png	81	255	191
 
 # id	file_path	texture_id
 [SPRITES]
 30	data\worldmap-sprite.txt	30
-						
+50	data\hud-sprite.txt	50
+
 # ani_id	file_path	
 [ANIMATIONS]
 30	data\worldmap-animation.txt
@@ -19,9 +21,9 @@
 #
 [ANIMATION_SETS]
 # MARIO
-430	43001 
+430	53001 
 # TREE
-431	43101	
+431	53101	
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type

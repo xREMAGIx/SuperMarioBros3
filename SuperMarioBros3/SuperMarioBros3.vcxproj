@@ -157,6 +157,7 @@
     <ClCompile Include="EnemyWall.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameBoard.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="debug.h" />
     <ClInclude Include="EnemyWall.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="GameBoard.h" />
     <ClInclude Include="PlayerFont.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Sound.h" />

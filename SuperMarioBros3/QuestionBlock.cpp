@@ -47,8 +47,6 @@ void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + QUESTION_BLOCK_BBOX_WIDTH;
 	b = y + QUESTION_BLOCK_BBOX_HEIGHT;
-
-
 }
 
 void CQuestionBlock::SetState(int state)

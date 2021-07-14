@@ -3,7 +3,7 @@
 
 void CFont::DrawNumber(int max, float x, float y, int s)
 {
-	/*
+	
 	if (s < 0)
 		s = 0;
 
@@ -12,15 +12,15 @@ void CFont::DrawNumber(int max, float x, float y, int s)
 
 	for (int i = 0; i < max - str.size(); i++)
 	{
-		sprites->Get(60000)->Draw(x, y);
-		x += 15;
+		sprites->Get(FONT_ID_0)->Draw(x, y);
+		x += FONT_SPACING;
 	}
 	for (int i = 0; i < str.size(); i++)
 	{
-		sprites->Get(60000 + convert(str[i]))->Draw(x, y);
-		x += 15;
+		sprites->Get(FONT_ID_0 + convert(str[i]))->Draw(x, y);
+		x += FONT_SPACING;
 	}
-	*/
+	
 }
 
 int CFont::convert(char c)

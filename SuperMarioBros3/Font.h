@@ -14,6 +14,8 @@ using namespace std;
 #define FONT_ID_8 40009
 #define FONT_ID_9 40010
 
+#define FONT_SPACING 8
+
 class CFont
 {
 private:
