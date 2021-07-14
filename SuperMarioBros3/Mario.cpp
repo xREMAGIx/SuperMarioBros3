@@ -37,6 +37,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (GetTickCount() - dt_die > MARIO_DIE_TIME && dt_die !=0 )
 	{
+		CBoard* game_board = CBoard::GetInstance();
+		game_board->RemoveLives();
+		game_board->SetState(BOARD_STATE_IDLE);
 		CGame::GetInstance()->SwitchScene(MAP_WOLRD_ID);
 	}
 	// No collision occured, proceed normally

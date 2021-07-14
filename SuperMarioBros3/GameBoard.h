@@ -7,8 +7,11 @@
 
 //NOTE BOARD START POINT	12	246	(REMEMER MINUS 1)
 
-#define BLOCK_BBOX_WIDTH  16
+#define BOARD_MARGIN_LEFT 5
 #define BOARD_HEIGHT 30
+
+#define BOARD_STATE_IDLE 0
+#define BOARD_STATE_START 1
 
 #define BOARD_TIME_X 123
 #define BOARD_TIME_Y 15
@@ -26,7 +29,6 @@
 #define BOARD_P_Y 7
 #define BOARD_MONEY_X 132
 #define BOARD_MONEY_Y 7
-
 #define BOARD_ITEM_BOX_X 161
 #define BOARD_ITEM_BOX_Y 0
 
@@ -36,6 +38,7 @@ class CBoard : public CGameObject
 
 	int time;
 	int score;
+	int lives;
 	int worldId;
 	int money;
 
@@ -48,8 +51,8 @@ public:
 	CBoard()
 	{
 		worldId = 0;
-		time = 300;
-		_count = GetTickCount();
+		time = 0;
+		lives = 4;
 		code = new CFont();
 		score = 0;
 		money = 0;
@@ -60,4 +63,11 @@ public:
 	void Update(DWORD dt);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
+	virtual void SetState(int state);
+
+	void StartCount() { time = 300; _count = GetTickCount(); }
+	void StopCount() { time = 0; }
+	void RemoveLives() { lives--; }
+	void AddMoney() { money++; }
+	void AddPoint(int point) { score += point; }
 };

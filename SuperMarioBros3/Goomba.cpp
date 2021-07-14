@@ -187,20 +187,26 @@ void CGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case GOOMBA_STATE_DIE:
+	case GOOMBA_STATE_DIE: {
 		score->SetPosition(x, y - 18);
 		score->SetState(POINT_STATE_SHOW);
 		y += GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE + 1;
 		vx = 0;
 		vy = 0;
+		CBoard* game_board = CBoard::GetInstance();
+		game_board->AddPoint(100);
 		break;
-	case GOOMBA_STATE_JUMP_DIE:
+	}
+	case GOOMBA_STATE_JUMP_DIE: {
 		vy = -GOOMBA_JUMP_SPEED;
 		score->SetPosition(x, y - 18);
 		score->SetState(POINT_STATE_SHOW);
 		vx = 0;
+		CBoard* game_board = CBoard::GetInstance();
+		game_board->AddPoint(100);
 		StartDie();
 		break;
+	}
 	case GOOMBA_STATE_WALKING:
 		vx = -GOOMBA_SPEED;
 	}

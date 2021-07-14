@@ -19,7 +19,9 @@
 
 class CMushroom : public CGameObject
 {
+	CPoint* score;
 public:
+	CMushroom();
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void SetState(int state);

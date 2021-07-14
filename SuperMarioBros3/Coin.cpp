@@ -20,7 +20,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 	
-	if (dt_jump	!=0 && (GetTickCount() - dt_jump > TIME_COIN_JUMP))
+	if (dt_jump	!=0 && (GetTickCount() - dt_jump > TIME_COIN_JUMP) && state != COIN_STATE_EARNED)
 	{
 		SetState(COIN_STATE_EARNED);
 	}
@@ -51,8 +51,12 @@ void CCoin::SetState(int state)
 			StartJump();
 			vy = -COIN_JUMP_SPEED;
 			break;
-		case COIN_STATE_EARNED:
+		case COIN_STATE_EARNED: {
+			CBoard* game_board = CBoard::GetInstance();
+			game_board->AddPoint(100);
+			game_board->AddMoney();
 			break;
+		}
 		case COIN_STATE_IDLE:
 			break;
 	}

@@ -1,5 +1,12 @@
 #include "Mushroom.h"
 
+CMushroom::CMushroom()
+{
+	SetState(MUSHSHROOM_STATE_WALKING);
+	score = new CPoint();
+	score->SetPointId(POINT_ID_1000);
+}
+
 void CMushroom::Render()
 {
 	if (state != MUSHSHROOM_STATE_EARNED) {
@@ -104,10 +111,15 @@ void CMushroom::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case MUSHSHROOM_STATE_WALKING:
-		vx = MUSHSHROOM_SPEED;
-		break;
-	case MUSHSHROOM_STATE_EARNED:
-		break;
+		case MUSHSHROOM_STATE_WALKING:
+			vx = MUSHSHROOM_SPEED;
+			break;
+		case MUSHSHROOM_STATE_EARNED: {
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
+			CBoard* game_board = CBoard::GetInstance();
+			game_board->AddPoint(1000);
+			break;
+		}
 	}
 }

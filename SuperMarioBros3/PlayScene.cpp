@@ -339,6 +339,9 @@ void CPlayScene::Load()
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 	grid = Grid::GetInstance();
 	gameBoard = CBoard::GetInstance();
+	if (player != NULL) {
+		gameBoard->SetState(BOARD_STATE_START);
+	}
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -431,7 +434,6 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 	gameBoard->Render();
-
 }
 
 /*
