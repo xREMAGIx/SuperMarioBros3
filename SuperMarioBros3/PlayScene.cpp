@@ -342,36 +342,30 @@ void CPlayScene::Load()
 	if (player != NULL) {
 		gameBoard->SetState(BOARD_STATE_START);
 	}
+	
+	if (marioWorld != NULL) {
+		vector<CMapPoint*> map_points = ((CPlayScene*)this)->GetMapPoints();
+		DebugOut(L"[INFO] CURRENT POINT %d\n", currentMapPoint);
+		marioWorld->SetMovingPoint(map_points.at(currentMapPoint)->x, map_points.at(currentMapPoint)->y);
+
+		//Set current point
+		//marioWorld->SetPosition(map_points.at(currentMapPoint)->x, map_points.at(currentMapPoint)->y);
+	}
+	
 }
 
 void CPlayScene::Update(DWORD dt)
 {
 	if (marioWorld != NULL) {
+		marioWorld->Update(dt);
 
+		
 		float cx, cy;
 		marioWorld->GetPosition(cx, cy);
 
 		CGame* game = CGame::GetInstance();
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
-
-		vector<LPGAMEOBJECT> coObjects;
-		for (size_t i = 1; i < objects.size(); i++)
-		{
-			coObjects.push_back(objects[i]);
-		}
-
-		grid->GetListObject(coObjects, cx, cy);
-
-		//Mario
-		objects[0]->Update(dt, &coObjects);
-
-		if (!objects.empty()) {
-			for (size_t i = 0; i < coObjects.size(); i++)
-			{
-				coObjects[i]->Update(dt, &coObjects);
-			}
-		}
 
 		//place update position camera at final 
 		if (cx > max_cam_x - game->GetScreenWidth()) {
@@ -384,6 +378,7 @@ void CPlayScene::Update(DWORD dt)
 		}
 
 		CGame::GetInstance()->SetCamPos(cx, cy);
+		
 	}
 	else {
 		if (player == NULL) return;
@@ -469,6 +464,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 
 	if (mario_world != NULL) {
+		if (mario_world->GetState() == MARIO_WORLD_STATE_MOVING) return;
 		switch (KeyCode)
 		{
 			case DIK_RIGHT:
@@ -478,7 +474,10 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				if (point->GetDRight() != -1) {
 					CMapPoint* nextPoint = map_points.at(point->GetDRight());
 
-					mario_world->SetPosition(nextPoint->x, nextPoint->y);
+
+					mario_world->MovingPosition(nextPoint->x, nextPoint->y);
+
+					//mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDRight());
 				}
 				break;
@@ -490,7 +489,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				if (point->GetDLeft() != -1) {
 					CMapPoint* nextPoint = map_points.at(point->GetDLeft());
 
-					mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					mario_world->MovingPosition(nextPoint->x, nextPoint->y);
+
+					//mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDLeft());
 				}
 				break;
@@ -502,7 +503,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				if (point->GetDBottom() != -1) {
 					CMapPoint* nextPoint = map_points.at(point->GetDBottom());
 
-					mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					mario_world->MovingPosition(nextPoint->x, nextPoint->y);
+
+					//mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDBottom());
 				}
 				break;
@@ -514,7 +517,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				if (point->GetDTop() != -1) {
 					CMapPoint* nextPoint = map_points.at(point->GetDTop());
 
-					mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					mario_world->MovingPosition(nextPoint->x, nextPoint->y);
+
+					//mario_world->SetPosition(nextPoint->x, nextPoint->y);
 					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDTop());
 				}
 				break;
@@ -552,7 +557,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 
 	if (mario_world != NULL) {
-		mario_world->SetState(MARIO_WORLD_STATE_SMALL);
 	}
 	else {
 	// disable control key when Mario die 
