@@ -24,6 +24,7 @@
 #define MARIO_ANI_BIG_IDLE_LEFT			3
 #define MARIO_ANI_BIG_WALKING_LEFT		4
 #define MARIO_ANI_BIG_JUMPING_LEFT		5
+#define MARIO_ANI_DIE		6
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -35,6 +36,7 @@
 #define MARIO_SMALL_BBOX_HEIGHT 15
 
 #define MARIO_UNTOUCHABLE_TIME 5000
+#define MARIO_DIE_TIME 3000
 
 
 class CMario : public CGameObject
@@ -42,6 +44,8 @@ class CMario : public CGameObject
 	int level;
 	int untouchable;
 	DWORD untouchable_start;
+	DWORD dt_die;
+
 public:
 
 	CMario() : CGameObject()
@@ -56,4 +60,6 @@ public:
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartDie() { dt_die = GetTickCount(); }
+
 };

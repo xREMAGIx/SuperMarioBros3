@@ -63,19 +63,23 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
+				if (ny != 0) vy = 0;
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (e->ny < 0)
-				{
-					if (jumpCount == 12) {
-						SetState(PARA_GOOMBA_STATE_JUMP_BIG);
-						jumpCount = 0;
-					}
-					else if(jumpCount == 4 || jumpCount == 8) {
-						SetState(PARA_GOOMBA_STATE_JUMP_SMALL);
-						jumpCount++;
-					}
-					else {
-						jumpCount++; 
+				if (state != PARA_GOOMBA_STATE_WALKING_WITHOUT_WING) {
+					if (e->ny < 0)
+					{
+						if (jumpCount == 12) {
+							SetState(PARA_GOOMBA_STATE_JUMP_BIG);
+							jumpCount = 0;
+						}
+						else if(jumpCount == 4 || jumpCount == 8) {
+							SetState(PARA_GOOMBA_STATE_JUMP_SMALL);
+							jumpCount++;
+						}
+						else {
+							jumpCount++; 
+						}
+						
 					}
 				}
 			}
@@ -130,8 +134,10 @@ void CParaGoomba::Render()
 	if (state == PARA_GOOMBA_STATE_DIE) {
 		ani = PARA_GOOMBA_ANI_DIE;
 	}
-	leftWing->Render();
-	rightWing->Render();
+	if (state != PARA_GOOMBA_STATE_WALKING_WITHOUT_WING) {
+		leftWing->Render();
+		rightWing->Render();
+	}
 	animation_set->at(ani)->Render(x, y, -nx, 255);
 }
 
@@ -140,19 +146,22 @@ void CParaGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case PARA_GOOMBA_STATE_DIE:
-		y += PARA_GOOMBA_BBOX_HEIGHT - PARA_GOOMBA_BBOX_HEIGHT_DIE + 1;
-		vx = 0;
-		vy = 0;
-		break;
-	case PARA_GOOMBA_STATE_JUMP_SMALL:
-		vy = -PARA_GOOMBA_JUMP_SPEED;
-		break;
-	case PARA_GOOMBA_STATE_JUMP_BIG:
-		vy = -PARA_GOOMBA_JUMP_SPEED * 3;
-		break;
-	case PARA_GOOMBA_STATE_WALKING:
-		vx = -PARA_GOOMBA_SPEED;
+		case PARA_GOOMBA_STATE_DIE:
+			//StartDie();
+			y += PARA_GOOMBA_BBOX_HEIGHT - PARA_GOOMBA_BBOX_HEIGHT_DIE + 1;
+			vx = 0;
+			vy = 0;
+			break;
+		case PARA_GOOMBA_STATE_JUMP_SMALL:
+			vy = -PARA_GOOMBA_JUMP_SPEED;
+			break;
+		case PARA_GOOMBA_STATE_JUMP_BIG:
+			vy = -PARA_GOOMBA_JUMP_SPEED * 3;
+			break;
+		case PARA_GOOMBA_STATE_WALKING_WITHOUT_WING:
+		case PARA_GOOMBA_STATE_WALKING: {
+			vx = -PARA_GOOMBA_SPEED;
+		}
 	}
 
 }

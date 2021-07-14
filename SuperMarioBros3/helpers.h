@@ -27,6 +27,8 @@
 
 #define MAX_FRAME_RATE 60
 
+#define MAP_WOLRD_ID 1
+
 #define ID_TEX_MARIO 0
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20

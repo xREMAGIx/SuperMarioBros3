@@ -341,46 +341,87 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-	if (player == NULL) return;
+	if (marioWorld != NULL) {
 
-	float cx, cy;
-	player->GetPosition(cx, cy);
+		float cx, cy;
+		marioWorld->GetPosition(cx, cy);
 
-	CGame* game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetScreenWidth() / 2;
+		cy -= game->GetScreenHeight() / 2;
 
-	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
-
-	grid->GetListObject(coObjects, cx, cy);
-
-	//Mario
-	objects[0]->Update(dt, &coObjects);
-
-	if (!objects.empty()) {
-		for (size_t i = 0; i < coObjects.size(); i++)
+		vector<LPGAMEOBJECT> coObjects;
+		for (size_t i = 1; i < objects.size(); i++)
 		{
-			coObjects[i]->Update(dt, &coObjects);
+			coObjects.push_back(objects[i]);
 		}
+
+		grid->GetListObject(coObjects, cx, cy);
+
+		//Mario
+		objects[0]->Update(dt, &coObjects);
+
+		if (!objects.empty()) {
+			for (size_t i = 0; i < coObjects.size(); i++)
+			{
+				coObjects[i]->Update(dt, &coObjects);
+			}
+		}
+
+		//place update position camera at final 
+		if (cx > max_cam_x - game->GetScreenWidth()) {
+			cx = max_cam_x - game->GetScreenWidth();
+		}
+
+
+		if (cy > max_cam_y) {
+			cy = max_cam_y;
+		}
+
+		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
+	else {
+		if (player == NULL) return;
+
+		float cx, cy;
+		player->GetPosition(cx, cy);
+
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetScreenWidth() / 2;
+		cy -= game->GetScreenHeight() / 2;
+
+		vector<LPGAMEOBJECT> coObjects;
+		for (size_t i = 1; i < objects.size(); i++)
+		{
+			coObjects.push_back(objects[i]);
+		}
+
+		grid->GetListObject(coObjects, cx, cy);
+
+		//Mario
+		objects[0]->Update(dt, &coObjects);
+
+		if (!objects.empty()) {
+			for (size_t i = 0; i < coObjects.size(); i++)
+			{
+				coObjects[i]->Update(dt, &coObjects);
+			}
+		}
 	
 
 
-	//place update position camera at final 
-	if (cx > max_cam_x - game->GetScreenWidth()) {
-		cx = max_cam_x - game->GetScreenWidth();
+		//place update position camera at final 
+		if (cx > max_cam_x - game->GetScreenWidth()) {
+			cx = max_cam_x - game->GetScreenWidth();
+		}
+
+
+		if (cy > max_cam_y) {
+			cy = max_cam_y;
+		}
+
+		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
-
-
-	if (cy > max_cam_y) {
-		cy = max_cam_y;
-	}
-
-	CGame::GetInstance()->SetCamPos(cx, cy);
 }
 
 void CPlayScene::Render()

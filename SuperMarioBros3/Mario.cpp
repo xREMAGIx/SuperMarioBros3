@@ -35,6 +35,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	if (GetTickCount() - dt_die > MARIO_DIE_TIME && dt_die !=0 )
+	{
+		CGame::GetInstance()->SwitchScene(MAP_WOLRD_ID);
+	}
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -82,6 +86,56 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (untouchable == 0)
 					{
 						if (goomba->GetState() == GOOMBA_STATE_WALKING)
+						{
+							if (level > MARIO_LEVEL_SMALL)
+							{
+								level = MARIO_LEVEL_SMALL;
+								StartUntouchable();
+							}
+							else {
+								DebugOut(L"[INFO] Touch Goomba Die\n");
+								SetState(MARIO_STATE_DIE);
+							}
+						}
+					}
+				}
+			}
+
+			//PARA GOOMBA
+			if (dynamic_cast<CParaGoomba*>(e->obj)) // if e->obj is Goomba 
+			{
+				CParaGoomba* goomba = dynamic_cast<CParaGoomba*>(e->obj);
+
+				// jump on top >> kill Goomba and deflect a bit 
+				if (e->ny < 0)
+				{
+					switch (goomba->GetState())
+					{
+					case PARA_GOOMBA_STATE_WALKING: {
+						goomba->SetState(PARA_GOOMBA_STATE_WALKING_WITHOUT_WING);
+						SetState(MARIO_STATE_IDLE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						break;
+					}
+					case PARA_GOOMBA_STATE_WALKING_WITHOUT_WING: {
+						goomba->SetState(PARA_GOOMBA_STATE_DIE);
+						SetState(MARIO_STATE_IDLE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						break;
+					}
+					default: {
+						goomba->SetState(RED_KOOPA_STATE_SHELL);
+						SetState(MARIO_STATE_IDLE);
+						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						break;
+					}
+					}
+				}
+				else if (e->nx != 0)
+				{
+					if (untouchable == 0)
+					{
+						if (goomba->GetState() != PARA_GOOMBA_STATE_DIE)
 						{
 							if (level > MARIO_LEVEL_SMALL)
 							{
@@ -340,6 +394,9 @@ void CMario::Render()
 			break;
 		}
 	}
+	if (state == MARIO_STATE_DIE) {
+		ani = MARIO_ANI_DIE;
+	}
 
 	animation_set->at(ani)->Render(x, y, nx, 255);
 }
@@ -367,7 +424,9 @@ void CMario::SetState(int state)
 			vy = -MARIO_JUMP_SPEED_Y;
 			break;
 		case MARIO_STATE_DIE:
+			vx = 0;
 			vy = -MARIO_DIE_DEFLECT_SPEED;
+			StartDie();
 			break;
 		case MARIO_STATE_IDLE:
 			vx = 0;
