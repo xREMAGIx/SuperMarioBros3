@@ -35,7 +35,7 @@ void CBoard::Render()
 
 	LPSPRITE sprite;
 	sprite = CSprites::GetInstance()->Get(40046);
-	sprite->Draw(x, y);
+	sprite->Draw(x, y); 
 
 	code->DrawNumber(1, x + BOARD_WORLD_ID_X, y + BOARD_WORLD_ID_Y, 1); // world id
 
@@ -49,6 +49,14 @@ void CBoard::Render()
 	code->DrawNumber(2, x + BOARD_LIVES_X, y + BOARD_LIVES_Y, 25); // lives
 	code->DrawNumber(3, x + BOARD_TIME_X, y + BOARD_TIME_Y, time); // time
 	code->DrawNumber(7, x + BOARD_SCORE_X, y + BOARD_SCORE_Y, score); // score
+	code->DrawNumber(2, x + BOARD_MONEY_X, y + BOARD_MONEY_Y, money); // money
+
+	
+	for (int i = 0; i < 3; i++)	//item boxes
+	{
+		itemBoxes.at(i)->SetPosition(x + i * ITEM_BOX_WIDTH + BOARD_ITEM_BOX_X, y + BOARD_ITEM_BOX_Y);
+		itemBoxes.at(i)->Render();
+	}
 }
 
 void CBoard::GetBoundingBox(float& l, float& t, float& r, float& b)

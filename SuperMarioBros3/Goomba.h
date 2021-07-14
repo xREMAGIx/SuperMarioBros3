@@ -35,5 +35,4 @@ public:
 	CGoomba();
 	virtual void SetState(int state);
 	void StartDie() { dt_die = GetTickCount(); }
-
 };
