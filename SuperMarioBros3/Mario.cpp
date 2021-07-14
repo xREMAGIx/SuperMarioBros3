@@ -69,28 +69,29 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
 				{
-					if (goomba->GetState() != GOOMBA_STATE_DIE)
+					if (goomba->GetState() == GOOMBA_STATE_WALKING)
 					{
 						goomba->SetState(GOOMBA_STATE_DIE);
 						goomba->StartDie();
 						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
-						break;
 					}
 				}
 				else if (e->nx != 0)
 				{
 					if (untouchable == 0)
 					{
-						if (goomba->GetState() != GOOMBA_STATE_DIE)
+						if (goomba->GetState() == GOOMBA_STATE_WALKING)
 						{
 							if (level > MARIO_LEVEL_SMALL)
 							{
 								level = MARIO_LEVEL_SMALL;
 								StartUntouchable();
 							}
-							else
+							else {
+								DebugOut(L"[INFO] Touch Goomba Die\n");
 								SetState(MARIO_STATE_DIE);
+							}
 						}
 					}
 				}
@@ -135,12 +136,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
 				{
-					if (redKoopa->GetState() == RED_KOOPA_STATE_WALKING)
+					switch (redKoopa->GetState())
 					{
-						redKoopa->SetState(RED_KOOPA_STATE_SHELL);
-						SetState(MARIO_STATE_IDLE);
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
-						break;
+						case RED_KOOPA_STATE_SHELL: {
+							redKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+							break;
+						}
+						default: {
+							redKoopa->SetState(RED_KOOPA_STATE_SHELL);
+							SetState(MARIO_STATE_IDLE);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
+							break;
+						}
 					}
 				}
 				else if (e->nx != 0)
@@ -149,20 +156,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						switch (redKoopa->GetState())
 						{
-						case RED_KOOPA_STATE_SHELL: {
-							redKoopa->SetDirection(-nx);
-							redKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
-							break;
-						}
-						case RED_KOOPA_STATE_WALKING: {
-							if (level > MARIO_LEVEL_SMALL)
-							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
+							case RED_KOOPA_STATE_SHELL: {
+								redKoopa->SetDirection(-nx);
+								redKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+								break;
 							}
-							else
-								SetState(MARIO_STATE_DIE);
-						}
+							case RED_KOOPA_STATE_WALKING: {
+								if (level > MARIO_LEVEL_SMALL)
+								{
+									level = MARIO_LEVEL_SMALL;
+									StartUntouchable();
+								}
+								else {
+									DebugOut(L"[INFO] Touch RedGoomba Die\n");
+									SetState(MARIO_STATE_DIE);
+								}
+								break;
+							}
 						default:
 							break;
 						}
@@ -303,31 +313,32 @@ void CMario::Render()
 	int ani;
 	switch (level)
 	{
-	case MARIO_LEVEL_BIG: {
-		if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
-		{
-			ani = MARIO_ANI_BIG_JUMPING_LEFT;
+		case MARIO_LEVEL_BIG: {
+			if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
+			{
+				ani = MARIO_ANI_BIG_JUMPING_LEFT;
+			}
+			else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
+				ani = MARIO_ANI_BIG_WALKING_LEFT;
+			}
+			else {
+				ani = MARIO_ANI_BIG_IDLE_LEFT;
+			}
+			break;
 		}
-		else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
-			ani = MARIO_ANI_BIG_WALKING_LEFT;
+		default: {
+			if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
+			{
+				ani = MARIO_ANI_JUMPING_LEFT;
+			}
+			else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
+				ani = MARIO_ANI_WALKING_LEFT;
+			}
+			else {
+				ani = MARIO_ANI_IDLE_LEFT;
+			}
+			break;
 		}
-		else {
-			ani = MARIO_ANI_BIG_IDLE_LEFT;
-		}
-		break;
-	}
-	default:
-		if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
-		{
-			ani = MARIO_ANI_JUMPING_LEFT;
-		}
-		else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
-			ani = MARIO_ANI_WALKING_LEFT;
-		}
-		else {
-			ani = MARIO_ANI_IDLE_LEFT;
-		}
-		break;
 	}
 
 	animation_set->at(ani)->Render(x, y, nx, 255);
@@ -338,29 +349,28 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case MARIO_STATE_WALKING_RIGHT: 
-	case MARIO_STATE_JUMP_RIGHT:
-	{
-		vx = MARIO_WALKING_SPEED;
-		nx = 1;
-		break;
-	}
-	case MARIO_STATE_WALKING_LEFT:
-	case MARIO_STATE_JUMP_LEFT:
-	{
-		vx = -MARIO_WALKING_SPEED;
-		nx = -1;
-		break;
-	}
-	case MARIO_STATE_JUMP:
-		if (y == 100)
+		case MARIO_STATE_WALKING_RIGHT: 
+		case MARIO_STATE_JUMP_RIGHT:
+		{
+			vx = MARIO_WALKING_SPEED;
+			nx = 1;
+			break;
+		}
+		case MARIO_STATE_WALKING_LEFT:
+		case MARIO_STATE_JUMP_LEFT:
+		{
+			vx = -MARIO_WALKING_SPEED;
+			nx = -1;
+			break;
+		}
+		case MARIO_STATE_JUMP:
 			vy = -MARIO_JUMP_SPEED_Y;
-	case MARIO_STATE_DIE:
-		vy = -MARIO_DIE_DEFLECT_SPEED;
-		break;
-	case MARIO_STATE_IDLE:
-		vx = 0;
-		break;
+			break;
+		case MARIO_STATE_DIE:
+			vy = -MARIO_DIE_DEFLECT_SPEED;
+			break;
+		case MARIO_STATE_IDLE:
+			vx = 0;
 	}
 }
 

@@ -22,7 +22,12 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 		bottom = y + GOOMBA_BBOX_HEIGHT_DIE;
 	}
 
-	if (dt_die != 0 &&  GetTickCount() - dt_die > TIME_GOOMBA_DIE)
+	if (state == GOOMBA_STATE_JUMP_DIE) {
+		right = x + 1;
+		bottom = y - 16;
+	}
+
+	if ((dt_die != 0 &&  GetTickCount() - dt_die > TIME_GOOMBA_DIE ))
 	{
 		left = 0;
 		top = 0;
@@ -48,6 +53,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (state == GOOMBA_STATE_DIE) {
 		score->Update(dt, coObjects);
+	}
+
+	if (state == GOOMBA_STATE_JUMP_DIE) {
+		score->Update(dt, coObjects);
+		x += dx;
+		y += dy;
 	}
 
 	// No collision occured, proceed normally
@@ -123,6 +134,17 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
+			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
+			{
+				CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(e->obj);
+				if (nx != 0)
+				{
+					if (koopa->GetState() == RED_KOOPA_STATE_SHELL_SCROLL) {
+						SetState(GOOMBA_STATE_JUMP_DIE);
+					}
+				}
+			}
+
 			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleWall* block = dynamic_cast<CInvisibleWall*>(e->obj);
@@ -148,6 +170,9 @@ void CGoomba::Render()
 		ani = GOOMBA_ANI_DIE;
 		score->Render();
 	}
+	if (state == GOOMBA_STATE_JUMP_DIE) {
+		score->Render();
+	}
 	if (dt_die != 0 && GetTickCount() - dt_die > TIME_GOOMBA_DIE)
 	{
 		ani = -1;
@@ -168,6 +193,13 @@ void CGoomba::SetState(int state)
 		y += GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE + 1;
 		vx = 0;
 		vy = 0;
+		break;
+	case GOOMBA_STATE_JUMP_DIE:
+		vy = -GOOMBA_JUMP_SPEED;
+		score->SetPosition(x, y - 18);
+		score->SetState(POINT_STATE_SHOW);
+		vx = 0;
+		StartDie();
 		break;
 	case GOOMBA_STATE_WALKING:
 		vx = -GOOMBA_SPEED;

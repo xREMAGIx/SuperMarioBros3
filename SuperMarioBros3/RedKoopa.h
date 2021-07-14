@@ -3,8 +3,8 @@
 
 #define RED_KOOPA_WIDTH 16
 #define RED_KOOPA_HEIGHT 16
-#define RED_KOOPA_SPEED 0.03f
-#define RED_KOOPA_SCROLL 0.06f
+#define RED_KOOPA_SPEED 0.05f
+#define RED_KOOPA_SCROLL 0.1f
 #define RED_KOOPA_GRAVITY	0.001f
 
 

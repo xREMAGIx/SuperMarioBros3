@@ -6,6 +6,7 @@
 #define GOOMBA_HEIGHT 16
 #define GOOMBA_SPEED 0.05f
 #define GOOMBA_GRAVITY	0.001f
+#define GOOMBA_JUMP_SPEED 0.1f
 
 #define TIME_GOOMBA_DIE 1000
 
@@ -15,9 +16,11 @@
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
+#define GOOMBA_STATE_JUMP_DIE 300
 
 #define GOOMBA_ANI_WALKING 0
 #define GOOMBA_ANI_DIE 1
+#define GOOMBA_ANI_JUMP_DIE 2
 
 class CGoomba : public CGameObject
 {

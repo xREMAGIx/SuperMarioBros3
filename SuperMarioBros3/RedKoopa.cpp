@@ -64,7 +64,10 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Walk on invisible wall
 			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
 			{
-				if (nx != 0) vx = 0;
+				if (nx != 0) {
+					this->vx = -vx;
+					this->nx = -nx;
+				}
 				if (ny != 0) vy = 0;
 			}
 
@@ -72,10 +75,8 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (e->ny < 0)
-				{
-					vy = 0;
-				}
+				if (ny != 0) vy = 0;
+
 				if (e->nx != 0)
 				{
 					x += dx;
@@ -173,19 +174,23 @@ void CRedKoopa::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case RED_KOOPA_STATE_RESPAWN:
-		y += - RED_KOOPA_BBOX_HEIGHT + RED_KOOPA_BBOX_SHELL_HEIGHT + 1;
-		vx = 0;
-		vy = 0;
-		break;
-	case RED_KOOPA_STATE_SHELL: 
-		vx = 0;
-		vy = 0;
-		break;
-	case RED_KOOPA_STATE_SHELL_SCROLL:
-		vx = nx* RED_KOOPA_SCROLL;
-		break;
-	case RED_KOOPA_STATE_WALKING:
-		vx = -RED_KOOPA_SPEED;
+		case RED_KOOPA_STATE_RESPAWN: {
+			y += - RED_KOOPA_BBOX_HEIGHT + RED_KOOPA_BBOX_SHELL_HEIGHT + 1;
+			vx = 0;
+			vy = 0;
+			break;
+		}
+		case RED_KOOPA_STATE_SHELL: {
+			vx = 0;
+			vy = 0;
+			break;
+		}
+		case RED_KOOPA_STATE_SHELL_SCROLL: {
+			vx = nx* RED_KOOPA_SCROLL;
+			vy = 0;
+			break;
+		}
+		case RED_KOOPA_STATE_WALKING:
+			vx = -RED_KOOPA_SPEED;
 	}
 }
