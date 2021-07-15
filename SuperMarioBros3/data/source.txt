@@ -5,3 +5,4 @@ start	1
 0	data\scenes\intro.txt
 1	data\scenes\world1.txt
 2	data\scenes\map1-1.txt
+3	data\scenes\map1-3.txt

@@ -1,0 +1,198 @@
+#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y
+[SETTINGS]
+250	230	0	100	2480	235
+
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\mario-luigi.png	68	145	190
+10	textures\enemies.png	68	145	190
+20	textures\npc-misc.png	166	185	255
+50	textures\hud-font.png	81	255	191
+
+# id	file_path	texture_id
+[SPRITES]
+0	data\character-sprite.txt	0
+10	data\enemies-sprite.txt	10
+20	data\misc-sprite.txt	20
+50	data\hud-sprite.txt	50
+						
+# ani_id	file_path	
+[ANIMATIONS]
+0	data\character-animation.txt
+10	data\enemies-animation.txt
+20	data\misc-animation.txt
+50	data\hud-animation.txt
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# MARIO
+101	10101	10102	10103	12101	12102	12103	11801
+# GOOMBA
+314	31401	31402
+# QUESTION BLOCK
+210	21001	21002
+# BRICK
+212	21201
+# COIN
+208	20801
+# GREEN KOOPA
+318	31801
+# RED KOOPA
+320	32001	32002	32003	32004
+# PARA GOOMBA
+315	31501	31502
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 
+# 0 = Mario 
+# 1 = Block
+# 2 = Goomba
+# 3 = Question block
+# 4 = Invisible block 
+# 5 = Brick
+# 6 = Coin
+# 7 = Cloud
+# 8 = Green Koopa
+# 9 = Red Koopa
+# 10 = Para Goomba
+# 11 = Para Koopa
+# 12 = Invisible Wall
+# 13 = Chimney
+# 14 = Enemy Wall
+
+# MARIO
+0	1582	236	101
+
+# BLOCK
+1	720	352	0
+1	736	352	0
+1	752	352	0
+1	768	352	0
+1	832	352	0
+1	832	368	0
+1	832	384	0
+1	832	400	0
+1	960	368	0
+1	960	384	0
+1	960	400	0
+1	1088	352	0
+1	1088	368	0
+1	1088	384	0
+1	1088	400	0
+1	1216	352	0
+1	1216	368	0
+1	1216	384	0
+1	1216	400	0
+
+
+# GOOMBA
+2	928	398	314
+2	1616	398	314
+2	1648	398	314
+
+#INVISIBLE_BLOCK
+4	0	416	0	1280
+4	1296	416	0	176
+4	1488	416	0	736
+4	176	384	0	64
+4	224	336	0	64
+4	1552	368	0	80
+4	1648	336	0	64
+4	1568	272	0	64
+4	1728	304	0	64
+4	1760	352	0	80
+4	1856	320	0	64
+4	1936	288	0	64
+
+#QUESTION_BLOCK
+3	528	384	210	6	208
+3	640	368	210	6	208
+
+#BRICK
+5	512	352	212
+5	512	368	212
+5	512	384	212
+5	512	400	212
+5	528	352	212
+5	528	368	212
+5	528	400	212
+5	544	352	212
+5	544	400	212
+5	560	368	212
+5	576	368	212
+5	576	384	212
+5	592	336	212
+5	592	352	212
+5	592	384	212
+5	608	336	212
+5	608	352	212
+5	608	384	212
+5	608	400	212
+5	624	336	212
+5	624	384	212
+5	624	400	212
+5	640	336	212
+5	640	352	212
+5	640	384	212
+5	640	400	212
+
+#COIN
+6	1009	320	208
+6	1025	320	208
+6	1041	320	208
+6	1137	320	208
+6	1153	320	208
+6	1169	320	208
+6	1585	336	208
+6	1665	304	208
+6	1729	272	208
+6	1745	272	208
+6	1761	272	208
+
+#CLOUD
+7	2064	0	0
+7	2080	0	0
+7	2096	0	0
+7	2112	0	0
+7	2128	0	0
+7	2144	0	0
+
+#GREEN KOOPA
+8	208	388	318
+8	800	388	318
+8	1920	388	318
+
+#RED KOOPA
+9	624	308	320
+9	1684	308	320
+
+#PARA GOOMBA
+10	1057	398	315
+10	1186	398	315
+10	1939	398	315
+
+
+#INVISIBLE_WALL
+12	-16	0	0	800
+12	2224	0	0	800
+
+#CHIMNEY
+13	2096	16	0	32	80
+
+#ENEMY_WALL
+14	1280	352	0	64
+14	1472	352	0	64
+14	1632	304	0	32
+14	1712	304	0	32
+
+# --- SCENE PORTAL ----
+# type	l	t	ani_set_id	r	b	scene_id
+50	300	98	1	316	150	1
+
+[MAP]
+0	mapfiles\map1-3.txt
+
+
