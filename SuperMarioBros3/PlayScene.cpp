@@ -203,6 +203,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CInvisibleBlock(width);
 		break;
 	}
+	case OBJECT_TYPE_INVISIBLE_PLATFORM:
+	{
+		int width = atof(tokens[4].c_str());
+		obj = new CInvisiblePlatform(width);
+		break;
+	}
 	case OBJECT_TYPE_INVISIBLE_WALL:
 	{
 		int height = atof(tokens[4].c_str());
@@ -349,7 +355,7 @@ void CPlayScene::Load()
 		marioWorld->SetMovingPoint(map_points.at(currentMapPoint)->x, map_points.at(currentMapPoint)->y);
 
 		//Set current point
-		//marioWorld->SetPosition(map_points.at(currentMapPoint)->x, map_points.at(currentMapPoint)->y);
+		marioWorld->SetPosition(map_points.at(currentMapPoint)->x, map_points.at(currentMapPoint)->y);
 	}
 	
 }

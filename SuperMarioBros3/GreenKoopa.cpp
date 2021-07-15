@@ -13,10 +13,17 @@ void CGreenKoopa::GetBoundingBox(float& left, float& top, float& right, float& b
 	top = y;
 	right = x + GREEN_KOOPA_BBOX_WIDTH;
 
-	if (state == GREEN_KOOPA_STATE_DIE)
-		bottom = y + GREEN_KOOPA_BBOX_HEIGHT_DIE;
-	else
+	switch (state)
+	{
+	case GREEN_KOOPA_STATE_SHELL:
+	case GREEN_KOOPA_STATE_SHELL_SCROLL: {
+		bottom = y + GREEN_KOOPA_BBOX_SHELL_HEIGHT;
+		break;
+	}
+	default:
 		bottom = y + GREEN_KOOPA_BBOX_HEIGHT;
+		break;
+	}
 }
 
 void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -53,18 +60,41 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
+			//Walk on invisible wall
+			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
+			{
+				if (nx != 0) {
+					this->vx = -vx;
+					this->nx = -nx;
+				}
+				if (ny != 0) vy = 0;
+			}
+
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (e->ny < 0)
-				{
-					vy = 0;
-				}
+				if (ny != 0) vy = 0;
+
 				if (e->nx != 0)
 				{
 					x += dx;
 					y += dy;
+				}
+			}
+
+			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
+			{
+				if (nx != 0)
+				{
+					vx = -vx;
+					nx = -nx;
+				}
+				if (ny != 0) vy = 0;
+				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
+				if (e->ny < 0)
+				{
+					vy = 0;
 				}
 			}
 
@@ -75,6 +105,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					vx = -vx;
+					nx = -nx;
 				}
 
 			}
@@ -85,22 +116,36 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CGreenKoopa* block = dynamic_cast<CGreenKoopa*>(e->obj);
 				if (e->nx != 0)
 				{
-					nx = -nx;
 					vx = -vx;
+					nx = -nx;
 				}
 			}
-
 
 			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
-				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
-				if (e->nx != 0)
-				{
-					nx = -nx;
-					vx = -vx;
+				if (state != GREEN_KOOPA_STATE_SHELL_SCROLL) {
+					CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
+					if (e->nx != 0)
+					{
+						this->vx = -vx;
+						this->nx = -nx;
+					}
+				}
+				else {
+					x += dx;
+					y += dy;
 				}
 			}
 
+			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
+			{
+				CChimney* block = dynamic_cast<CChimney*>(e->obj);
+				if (e->nx != 0)
+				{
+					this->vx = -vx;
+					this->nx = -nx;
+				}
+			}
 		}
 	}
 
@@ -110,11 +155,31 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CGreenKoopa::Render()
 {
+	int ani;
 
-	int ani = GREEN_KOOPA_ANI_WALKING;
-	if (state == GREEN_KOOPA_STATE_DIE) {
-		ani = GREEN_KOOPA_ANI_DIE;
+	switch (state)
+	{
+	case GREEN_KOOPA_STATE_RESPAWN:
+	{
+		ani = GREEN_KOOPA_ANI_RESPAWN;
+		break;
 	}
+	case GREEN_KOOPA_STATE_SHELL:
+	{
+		ani = GREEN_KOOPA_ANI_SHELL;
+		break;
+	}
+	case GREEN_KOOPA_STATE_SHELL_SCROLL:
+	{
+		ani = GREEN_KOOPA_ANI_SHELL_SCROLL;
+		break;
+	}
+	default:
+		ani = GREEN_KOOPA_ANI_WALKING;
+		break;
+	}
+
+
 	animation_set->at(ani)->Render(x, y, -nx, 255);
 }
 
@@ -123,12 +188,23 @@ void CGreenKoopa::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case GREEN_KOOPA_STATE_DIE:
-		y += GREEN_KOOPA_BBOX_HEIGHT - GREEN_KOOPA_BBOX_HEIGHT_DIE + 1;
+	case GREEN_KOOPA_STATE_RESPAWN: {
+		y += -GREEN_KOOPA_BBOX_HEIGHT + GREEN_KOOPA_BBOX_SHELL_HEIGHT + 1;
 		vx = 0;
-		vy = 0;
 		break;
-	case GREEN_KOOPA_STATE_WALKING:
+	}
+	case GREEN_KOOPA_STATE_SHELL: {
+		y += -GREEN_KOOPA_BBOX_HEIGHT + GREEN_KOOPA_BBOX_SHELL_HEIGHT + 1;
+		vx = 0;
+		break;
+	}
+	case GREEN_KOOPA_STATE_SHELL_SCROLL: {
+		vx = nx * GREEN_KOOPA_SCROLL;
+		break;
+	}
+	case GREEN_KOOPA_STATE_WALKING: {
 		vx = -GREEN_KOOPA_SPEED;
+		break;
+	}
 	}
 }

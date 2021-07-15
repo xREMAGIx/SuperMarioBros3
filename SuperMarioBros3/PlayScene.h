@@ -24,6 +24,7 @@
 #include "ThirdFont.h"
 #include "PlayerFont.h"
 #include "GameBoard.h"
+#include "InvisiblePlatform.h"
 #include "helpers.h"
 
 

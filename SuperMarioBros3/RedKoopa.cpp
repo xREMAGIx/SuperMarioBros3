@@ -12,18 +12,17 @@ void CRedKoopa::GetBoundingBox(float& left, float& top, float& right, float& bot
 	left = x;
 	top = y;
 	right = x + RED_KOOPA_BBOX_WIDTH;
-	bottom = y + RED_KOOPA_BBOX_HEIGHT;
 
 	switch (state)
 	{
-	case RED_KOOPA_STATE_SHELL:
-	case RED_KOOPA_STATE_SHELL_SCROLL: {
-		bottom = y + RED_KOOPA_BBOX_SHELL_HEIGHT;
-		break;
-	}
-	default:
-		bottom = y + RED_KOOPA_BBOX_HEIGHT;
-		break;
+		case RED_KOOPA_STATE_SHELL:
+		case RED_KOOPA_STATE_SHELL_SCROLL: {
+			bottom = y + RED_KOOPA_BBOX_SHELL_HEIGHT;
+			break;
+		}
+		default:
+			bottom = y + RED_KOOPA_BBOX_HEIGHT;
+			break;
 	}
 }
 
@@ -81,6 +80,21 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					x += dx;
 					y += dy;
+				}
+			}
+
+			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
+			{
+				if (nx != 0)
+				{
+					vx = -vx;
+					nx = -nx;
+				}
+				if (ny != 0) vy = 0;
+				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
+				if (e->ny < 0)
+				{
+					vy = 0;
 				}
 			}
 
@@ -177,20 +191,20 @@ void CRedKoopa::SetState(int state)
 		case RED_KOOPA_STATE_RESPAWN: {
 			y += - RED_KOOPA_BBOX_HEIGHT + RED_KOOPA_BBOX_SHELL_HEIGHT + 1;
 			vx = 0;
-			vy = 0;
 			break;
 		}
 		case RED_KOOPA_STATE_SHELL: {
+			y += - RED_KOOPA_BBOX_HEIGHT + RED_KOOPA_BBOX_SHELL_HEIGHT + 1;
 			vx = 0;
-			vy = 0;
 			break;
 		}
 		case RED_KOOPA_STATE_SHELL_SCROLL: {
 			vx = nx* RED_KOOPA_SCROLL;
-			vy = 0;
 			break;
 		}
-		case RED_KOOPA_STATE_WALKING:
+		case RED_KOOPA_STATE_WALKING: {
 			vx = -RED_KOOPA_SPEED;
+			break;
+		}
 	}
 }

@@ -164,6 +164,7 @@
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="helpers.cpp" />
     <ClCompile Include="InvisibleBlock.cpp" />
+    <ClCompile Include="InvisiblePlatform.cpp" />
     <ClCompile Include="InvisibleWall.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="KeyEventHandler.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="EnemyWall.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameBoard.h" />
+    <ClInclude Include="InvisiblePlatform.h" />
     <ClInclude Include="ItemBox.h" />
     <ClInclude Include="PlayerFont.h" />
     <ClInclude Include="Point.h" />

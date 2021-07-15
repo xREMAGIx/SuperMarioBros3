@@ -126,12 +126,21 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
-				CChimney* block = dynamic_cast<CChimney*>(e->obj);
-				if (e->nx != 0)
+				if (nx != 0)
 				{
 					vx = -vx;
 					nx = -nx;
 				}
+			}
+
+			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
+			{
+				if (nx != 0)
+				{
+					vx = -vx;
+					nx = -nx;
+				}
+				if (ny != 0) vy = 0;
 			}
 
 			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
@@ -147,14 +156,12 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
 			{
-				CInvisibleWall* block = dynamic_cast<CInvisibleWall*>(e->obj);
-				if (e->nx != 0)
+				if (nx != 0)
 				{
 					vx = -vx;
 					nx = -nx;
 				}
 			}
-
 		}
 	}
 

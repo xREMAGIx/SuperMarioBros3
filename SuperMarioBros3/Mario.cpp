@@ -69,6 +69,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
+			//Walk on invisible block
+			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
+			{
+				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
+				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				{
+					vy = 0;
+					SetState(MARIO_STATE_IDLE);
+				}
+			}
+
+
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -84,7 +98,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
-				else if (e->nx != 0)
+				else if (nx != 0)
 				{
 					if (untouchable == 0)
 					{
@@ -157,30 +171,49 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CGreenKoopa*>(e->obj)) // if e->obj is Goomba 
 			{
 				CGreenKoopa* greenKoopa = dynamic_cast<CGreenKoopa*>(e->obj);
-
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
 				{
-					if (greenKoopa->GetState() != GREEN_KOOPA_STATE_DIE)
+					switch (greenKoopa->GetState())
 					{
-						greenKoopa->SetState(GREEN_KOOPA_STATE_DIE);
+					case GREEN_KOOPA_STATE_SHELL: {
+						greenKoopa->SetState(GREEN_KOOPA_STATE_SHELL_SCROLL);
+						break;
+					}
+					default: {
+						greenKoopa->SetState(GREEN_KOOPA_STATE_SHELL);
 						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
+						break;
+					}
 					}
 				}
 				else if (e->nx != 0)
 				{
 					if (untouchable == 0)
 					{
-						if (greenKoopa->GetState() != GREEN_KOOPA_STATE_DIE)
+						switch (greenKoopa->GetState())
 						{
+						case GREEN_KOOPA_STATE_SHELL: {
+							greenKoopa->SetDirection(-nx);
+							greenKoopa->SetState(GREEN_KOOPA_STATE_SHELL_SCROLL);
+							break;
+						}
+						case GREEN_KOOPA_STATE_SHELL_SCROLL:
+						case GREEN_KOOPA_STATE_WALKING: {
 							if (level > MARIO_LEVEL_SMALL)
 							{
 								level = MARIO_LEVEL_SMALL;
 								StartUntouchable();
 							}
-							else
+							else {
+								DebugOut(L"[INFO] Touch RedGoomba Die\n");
 								SetState(MARIO_STATE_DIE);
+							}
+							break;
+						}
+						default:
+							break;
 						}
 					}
 				}
@@ -188,7 +221,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Goomba 
 			{
-	
 				CRedKoopa* redKoopa = dynamic_cast<CRedKoopa*>(e->obj);
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
@@ -218,6 +250,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								redKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
 								break;
 							}
+							case RED_KOOPA_STATE_SHELL_SCROLL:
 							case RED_KOOPA_STATE_WALKING: {
 								if (level > MARIO_LEVEL_SMALL)
 								{
@@ -250,8 +283,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);
 					}
 				}
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				if (ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
+					vy = 0;
 					SetState(MARIO_STATE_IDLE);
 				}
 				
@@ -265,6 +299,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CBlock* block = dynamic_cast<CBlock*>(e->obj);
 				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
+					vy = 0;
 					SetState(MARIO_STATE_IDLE);
 				}
 			}
@@ -277,6 +312,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CBrick* block = dynamic_cast<CBrick*>(e->obj);
 				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
+					vy = 0;
 					SetState(MARIO_STATE_IDLE);
 				}
 			}
@@ -287,6 +323,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CCloud* block = dynamic_cast<CCloud*>(e->obj);
 				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
+					vy = 0;
 					SetState(MARIO_STATE_IDLE);
 				}
 			}
@@ -338,6 +375,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CChimney* block = dynamic_cast<CChimney*>(e->obj);
 				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
+					vy = 0;
 					SetState(MARIO_STATE_IDLE);
 				}
 			}
@@ -446,7 +484,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;
 	}
-	else
+	else if(state != MARIO_STATE_DIE)
 	{
 		right = x + MARIO_SMALL_BBOX_WIDTH;
 		bottom = y + MARIO_SMALL_BBOX_HEIGHT;

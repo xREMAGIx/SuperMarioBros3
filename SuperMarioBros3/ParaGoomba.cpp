@@ -60,11 +60,10 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			//Walk on invisible block
-			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
+			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
 			{
 				if (ny != 0) vy = 0;
-				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
+				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
 				if (state != PARA_GOOMBA_STATE_WALKING_WITHOUT_WING) {
 					if (e->ny < 0)
 					{
@@ -72,14 +71,14 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							SetState(PARA_GOOMBA_STATE_JUMP_BIG);
 							jumpCount = 0;
 						}
-						else if(jumpCount == 4 || jumpCount == 8) {
+						else if (jumpCount == 4 || jumpCount == 8) {
 							SetState(PARA_GOOMBA_STATE_JUMP_SMALL);
 							jumpCount++;
 						}
 						else {
-							jumpCount++; 
+							jumpCount++;
 						}
-						
+
 					}
 				}
 			}

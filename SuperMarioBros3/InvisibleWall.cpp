@@ -9,10 +9,6 @@ CInvisibleWall::CInvisibleWall(int height)
 
 void CInvisibleWall::Render()
 {
-	//RenderBoundingBox();
-	LPSPRITE sprite;
-	sprite = CSprites::GetInstance()->Get(20022);
-	sprite->Draw(x, y);
 }
 
 void CInvisibleWall::GetBoundingBox(float& l, float& t, float& r, float& b)
