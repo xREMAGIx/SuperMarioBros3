@@ -31,6 +31,7 @@ Sprite ID
 29: hud 
 30: mario worldmap 1
 31: tree worldmap 1
+32: music box
 
 Animations ID (id time [..spriteId])
 10101: small mario idle left

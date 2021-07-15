@@ -25,6 +25,7 @@
 #include "PlayerFont.h"
 #include "GameBoard.h"
 #include "InvisiblePlatform.h"
+#include "MusicBox.h"
 #include "helpers.h"
 
 

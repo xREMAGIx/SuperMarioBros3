@@ -396,6 +396,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(MARIO_LEVEL_BIG);
 			}
 
+			//Jump touch music box
+			
+			if (dynamic_cast<CMusicBox*>(e->obj)) // if e->obj is Block 
+			{
+				if (ny != 0) vy = 0;
+				if (nx != 0) vx = 0;
+				CMusicBox* block = dynamic_cast<CMusicBox*>(e->obj);
+				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				{
+					vy = 0;
+					SetState(MARIO_STATE_IDLE);
+				}
+			}
+			
+
 		}
 	}
 

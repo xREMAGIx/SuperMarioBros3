@@ -241,11 +241,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		point = new CMapPoint(id, dTop, dRight, dBottom, dLeft, scene_id);
 		point->SetPosition(x, y);
 		mapPoints.push_back(point);
-
 		return;
 	}
 	case OBJECT_TYPE_INTRO_3_FONT: {
 		obj = new CThirdFont();
+		break;
+	}
+	case OBJECT_TYPE_MUSIC_BOX: {
+		obj = new CMusicBox();
+		int id = atof(tokens[4].c_str());
+		if (id == 1) {
+			obj->SetState(MUSIC_BOX_STATE_HIDDEN);
+		}
 		break;
 	}
 	case OBJECT_TYPE_INTRO_PLAYER_FONT: {
