@@ -264,6 +264,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CVenusFireTrap();
 		break;
 	}
+	case OBJECT_TYPE_BOOMERANG_BROTHER: {
+		obj = new CBoomerangBrother();
+		break;
+	}
 	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);

@@ -198,6 +198,12 @@
     <ClCompile Include="FireBall.cpp">
       <Filter>Source Files\EnemiesItems</Filter>
     </ClCompile>
+    <ClCompile Include="BoomerangBrother.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="Boomerang.cpp">
+      <Filter>Source Files\EnemiesItems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -341,6 +347,12 @@
       <Filter>Header Files\Enemies</Filter>
     </ClInclude>
     <ClInclude Include="FireBall.h">
+      <Filter>Header Files\EnemiesItems</Filter>
+    </ClInclude>
+    <ClInclude Include="BoomerangBrother.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Boomerang.h">
       <Filter>Header Files\EnemiesItems</Filter>
     </ClInclude>
   </ItemGroup>

@@ -27,6 +27,7 @@
 #include "InvisiblePlatform.h"
 #include "MusicBox.h"
 #include "VenusFireTrap.h"
+#include "BoomerangBrother.h"
 #include "helpers.h"
 
 

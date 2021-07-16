@@ -45,6 +45,8 @@
 315	31501	31502
 # MUSIC BOX
 232	23201	23202	23203
+#BOOMERANG_BROTHER
+334	33401
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
@@ -66,6 +68,7 @@
 # 14 = Enemy Wall
 # 16 = Invisible Platform
 # 17 = Music Box
+# 19 = Boomerang Brother
 
 # MARIO
 0	50	400	101
@@ -198,6 +201,10 @@
 17	480	368	232	0
 17	512	336	232	0
 17	544	368	232	1
+
+#BOOMERANG_BROTHER
+19	336	387	334
+19	1392	387	334
 
 # --- SCENE PORTAL ----
 # type	l	t	ani_set_id	r	b	scene_id

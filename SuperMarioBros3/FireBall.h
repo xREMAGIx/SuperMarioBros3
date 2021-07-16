@@ -1,6 +1,5 @@
 #pragma once
 #include "GameObject.h"
-#include "Point.h"
 
 #define FIREBALL_WIDTH 11
 #define FIREBALL_HEIGHT 11

@@ -149,6 +149,8 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="BigWing.cpp" />
     <ClCompile Include="Block.cpp" />
+    <ClCompile Include="Boomerang.cpp" />
+    <ClCompile Include="BoomerangBrother.cpp" />
     <ClCompile Include="Brick.cpp" />
     <ClCompile Include="Chimney.cpp" />
     <ClCompile Include="Cloud.cpp" />
@@ -200,6 +202,8 @@
   <ItemGroup>
     <ClInclude Include="Animations.h" />
     <ClInclude Include="BigWing.h" />
+    <ClInclude Include="Boomerang.h" />
+    <ClInclude Include="BoomerangBrother.h" />
     <ClInclude Include="Brick.h" />
     <ClInclude Include="Chimney.h" />
     <ClInclude Include="Cloud.h" />
