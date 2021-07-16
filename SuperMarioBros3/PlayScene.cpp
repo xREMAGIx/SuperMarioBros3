@@ -21,6 +21,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 */
 
 GameMap* map;
+GameMap* layer;
 Grid* grid;
 CBoard* gameBoard;
 
@@ -259,6 +260,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CPlayerFont();
 		break;
 	}
+	case OBJECT_TYPE_VENUS_FIRE_TRAP: {
+		obj = new CVenusFireTrap();
+		break;
+	}
 	break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
@@ -290,8 +295,14 @@ void CPlayScene::_ParseSection_MAP(string line)
 	int ani_id = atoi(tokens[0].c_str());
 	wstring path = ToWSTR(tokens[1]);
 
-	map = new GameMap();
-	map->LoadMap(path.c_str());
+	if (ani_id == 1) {
+		layer = new GameMap();
+		layer->LoadMap(path.c_str());
+	}
+	else {
+		map = new GameMap();
+		map->LoadMap(path.c_str());
+	}
 
 	DebugOut(L"[INFO] Load file map resources %s\n", path.c_str());
 }
@@ -441,6 +452,9 @@ void CPlayScene::Render()
 	map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	if (layer != NULL) {
+		layer->Render();
+	}
 	gameBoard->Render();
 }
 
@@ -457,6 +471,7 @@ void CPlayScene::Unload()
 	objects.clear();
 	player = NULL;
 	map = NULL;
+	layer = NULL;
 	marioWorld = NULL;
 
 	for (int i = 0; i < mapPoints.size(); i++)

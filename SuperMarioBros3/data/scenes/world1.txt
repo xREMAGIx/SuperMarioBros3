@@ -109,6 +109,6 @@
 
 
 [MAP]
-1	mapfiles\world1.txt
+0	mapfiles\world1.txt
 
 

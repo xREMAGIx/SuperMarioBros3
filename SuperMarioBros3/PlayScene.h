@@ -26,6 +26,7 @@
 #include "GameBoard.h"
 #include "InvisiblePlatform.h"
 #include "MusicBox.h"
+#include "VenusFireTrap.h"
 #include "helpers.h"
 
 

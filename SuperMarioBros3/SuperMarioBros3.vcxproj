@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -155,6 +155,7 @@
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="EnemyWall.cpp" />
+    <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameBoard.cpp" />
@@ -191,6 +192,7 @@
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="ThirdFont.cpp" />
     <ClCompile Include="TreeWorld.cpp" />
+    <ClCompile Include="VenusFireTrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico" />
@@ -204,6 +206,7 @@
     <ClInclude Include="Coin.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="EnemyWall.h" />
+    <ClInclude Include="FireBall.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="GameBoard.h" />
     <ClInclude Include="InvisiblePlatform.h" />
@@ -240,6 +243,7 @@
     <ClInclude Include="SuperLeaf.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="TreeWorld.h" />
+    <ClInclude Include="VenusFireTrap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
