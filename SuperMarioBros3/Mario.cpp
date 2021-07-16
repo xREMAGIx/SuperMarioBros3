@@ -128,6 +128,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					switch (goomba->GetState())
 					{
+					case PARA_GOOMBA_STATE_JUMP_SMALL:
+					case PARA_GOOMBA_STATE_JUMP_BIG:
 					case PARA_GOOMBA_STATE_WALKING: {
 						goomba->SetState(PARA_GOOMBA_STATE_WALKING_WITHOUT_WING);
 						SetState(MARIO_STATE_IDLE);
@@ -141,7 +143,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						break;
 					}
 					default: {
-						goomba->SetState(RED_KOOPA_STATE_SHELL);
 						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 						break;

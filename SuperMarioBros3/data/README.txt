@@ -32,6 +32,8 @@ Sprite ID
 30: mario worldmap 1
 31: tree worldmap 1
 32: music box
+33: fire ball
+34: boomerang brother
 
 Animations ID (id time [..spriteId])
 10101: small mario idle left

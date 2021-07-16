@@ -13,7 +13,7 @@ void CBoard::Update(DWORD dt)
 	CGame* game = CGame::GetInstance();
 	float cx, cy;
 	D3DXVECTOR2 camPos = game->GetCamPos();
-	cx = camPos.x;
+	cx = camPos.x + BOARD_MARGIN_LEFT;
 	cy = camPos.y + game->GetScreenHeight() - BOARD_HEIGHT;
 	SetPosition(cx, cy);
 

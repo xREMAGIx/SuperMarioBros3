@@ -64,7 +64,7 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (ny != 0) vy = 0;
 				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
-				if (state != PARA_GOOMBA_STATE_WALKING_WITHOUT_WING) {
+				if (state != PARA_GOOMBA_STATE_WALKING_WITHOUT_WING && state != PARA_GOOMBA_STATE_DIE) {
 					if (e->ny < 0)
 					{
 						if (jumpCount == 12) {
@@ -129,14 +129,27 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CParaGoomba::Render()
 {
-	int ani = PARA_GOOMBA_ANI_WALKING;
-	if (state == PARA_GOOMBA_STATE_DIE) {
-		ani = PARA_GOOMBA_ANI_DIE;
-	}
-	if (state != PARA_GOOMBA_STATE_WALKING_WITHOUT_WING) {
+	int ani;
+
+	switch (state)
+	{
+	case PARA_GOOMBA_STATE_JUMP_SMALL: 
+	case PARA_GOOMBA_STATE_JUMP_BIG:
+	case PARA_GOOMBA_STATE_WALKING: {
+		ani = PARA_GOOMBA_ANI_WALKING;
 		leftWing->Render();
 		rightWing->Render();
+		break;
 	}
+	case PARA_GOOMBA_STATE_DIE: {
+		ani = PARA_GOOMBA_ANI_DIE;
+		break;
+	}
+	default:
+		ani = PARA_GOOMBA_ANI_WALKING;
+		break;
+	}
+
 	animation_set->at(ani)->Render(x, y, -nx, 255);
 }
 
@@ -146,8 +159,7 @@ void CParaGoomba::SetState(int state)
 	switch (state)
 	{
 		case PARA_GOOMBA_STATE_DIE:
-			//StartDie();
-			y += PARA_GOOMBA_BBOX_HEIGHT - PARA_GOOMBA_BBOX_HEIGHT_DIE + 1;
+			y += - PARA_GOOMBA_BBOX_HEIGHT + PARA_GOOMBA_BBOX_HEIGHT_DIE + 1;
 			vx = 0;
 			vy = 0;
 			break;
