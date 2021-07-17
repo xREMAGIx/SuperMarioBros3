@@ -37,5 +37,5 @@ public:
 	void StartShow() { dt_show = GetTickCount(); }
 	void StopShow() { dt_show = 0; }
 	void StartFire() { dt_fire = GetTickCount(); }
-	void StopShow() { dt_fire = 0; }
+	void StopFire() { dt_fire = 0; }
 };

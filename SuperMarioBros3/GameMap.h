@@ -10,8 +10,6 @@
 #include <stdlib.h>
 #include "debug.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
 #define ID_TEX_MAP1 11
 #define TILE_SIZE 16
 #define BRICK_SIZE 16

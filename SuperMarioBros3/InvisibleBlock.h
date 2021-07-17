@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#define INVISIBLE_BLOCK_BBOX_HEIGHT 16
+#define INVISIBLE_BLOCK_BBOX_HEIGHT 2
 
 class CInvisibleBlock : public CGameObject
 {

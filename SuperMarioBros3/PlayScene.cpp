@@ -454,11 +454,10 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	map->Render();
+
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	if (layer != NULL) {
-		layer->Render();
-	}
+
 	gameBoard->Render();
 }
 
@@ -599,6 +598,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 		}
 		else if (game->IsKeyDown(DIK_LEFT)) {
+			mario->SetState(MARIO_STATE_WALKING_LEFT);
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
 		else
