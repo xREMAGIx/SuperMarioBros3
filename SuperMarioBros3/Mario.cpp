@@ -71,12 +71,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
- 
-			if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-			{
-				vy = 0;
-				SetState(MARIO_STATE_IDLE);
-			}
 			
 
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
@@ -287,6 +281,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
 				if (e->nx != 0) {
+					this->vx = current_vx;
 					x += dx;
 				}
 
@@ -319,7 +314,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CMusicBox* block = dynamic_cast<CMusicBox*>(e->obj);
 			}
 			
-
+			if (state != MARIO_STATE_DIE) {
+				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				{
+					SetState(MARIO_STATE_IDLE);
+				}
+			}
 		}
 	}
 
@@ -357,6 +357,7 @@ void CMario::Render()
 		}
 		case MARIO_STATE_DIE: {
 			ani = MARIO_ANI_DIE;
+			break;
 		}
 		default:
 			if (level == MARIO_LEVEL_BIG) {
@@ -394,12 +395,14 @@ void CMario::SetState(int state)
 			vy = -MARIO_JUMP_SPEED_Y;
 			break;
 		case MARIO_STATE_DIE:
-			vx = 0;
 			vy = -MARIO_DIE_DEFLECT_SPEED;
+			vx = 0;
 			StartDie();
 			break;
-		case MARIO_STATE_IDLE:
+		case MARIO_STATE_IDLE: {
 			vx = 0;
+			break;
+		}
 	}
 }
 
@@ -417,5 +420,8 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	{
 		right = x + MARIO_SMALL_BBOX_WIDTH;
 		bottom = y + MARIO_SMALL_BBOX_HEIGHT;
+	} else {
+		right = x + 1;
+		bottom = y + 1;
 	}
 }

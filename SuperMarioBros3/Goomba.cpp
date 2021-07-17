@@ -54,6 +54,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	coEvents.clear();
 	vy += GOOMBA_GRAVITY * dt;
 	CalcPotentialCollisions(coObjects, coEvents);
+
+	float current_vy = vy;
+	float current_vx = vx;
 	
 	if (state == GOOMBA_STATE_DIE || state == GOOMBA_STATE_JUMP_DIE) {
 		score->Update(dt, coObjects);
@@ -75,6 +78,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.4f;
 
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -84,9 +90,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (e->ny < 0)
-				{
-					 vy = 0;
+				if (e->nx != 0) {
+					this->vx = current_vx;
 				}
 			}
 
@@ -96,7 +101,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}
@@ -107,7 +112,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CGoomba* block = dynamic_cast<CGoomba*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}
@@ -117,7 +122,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}
@@ -125,16 +130,20 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
 				CChimney* block = dynamic_cast<CChimney*>(e->obj);
-				if (nx != 0)
+				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}
 
 			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
 			{
-				if (ny != 0) vy = 0;
+				if (e->nx != 0)
+				{
+					this->vx = -current_vx;
+					this->nx = -nx;
+				}
 			}
 
 			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
