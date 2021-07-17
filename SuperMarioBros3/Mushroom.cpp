@@ -14,6 +14,9 @@ void CMushroom::Render()
 		sprite = CSprites::GetInstance()->Get(20001);
 		sprite->Draw(x, y);
 	}
+	else {
+		score->Render();
+	}
 }
 
 void CMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -24,6 +27,9 @@ void CMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)
 		t = y;
 		r = x + MUSHSHROOM_BBOX_WIDTH;
 		b = y + MUSHSHROOM_BBOX_HEIGHT;
+	}
+	else {
+
 	}
 }
 
@@ -38,6 +44,10 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	vy += MUSHSHROOM_GRAVITY * dt;
 	CalcPotentialCollisions(coObjects, coEvents);
+
+	if (state == MUSHSHROOM_STATE_EARNED) {
+		score->Update(dt, coObjects);
+	}
 
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -56,6 +66,7 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		y += min_ty * dy + ny * 0.4f;
 
 		
+		if (ny != 0) vy = 0;
 
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -65,37 +76,36 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
-				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (e->ny < 0)
-				{
-					vy = 0;
-				}
+				if (ny != 0) vy = 0;
 			}
 
 			//Touch question block
 			if (dynamic_cast<CQuestionBlock*>(e->obj)) // if e->obj is Block 
 			{
 				if (nx != 0) {
-					vx = -vx;
-					nx = -nx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
-				if (ny != 0) vy = 0;
+				
 			}
 
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
 				if (nx != 0) {
-					vx = -vx;
-					nx = -nx;
+					this->vx = -vx;
+					this->nx = -nx;
 				};
 			}
 
-			LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
-			CMario* mario = ((CPlayScene*)scene)->GetPlayer();
-			if (mario) // if e->obj is Block 
+			if (dynamic_cast<CMario*>(e->obj)) // if e->obj is Block 
 			{
-				mario->SetLevel(MARIO_LEVEL_BIG);
-				SetState(MUSHSHROOM_STATE_EARNED);
+				LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+				CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+				if (state != MUSHSHROOM_STATE_SHOWING) // if e->obj is Block 
+				{
+					mario->SetLevel(MARIO_LEVEL_BIG);
+					SetState(MUSHSHROOM_STATE_EARNED);
+				}
 			}
 		}
 	}
@@ -109,9 +119,14 @@ void CMushroom::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-		case MUSHSHROOM_STATE_WALKING:
-			vx = MUSHSHROOM_SPEED;
+		case MUSHSHROOM_STATE_SHOWING: {
+			vy = -MUSHSHROOM_SPEED;
 			break;
+		}
+		case MUSHSHROOM_STATE_WALKING: {
+			vx = nx*MUSHSHROOM_SPEED;
+			break;
+		}
 		case MUSHSHROOM_STATE_EARNED: {
 			score->SetPosition(x, y - 18);
 			score->SetState(POINT_STATE_SHOW);

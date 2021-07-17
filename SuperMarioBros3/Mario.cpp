@@ -74,7 +74,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(MARIO_STATE_IDLE);
 			}
 
-
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -305,12 +304,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				coin->SetState(COIN_STATE_EARNED);
 			}
 
-			//Interact with mushroom
-			if (dynamic_cast<CMushroom*>(e->obj)) // if e->obj is Block 
-			{
-				CMushroom* mushroom = dynamic_cast<CMushroom*>(e->obj);
-				SetState(MARIO_LEVEL_BIG);
-			}
+			
 
 			//Jump touch music box
 			
