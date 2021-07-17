@@ -22,10 +22,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
+	float current_vy = vy;
+	float current_vx = vx;
+
 	coEvents.clear();
 
 	// turn off collision when die 
-	if (state != MARIO_STATE_DIE)
+	if (state != MARIO_STATE_DIE) 
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
@@ -42,6 +45,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		game_board->SetState(BOARD_STATE_IDLE);
 		CGame::GetInstance()->SwitchScene(MAP_WOLRD_ID);
 	}
+
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -50,6 +54,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	else
 	{
+
 		float min_tx, min_ty, nx = 0, ny;
 
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
@@ -61,7 +66,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//Collision
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
-		
 
 		// Collision logic with Goombas
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -73,6 +77,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				vy = 0;
 				SetState(MARIO_STATE_IDLE);
 			}
+			
 
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
 			{
@@ -88,7 +93,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
-				else if (nx != 0)
+				else if (e->nx != 0)
 				{
 					if (untouchable == 0)
 					{
@@ -271,8 +276,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Interact with CEnemyWall
 			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
-				x += dx;
+				this->vy = current_vy;
+				this->vx = current_vx;
 				y += dy;
+				x += dx;
 			}
 
 			//Walk on invisible block
@@ -283,9 +290,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					x += dx;
 				}
 
-				if (e->ny > 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
+				if (e->ny > 0)
 				{
-					vy = -MARIO_JUMP_SPEED_Y;
+					this->vy = current_vy;
 					y += dy;
 				}
 			}
@@ -294,7 +301,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Interact with chimney
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
-				CChimney* block = dynamic_cast<CChimney*>(e->obj);
 			}
 
 			//Interact with coin

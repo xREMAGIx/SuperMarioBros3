@@ -96,8 +96,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
-					nx = -nx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 
@@ -107,8 +107,8 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CGoomba* block = dynamic_cast<CGoomba*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
-					nx = -nx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 
@@ -117,34 +117,30 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
-					nx = -nx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
+				CChimney* block = dynamic_cast<CChimney*>(e->obj);
 				if (nx != 0)
 				{
-					vx = -vx;
-					nx = -nx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 
 			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
 			{
-				if (nx != 0)
-				{
-					vx = -vx;
-					nx = -nx;
-				}
 				if (ny != 0) vy = 0;
 			}
 
 			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
 			{
 				CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(e->obj);
-				if (nx != 0)
+				if (e->nx != 0)
 				{
 					if (koopa->GetState() == RED_KOOPA_STATE_SHELL_SCROLL) {
 						SetState(GOOMBA_STATE_JUMP_DIE);
@@ -154,10 +150,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
 			{
-				if (nx != 0)
+				CInvisibleWall* invisibleWall = dynamic_cast<CInvisibleWall*>(e->obj);
+				if (e->nx != 0)
 				{
-					vx = -vx;
-					nx = -nx;
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 		}
