@@ -4,7 +4,7 @@
 
 CBoomerangBrother::CBoomerangBrother()
 {
-
+	SetState(BOOMERANG_BROTHER_STATE_WALKING);
 }
 
 
@@ -19,7 +19,7 @@ void CBoomerangBrother::GetBoundingBox(float& left, float& top, float& right, fl
 void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-
+	
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -51,7 +51,17 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			
+			if ((dt_throw != 0 && GetTickCount() - dt_throw > TIME_BOOMERANG_BROTHER_THROW))
+			{
+				DebugOut(L"[ERROR] Throw Boomerang!\n");
+				SetState(BOOMERANG_BROTHER_STATE_THROW);
+				StartWaiting();
+				boomerang->SetPosition(x, y);
+				boomerang->SetState(BOOMERANG_STATE_THROWN);
+			}
+			if (boomerang->GetState() == BOOMERANG_STATE_THROWN) {
+				boomerang->Update(dt, coObjects);
+			}
 		}
 	}
 
@@ -62,6 +72,11 @@ void CBoomerangBrother::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CBoomerangBrother::Render()
 {
 	int ani = BOOMERANG_BROTHER_ANI_WALKING;
+	boomerang->Render();
+
+	if (state == BOOMERANG_BROTHER_STATE_THROW) {
+		boomerang->Render();
+	}
 	if (ani != -1) {
 		animation_set->at(ani)->Render(x, y, -nx, 255);
 	}
@@ -69,4 +84,22 @@ void CBoomerangBrother::Render()
 
 void CBoomerangBrother::SetState(int state)
 {
+	switch (state)
+	{
+	case BOOMERANG_BROTHER_STATE_DIE: {
+		score->SetPosition(x, y - 18);
+		score->SetState(POINT_STATE_SHOW);
+		CBoard* game_board = CBoard::GetInstance();
+		game_board->AddPoint(100);
+		break;
+	}
+	case BOOMERANG_BROTHER_STATE_THROW: {
+		break;
+	}
+	case BOOMERANG_BROTHER_STATE_WALKING:
+		boomerang = new CBoomerang();
+		StartThrow();
+		// vx = -BOOMERANG_BROTHER_SPEED;
+		break;
+	}
 }

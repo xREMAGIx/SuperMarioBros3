@@ -47,6 +47,8 @@
 232	23201	23202	23203
 #BOOMERANG_BROTHER
 334	33401
+#BOOMERANG
+335	33501	33502
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
