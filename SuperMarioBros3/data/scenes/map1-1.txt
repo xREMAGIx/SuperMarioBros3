@@ -241,5 +241,4 @@
 
 [MAP]
 0	mapfiles\map1-1.txt
-1	mapfiles\map1-1-layer.txt
 

@@ -35,7 +35,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
-	if (GetTickCount() - dt_die > MARIO_DIE_TIME && dt_die !=0 )
+	if (dt_die!=0 && GetTickCount() - dt_die > MARIO_DIE_TIME)
 	{
 		CBoard* game_board = CBoard::GetInstance();
 		game_board->RemoveLives();
@@ -55,8 +55,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 		// block 
-		x += min_tx * dx + nx * 0.5f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.5f;
+		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		y += min_ty * dy + ny * 0.4f;
 
 		//Collision
 		if (nx != 0) vx = 0;
@@ -68,16 +68,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
  
-
-			//Walk on invisible block
-			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
+			if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 			{
-				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
+				vy = 0;
+				SetState(MARIO_STATE_IDLE);
 			}
 
 
@@ -92,7 +86,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						goomba->SetState(GOOMBA_STATE_DIE);
 						goomba->StartDie();
-						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
@@ -130,18 +123,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					case PARA_GOOMBA_STATE_JUMP_BIG:
 					case PARA_GOOMBA_STATE_WALKING: {
 						goomba->SetState(PARA_GOOMBA_STATE_WALKING_WITHOUT_WING);
-						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 						break;
 					}
 					case PARA_GOOMBA_STATE_WALKING_WITHOUT_WING: {
 						goomba->SetState(PARA_GOOMBA_STATE_DIE);
-						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 						break;
 					}
 					default: {
-						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 						break;
 					}
@@ -159,7 +149,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								StartUntouchable();
 							}
 							else {
-								DebugOut(L"[INFO] Touch Goomba Die\n");
 								SetState(MARIO_STATE_DIE);
 							}
 						}
@@ -181,7 +170,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					default: {
 						greenKoopa->SetState(GREEN_KOOPA_STATE_SHELL);
-						SetState(MARIO_STATE_IDLE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 						break;
 					}
@@ -232,7 +220,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 						default: {
 							redKoopa->SetState(RED_KOOPA_STATE_SHELL);
-							SetState(MARIO_STATE_IDLE);
 							vy = -MARIO_JUMP_DEFLECT_SPEED;
 							break;
 						}
@@ -280,47 +267,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);
 					}
 				}
-				if (ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
-				
 			}
-
-			//Jump touch block
-			if (dynamic_cast<CBlock*>(e->obj)) // if e->obj is Block 
-			{
-				CBlock* block = dynamic_cast<CBlock*>(e->obj);
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
-			}
-
-			//Jump touch block
-			if (dynamic_cast<CBrick*>(e->obj)) // if e->obj is Block 
-			{
-				CBrick* block = dynamic_cast<CBrick*>(e->obj);
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
-			}
-
-			//Jump touch block
-			if (dynamic_cast<CCloud*>(e->obj)) // if e->obj is Block 
-			{
-				CCloud* block = dynamic_cast<CCloud*>(e->obj);
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
-			}
-
 
 			//Interact with CEnemyWall
 			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
@@ -333,11 +280,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
 				if (e->nx != 0) {
 					x += dx;
 				}
@@ -345,32 +287,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny > 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
 				{
 					vy = -MARIO_JUMP_SPEED_Y;
-					x += dx;
 					y += dy;
 				}
 			}
 
 
-			//Touch invisible wall
-			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
-			{
-				CInvisibleWall* block = dynamic_cast<CInvisibleWall*>(e->obj);
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
-			}
-
 			//Interact with chimney
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
 				CChimney* block = dynamic_cast<CChimney*>(e->obj);
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
 			}
 
 			//Interact with coin
@@ -392,11 +317,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CMusicBox*>(e->obj)) // if e->obj is Block 
 			{
 				CMusicBox* block = dynamic_cast<CMusicBox*>(e->obj);
-				if (e->ny < 0 && (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT))
-				{
-					vy = 0;
-					SetState(MARIO_STATE_IDLE);
-				}
 			}
 			
 
@@ -410,37 +330,42 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMario::Render()
 {
 	int ani;
-	switch (level)
+	switch (state)
 	{
-		case MARIO_LEVEL_BIG: {
-			if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
-			{
+		case MARIO_STATE_JUMP:
+		case MARIO_STATE_JUMP_RIGHT:
+		case MARIO_STATE_JUMP_LEFT:
+		{
+			if (level == MARIO_LEVEL_BIG) {
 				ani = MARIO_ANI_BIG_JUMPING_LEFT;
 			}
-			else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
-				ani = MARIO_ANI_BIG_WALKING_LEFT;
-			}
 			else {
-				ani = MARIO_ANI_BIG_IDLE_LEFT;
+				ani = MARIO_ANI_JUMPING_LEFT;
 			}
 			break;
 		}
-		default: {
-			if (state == MARIO_STATE_JUMP || state == MARIO_STATE_JUMP_RIGHT || state == MARIO_STATE_JUMP_LEFT)
-			{
-				ani = MARIO_ANI_JUMPING_LEFT;
+		case MARIO_STATE_WALKING_RIGHT:
+		case MARIO_STATE_WALKING_LEFT:
+		{
+			if (level == MARIO_LEVEL_BIG) {
+				ani = MARIO_ANI_BIG_WALKING_LEFT;
 			}
-			else if (state == MARIO_STATE_WALKING_RIGHT || state == MARIO_STATE_WALKING_LEFT) {
+			else {
 				ani = MARIO_ANI_WALKING_LEFT;
+			}
+			break;
+		}
+		case MARIO_STATE_DIE: {
+			ani = MARIO_ANI_DIE;
+		}
+		default:
+			if (level == MARIO_LEVEL_BIG) {
+				ani = MARIO_ANI_BIG_IDLE_LEFT;
 			}
 			else {
 				ani = MARIO_ANI_IDLE_LEFT;
 			}
 			break;
-		}
-	}
-	if (state == MARIO_STATE_DIE) {
-		ani = MARIO_ANI_DIE;
 	}
 
 	animation_set->at(ani)->Render(x, y, nx, 255);

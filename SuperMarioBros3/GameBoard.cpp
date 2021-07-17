@@ -27,12 +27,6 @@ void CBoard::Update(DWORD dt)
 
 void CBoard::Render()
 {
-	CGame* game = CGame::GetInstance();
-	float cx, cy;
-	D3DXVECTOR2 camPos = game->GetCamPos();
-	cx = camPos.x + BOARD_MARGIN_LEFT;
-	cy = camPos.y + game->GetScreenHeight() - BOARD_HEIGHT;
-
 	LPSPRITE sprite;
 	sprite = CSprites::GetInstance()->Get(40046);
 	sprite->Draw(x, y); 

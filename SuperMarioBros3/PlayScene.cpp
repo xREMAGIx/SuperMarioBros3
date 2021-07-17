@@ -298,15 +298,9 @@ void CPlayScene::_ParseSection_MAP(string line)
 
 	int ani_id = atoi(tokens[0].c_str());
 	wstring path = ToWSTR(tokens[1]);
-
-	if (ani_id == 1) {
-		layer = new GameMap();
-		layer->LoadMap(path.c_str());
-	}
-	else {
-		map = new GameMap();
-		map->LoadMap(path.c_str());
-	}
+	map = new GameMap();
+	map->LoadMap(path.c_str());
+	
 
 	DebugOut(L"[INFO] Load file map resources %s\n", path.c_str());
 }
@@ -418,6 +412,8 @@ void CPlayScene::Update(DWORD dt)
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
 
+		/*
+*/
 		vector<LPGAMEOBJECT> coObjects;
 		for (size_t i = 1; i < objects.size(); i++)
 		{
@@ -429,11 +425,9 @@ void CPlayScene::Update(DWORD dt)
 		//Mario
 		objects[0]->Update(dt, &coObjects);
 
-		if (!objects.empty()) {
-			for (size_t i = 0; i < coObjects.size(); i++)
-			{
-				coObjects[i]->Update(dt, &coObjects);
-			}
+		for (size_t i = 0; i < coObjects.size(); i++)
+		{
+			coObjects[i]->Update(dt, &coObjects);
 		}
 	
 		//place update position camera at final 
@@ -598,7 +592,6 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 		}
 		else if (game->IsKeyDown(DIK_LEFT)) {
-			mario->SetState(MARIO_STATE_WALKING_LEFT);
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 		}
 		else

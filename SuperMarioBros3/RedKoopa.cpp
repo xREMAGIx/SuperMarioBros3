@@ -55,95 +55,33 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.4f;
 
+		if (ny != 0) vy = 0;
+
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			//Walk on invisible wall
-			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
+			if (e->nx != 0)
 			{
-				if (nx != 0) {
-					this->vx = -vx;
-					this->nx = -nx;
-				}
-				if (ny != 0) vy = 0;
-			}
-
-			//Walk on invisible block
-			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
-			{
-				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (ny != 0) vy = 0;
-
-				if (e->nx != 0)
-				{
-					x += dx;
-					y += dy;
-				}
-			}
-
-			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
-			{
-				if (nx != 0)
-				{
-					vx = -vx;
-					nx = -nx;
-				}
-				if (ny != 0) vy = 0;
-				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
-				if (e->ny < 0)
-				{
-					vy = 0;
-				}
-			}
-
-			//Touch question block
-			if (dynamic_cast<CQuestionBlock*>(e->obj)) // if e->obj is Block 
-			{
-				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
-				if (e->nx != 0)
-				{
-					vx = -vx;
-					nx = -nx;
-				}
-
-			}
-
-			//Touch other Goomba
-			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
-			{
-				CRedKoopa* block = dynamic_cast<CRedKoopa*>(e->obj);
-				if (e->nx != 0)
-				{
-					vx = -vx;
-					nx = -nx;
-				}
+				this->vx = -vx;
+				this->nx = -nx;
 			}
 
 			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
-				if (state != RED_KOOPA_STATE_SHELL_SCROLL) {
-					CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
-					if (e->nx != 0)
-					{
-						this->vx = -vx;
-						this->nx = -nx;
-					}
-				}
-				else {
+				if (state == RED_KOOPA_STATE_SHELL_SCROLL) {
 					x += dx;
 					y += dy;
 				}
 			}
-
-			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
+			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
-				CChimney* block = dynamic_cast<CChimney*>(e->obj);
+				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
-					this->nx = -nx;
+					x += dx;
+					y += dy;
 				}
 			}
 		}
@@ -178,8 +116,7 @@ void CRedKoopa::Render()
 			ani = RED_KOOPA_ANI_WALKING;
 			break;
 	}
-	
-	
+
 	animation_set->at(ani)->Render(x, y, -nx, 255);
 }
 

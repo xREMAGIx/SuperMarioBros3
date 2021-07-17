@@ -17,22 +17,29 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 	right = x + GOOMBA_BBOX_WIDTH;
 	bottom = y + GOOMBA_BBOX_HEIGHT;
 	
+	if (state == GOOMBA_STATE_JUMP_DIE) {
+		right = x + 1;
+		bottom = y + 1;
+
+		if ((dt_die != 0 && GetTickCount() - dt_die > TIME_GOOMBA_DIE))
+		{
+			left = 0;
+			top = 0;
+			right = 0;
+			bottom = 0;
+		}
+	}
 
 	if (state == GOOMBA_STATE_DIE) {
 		bottom = y + GOOMBA_BBOX_HEIGHT_DIE;
-	}
 
-	if (state == GOOMBA_STATE_JUMP_DIE) {
-		right = x + 1;
-		bottom = y - 16;
-	}
-
-	if ((dt_die != 0 &&  GetTickCount() - dt_die > TIME_GOOMBA_DIE ))
-	{
-		left = 0;
-		top = 0;
-		right = 0;
-		bottom = 0;
+		if ((dt_die != 0 &&  GetTickCount() - dt_die > TIME_GOOMBA_DIE ))
+		{
+			left = 0;
+			top = 0;
+			right = 0;
+			bottom = 0;
+		}
 	}
 	
 }
@@ -45,20 +52,11 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
-	if (state != GOOMBA_STATE_DIE)
-	{
-		vy += GOOMBA_GRAVITY * dt;
-		CalcPotentialCollisions(coObjects, coEvents);
-	}
-
-	if (state == GOOMBA_STATE_DIE) {
+	vy += GOOMBA_GRAVITY * dt;
+	CalcPotentialCollisions(coObjects, coEvents);
+	
+	if (state == GOOMBA_STATE_DIE || state == GOOMBA_STATE_JUMP_DIE) {
 		score->Update(dt, coObjects);
-	}
-
-	if (state == GOOMBA_STATE_JUMP_DIE) {
-		score->Update(dt, coObjects);
-		x += dx;
-		y += dy;
 	}
 
 	// No collision occured, proceed normally
@@ -194,27 +192,28 @@ void CGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case GOOMBA_STATE_DIE: {
-		score->SetPosition(x, y - 18);
-		score->SetState(POINT_STATE_SHOW);
-		y += GOOMBA_BBOX_HEIGHT - GOOMBA_BBOX_HEIGHT_DIE + 1;
-		vx = 0;
-		vy = 0;
-		CBoard* game_board = CBoard::GetInstance();
-		game_board->AddPoint(100);
-		break;
-	}
-	case GOOMBA_STATE_JUMP_DIE: {
-		vy = -GOOMBA_JUMP_SPEED;
-		score->SetPosition(x, y - 18);
-		score->SetState(POINT_STATE_SHOW);
-		vx = 0;
-		CBoard* game_board = CBoard::GetInstance();
-		game_board->AddPoint(100);
-		StartDie();
-		break;
-	}
-	case GOOMBA_STATE_WALKING:
-		vx = -GOOMBA_SPEED;
+		case GOOMBA_STATE_DIE: {
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
+			vx = 0;
+			vy = 0;
+			CBoard* game_board = CBoard::GetInstance();
+			game_board->AddPoint(100);
+			break;
+		}
+		case GOOMBA_STATE_JUMP_DIE: {
+			vy = -GOOMBA_JUMP_SPEED;
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
+			vx = 0;
+			CBoard* game_board = CBoard::GetInstance();
+			game_board->AddPoint(100);
+			StartDie();
+			break;
+		}
+		case GOOMBA_STATE_WALKING: {
+			vx = -GOOMBA_SPEED;
+			break;
+		}
 	}
 }
