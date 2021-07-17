@@ -51,10 +51,10 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
-	coEvents.clear();
 	vy += GOOMBA_GRAVITY * dt;
-	CalcPotentialCollisions(coObjects, coEvents);
+	coEvents.clear();
 
+	CalcPotentialCollisions(coObjects, coEvents);
 	float current_vy = vy;
 	float current_vx = vx;
 	

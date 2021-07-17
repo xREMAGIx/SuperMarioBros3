@@ -38,6 +38,9 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	CalcPotentialCollisions(coObjects, coEvents);
 
+	float current_vy = vy;
+	float current_vx = vx;
+
 
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -57,6 +60,9 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// block 
 		x += min_tx * dx + nx * 0.5f;		// nx*0.5f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.5f;
+
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
 
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -87,12 +93,22 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 
 			//Touch question block
+			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Block 
+			{
+				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+				this->vy = current_vy;
+				this->vx = current_vx;
+				y += dy;
+				x += dx;
+			}
+
+			//Touch question block
 			if (dynamic_cast<CQuestionBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}
@@ -103,7 +119,7 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CParaGoomba* block = dynamic_cast<CParaGoomba*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}
@@ -113,7 +129,7 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}

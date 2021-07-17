@@ -79,6 +79,31 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			//Interact with CEnemyWall
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
+			{
+				this->vy = current_vy;
+				this->vx = current_vx;
+				y += dy;
+				x += dx;
+			}
+
+			//Walk on invisible block
+			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
+			{
+				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
+				if (e->nx != 0) {
+					this->vx = current_vx;
+					x += dx;
+				}
+
+				if (e->ny > 0)
+				{
+					this->vy = current_vy;
+					y += dy;
+				}
+			}
 			
 
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Goomba 
@@ -272,31 +297,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);
 					}
-				}
-			}
-
-			//Interact with CEnemyWall
-			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
-			{
-				this->vy = current_vy;
-				this->vx = current_vx;
-				y += dy;
-				x += dx;
-			}
-
-			//Walk on invisible block
-			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
-			{
-				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (e->nx != 0) {
-					this->vx = current_vx;
-					x += dx;
-				}
-
-				if (e->ny > 0)
-				{
-					this->vy = current_vy;
-					y += dy;
 				}
 			}
 
