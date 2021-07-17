@@ -1,21 +1,21 @@
-#include "InvisibleBlock.h"
+#include "InvisiblePlatform.h"
 
 
-CInvisibleBlock::CInvisibleBlock(int width)
+CInvisiblePlatform::CInvisiblePlatform(int width)
 {
 	this->width = width;
 }
 
 
-void CInvisibleBlock::Render()
+void CInvisiblePlatform::Render()
 {
 	//RenderBoundingBox();
 }
 
-void CInvisibleBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
+void CInvisiblePlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
 	r = x + width;
-	b = y + INVISIBLE_BLOCK_BBOX_HEIGHT;
+	b = y + INVISIBLE_PLATFORM_BBOX_HEIGHT;
 }

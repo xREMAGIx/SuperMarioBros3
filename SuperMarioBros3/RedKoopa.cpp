@@ -35,9 +35,13 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
+	float current_vy = vy;
+	float current_vx = vx;
+
 	coEvents.clear();
 
-	CalcPotentialCollisions(coObjects, coEvents);
+	if (state != RED_KOOPA_STATE_DIE)
+		CalcPotentialCollisions(coObjects, coEvents);
 
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -48,13 +52,17 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{
 		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
 
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+		// TODO: This is a very ugly designed function!!!!
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		// block 
 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.4f;
 
+		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
 
 		// Collision logic with world
@@ -65,9 +73,9 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Walk on invisible wall
 			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
 			{
-				if (nx != 0) {
-					vx = -vx;
-					nx = -nx;
+				if (e->nx != 0) {
+					this->vx = -current_vx;
+					this->nx = -nx;
 				}
 			}
 
@@ -88,8 +96,11 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
-					nx = -nx;
+					if (state == RED_KOOPA_STATE_SHELL_SCROLL) {
+						block->SetState(QUESTION_BLOCK_STATE_OPENED);
+					}
+					this->vx = -current_vx;
+					this->nx = -nx;
 				}
 
 			}
@@ -100,7 +111,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CRedKoopa* block = dynamic_cast<CRedKoopa*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}
@@ -111,11 +122,13 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 					if (e->nx != 0)
 					{
-						this->vx = -vx;
+						this->vx = -current_vx;
 						this->nx = -nx;
 					}
 				}
 				else {
+					this->vy = current_vy;
+					this->vx = current_vx;
 					x += dx;
 					y += dy;
 				}
@@ -126,7 +139,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CChimney* block = dynamic_cast<CChimney*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}

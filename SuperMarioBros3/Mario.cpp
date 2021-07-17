@@ -16,9 +16,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
-	// Simple fall down
-	vy += MARIO_GRAVITY * dt;
-
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -27,9 +24,14 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 
+	// Simple fall down
+	vy += MARIO_GRAVITY * dt;
+
+
 	// turn off collision when die 
-	if (state != MARIO_STATE_DIE) 
+	if (state != MARIO_STATE_DIE) {
 		CalcPotentialCollisions(coObjects, coEvents);
+	}
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -56,14 +58,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 
 		float min_tx, min_ty, nx = 0, ny;
+		float rdx = 0;
+		float rdy = 0;
 
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+		// TODO: This is a very ugly designed function!!!!
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
-		// block 
-		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
+		//if (rdx != 0 && rdx!=dx)
+		//	x += nx*abs(rdx); 
+
+		// block every object first!
+		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
-		//Collision
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
 
@@ -304,9 +312,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				coin->SetState(COIN_STATE_EARNED);
 			}
-
-			
-
 			//Jump touch music box
 			
 			if (dynamic_cast<CMusicBox*>(e->obj)) // if e->obj is Block 
@@ -394,11 +399,12 @@ void CMario::SetState(int state)
 		case MARIO_STATE_JUMP:
 			vy = -MARIO_JUMP_SPEED_Y;
 			break;
-		case MARIO_STATE_DIE:
+		case MARIO_STATE_DIE: {
 			vy = -MARIO_DIE_DEFLECT_SPEED;
 			vx = 0;
 			StartDie();
 			break;
+		}
 		case MARIO_STATE_IDLE: {
 			vx = 0;
 			break;
