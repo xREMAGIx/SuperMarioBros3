@@ -10,12 +10,18 @@ CBoard* CBoard::GetInstance()
 
 void CBoard::Update(DWORD dt)
 {
+
 	CGame* game = CGame::GetInstance();
 	float cx, cy;
+
 	D3DXVECTOR2 camPos = game->GetCamPos();
 	cx = camPos.x + BOARD_MARGIN_LEFT;
-	cy = camPos.y + game->GetScreenHeight() - BOARD_HEIGHT;
+	cy = camPos.y + game->GetScreenHeight() - BOARD_HEIGHT - BOARD_MARGIN_BOTTOM;
 	SetPosition(cx, cy);
+
+	DebugOut(L"[INFO] Cam Y : %f \n", camPos.y);
+
+	DebugOut(L"[INFO] Screen Height : %d \n", game->GetScreenHeight());
 
 	if (state == BOARD_STATE_START &&  GetTickCount() - _count >= 1000)  // 1000 millisecond
 	{

@@ -41,9 +41,9 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 	int maxCamY = atoi(tokens[5].c_str());
 
 
-	CGame::GetInstance()->ReInit(scene_width, scene_height);
-	CGame::GetInstance()->SetMaxCamPos(maxCamX, maxCamY);
+	//CGame::GetInstance()->ReInit(scene_width, scene_height);
 	CGame::GetInstance()->SetCamPos(cam_x, cam_y);
+	CGame::GetInstance()->SetMaxCamPos(maxCamX, maxCamY);
 }
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
