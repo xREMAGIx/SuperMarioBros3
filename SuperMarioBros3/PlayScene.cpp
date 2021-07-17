@@ -404,7 +404,9 @@ void CPlayScene::Update(DWORD dt)
 
 		grid->GetListObject(coObjects, objects, cx, cy);
 
-		for (size_t i = 0; i < coObjects.size(); i++)
+		coObjects[0]->Update(dt, &coObjects);
+
+		for (size_t i = 1; i < coObjects.size(); i++)
 		{
 			coObjects[i]->Update(dt, &coObjects);
 		}
