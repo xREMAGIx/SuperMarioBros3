@@ -45,7 +45,7 @@ void CBoomerang::SetState(int state)
 		break;
 	}
 	case BOOMERANG_STATE_THROWN: {
-		vx = -BOOMERANG_BROTHER_SPEED;
+		vx = -BOOMERANG_SPEED;
 		break;
 	}
 	case BOOMERANG_STATE_DESTROYED:

@@ -4,7 +4,10 @@
 
 CFireball::CFireball()
 {
-	SetState(COIN_STATE_IDLE);
+	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
+	LPANIMATION_SET ani_set = animation_sets->Get(BOOMERANG_ANI_SET_ID);
+	SetAnimationSet(ani_set);
+	SetState(FIREBALL_STATE_THROWN);
 }
 
 void CFireball::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -24,9 +27,16 @@ void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CFireball::Render()
 {
+	int ani = FIREBALL_ANI_THROWN;
+	if (ani != -1) {
+		animation_set->at(ani)->Render(x, y, -nx, 255);
+	}
 }
 
 void CFireball::SetState(int state)
 {
 	CGameObject::SetState(state);
+	if (state == FIREBALL_STATE_THROWN) {
+		vx = -BOOMERANG_BROTHER_SPEED;
+	}
 }

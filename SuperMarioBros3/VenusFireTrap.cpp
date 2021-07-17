@@ -64,11 +64,6 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			//Walk on invisible block
-			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
-			{
-				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-			}
 		}
 	}
 
@@ -94,6 +89,7 @@ void CVenusFireTrap::SetState(int state)
 		case VENUS_FIRE_TRAP_STATE_SHOWING: {
 			//y += VENUS_FIRE_TRAP_BBOX_HEIGHT;
 			//StartShow();
+			StartFire();
 			break;
 		}
 		default: 
