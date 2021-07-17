@@ -62,19 +62,16 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (e->nx != 0)
+			//Walk on invisible wall
+			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
 			{
-				this->vx = -vx;
-				this->nx = -nx;
-			}
-
-			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
-			{
-				if (state == RED_KOOPA_STATE_SHELL_SCROLL) {
-					x += dx;
-					y += dy;
+				if (nx != 0) {
+					vx = -vx;
+					nx = -nx;
 				}
 			}
+
+			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
@@ -82,6 +79,55 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					x += dx;
 					y += dy;
+				}
+			}
+
+			//Touch question block
+			if (dynamic_cast<CQuestionBlock*>(e->obj)) // if e->obj is Block 
+			{
+				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
+				if (e->nx != 0)
+				{
+					vx = -vx;
+					nx = -nx;
+				}
+
+			}
+
+			//Touch other Goomba
+			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
+			{
+				CRedKoopa* block = dynamic_cast<CRedKoopa*>(e->obj);
+				if (e->nx != 0)
+				{
+					this->vx = -vx;
+					this->nx = -nx;
+				}
+			}
+
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
+			{
+				if (state != RED_KOOPA_STATE_SHELL_SCROLL) {
+					CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
+					if (e->nx != 0)
+					{
+						this->vx = -vx;
+						this->nx = -nx;
+					}
+				}
+				else {
+					x += dx;
+					y += dy;
+				}
+			}
+
+			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
+			{
+				CChimney* block = dynamic_cast<CChimney*>(e->obj);
+				if (e->nx != 0)
+				{
+					this->vx = -vx;
+					this->nx = -nx;
 				}
 			}
 		}
@@ -116,7 +162,8 @@ void CRedKoopa::Render()
 			ani = RED_KOOPA_ANI_WALKING;
 			break;
 	}
-
+	
+	
 	animation_set->at(ani)->Render(x, y, -nx, 255);
 }
 

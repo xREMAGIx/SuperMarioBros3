@@ -29,6 +29,9 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt);
 
+	x += dx;
+	y += dy;
+
 	if (state == COIN_STATE_JUMP && GetTickCount() - dt_jump > (TIME_COIN_JUMP / 2)) {
 		vy += COIN_GRAVITY * dt;
 
@@ -46,10 +49,6 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			SetState(COIN_STATE_EARNED);
 		}
 	}
-
-
-	x += dx;
-	y += dy;
 }
 
 void CCoin::Render()

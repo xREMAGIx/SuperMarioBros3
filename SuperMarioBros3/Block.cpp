@@ -5,7 +5,6 @@ void CBlock::Render()
 	LPSPRITE sprite;
 	sprite = CSprites::GetInstance()->Get(20022);
 	sprite->Draw(x, y);
-	//RenderBoundingBox();
 }
 
 void CBlock::GetBoundingBox(float& l, float& t, float& r, float& b)

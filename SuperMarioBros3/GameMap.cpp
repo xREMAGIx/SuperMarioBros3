@@ -59,7 +59,6 @@ void GameMap::_ParseSection_READDATA(string line)
 
 void GameMap::_ParseSection_MAP(string line)
 {
-	DebugOut(L"[INFO] [RUN MAP ID ROW] %d\n", currentRow);
 	vector<string> tokens = split(line);
 	int index;
 	for (int i = 0; i < tokens.size(); i++)
@@ -128,6 +127,14 @@ int GameMap::getTitle(int x, int y)
 
 void GameMap::Render()
 {
+	CGame* game = CGame::GetInstance();
+	D3DXVECTOR2 cam = game->GetCamPos();
+
+	float l = cam.x - 32,
+		t = cam.y,
+		r = cam.x + game->GetScreenWidth(),
+		b = cam.y + game->GetScreenHeight();
+
 	for (int i = 0; i < numRows; i++)
 	{
 		for (int j = 0; j < numCols; j++)
@@ -135,7 +142,7 @@ void GameMap::Render()
 			float posX = j * cellW;
 			float posY = i * cellH;
 
-			if (posX < 0 || posY < 0) continue;
+			if (posX < l || posX > r || posY > b || posY < t) continue;
 
 			if (CSprites::GetInstance()->Get(getTitle(i, j)) != NULL)
 				CSprites::GetInstance()->Get(getTitle(i, j))->Draw(posX, posY);

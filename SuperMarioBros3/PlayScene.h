@@ -42,9 +42,6 @@ protected:
 
 	int currentMapPoint = 0;
 
-	float max_cam_x = 0.0f;
-	float max_cam_y = 0.0f;
-
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_SPRITES(string line);

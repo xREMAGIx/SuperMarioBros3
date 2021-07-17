@@ -7,7 +7,6 @@ void CTreeWorld::GetBoundingBox(float& left, float& top, float& right, float& bo
 
 void CTreeWorld::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	CGameObject::Update(dt, coObjects);
 }
 
 void CTreeWorld::Render()

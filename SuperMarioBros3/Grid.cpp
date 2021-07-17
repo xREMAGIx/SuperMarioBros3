@@ -28,7 +28,7 @@ bool Grid::IsOutOfCamera(float cam_x, float cam_y, LPGAMEOBJECT obj)
 	// CAM
 	float l = cam_x - 80,
 		t = cam_y,
-		r = cam_x + game->GetScreenWidth() + 80,
+		r = cam_x + game->GetScreenWidth() + 160,
 		b = cam_y + game->GetScreenHeight() + 160;
 
 	rectThis.left = (int)l;
@@ -47,7 +47,7 @@ bool Grid::IsOutOfCamera(float cam_x, float cam_y, LPGAMEOBJECT obj)
 	return !CGame::GetInstance()->isCollision(rectThis, rect1);
 }
 
-void Grid::GetListObject(vector<LPGAMEOBJECT>& ListObj, float cam_x, float cam_y)
+void Grid::GetListObject(vector<LPGAMEOBJECT>& NewObj, vector<LPGAMEOBJECT>& ListObj, float cam_x, float cam_y)
 {
 	vector<LPGAMEOBJECT> mapObject;
 
@@ -58,10 +58,10 @@ void Grid::GetListObject(vector<LPGAMEOBJECT>& ListObj, float cam_x, float cam_y
 		}
 	}
 
-	ListObj.clear();	
+	NewObj.clear();
 
 	for (auto& x : mapObject)
 	{
-		ListObj.push_back(x);
+		NewObj.push_back(x);
 	}
 }

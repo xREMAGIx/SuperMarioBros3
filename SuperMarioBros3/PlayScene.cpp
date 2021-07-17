@@ -40,10 +40,9 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 	int maxCamX = atoi(tokens[4].c_str());
 	int maxCamY = atoi(tokens[5].c_str());
 
-	max_cam_x = maxCamX;
-	max_cam_y = maxCamY;
 
 	CGame::GetInstance()->ReInit(scene_width, scene_height);
+	CGame::GetInstance()->SetMaxCamPos(maxCamX, maxCamY);
 	CGame::GetInstance()->SetCamPos(cam_x, cam_y);
 }
 
@@ -367,7 +366,6 @@ void CPlayScene::Load()
 	
 	if (marioWorld != NULL) {
 		vector<CMapPoint*> map_points = ((CPlayScene*)this)->GetMapPoints();
-		DebugOut(L"[INFO] CURRENT POINT %d\n", currentMapPoint);
 		marioWorld->SetMovingPoint(map_points.at(currentMapPoint)->x, map_points.at(currentMapPoint)->y);
 
 		//Set current point
@@ -387,17 +385,7 @@ void CPlayScene::Update(DWORD dt)
 
 		CGame* game = CGame::GetInstance();
 		cx -= game->GetScreenWidth() / 2;
-		cy -= game->GetScreenHeight() / 2;
-
-		//place update position camera at final 
-		if (cx > max_cam_x - game->GetScreenWidth()) {
-			cx = max_cam_x - game->GetScreenWidth();
-		}
-
-
-		if (cy > max_cam_y) {
-			cy = max_cam_y;
-		}
+		cy -= game->GetScreenHeight() / 2;	
 
 		CGame::GetInstance()->SetCamPos(cx, cy);
 		
@@ -412,34 +400,16 @@ void CPlayScene::Update(DWORD dt)
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
 
-		/*
-*/
 		vector<LPGAMEOBJECT> coObjects;
-		for (size_t i = 1; i < objects.size(); i++)
-		{
-			coObjects.push_back(objects[i]);
-		}
 
-		grid->GetListObject(coObjects, cx, cy);
+		grid->GetListObject(coObjects, objects, cx, cy);
 
-		//Mario
-		objects[0]->Update(dt, &coObjects);
 
 		for (size_t i = 0; i < coObjects.size(); i++)
 		{
 			coObjects[i]->Update(dt, &coObjects);
 		}
 	
-		//place update position camera at final 
-		if (cx > max_cam_x - game->GetScreenWidth()) {
-			cx = max_cam_x - game->GetScreenWidth();
-		}
-
-
-		if (cy > max_cam_y) {
-			cy = max_cam_y;
-		}
-
 		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
 	gameBoard->Update(dt);

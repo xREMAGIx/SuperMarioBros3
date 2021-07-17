@@ -35,11 +35,9 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
-	if (state != MUSHSHROOM_STATE_EARNED)
-	{
-		vy += MUSHSHROOM_GRAVITY * dt;
-		CalcPotentialCollisions(coObjects, coEvents);
-	}
+
+	vy += MUSHSHROOM_GRAVITY * dt;
+	CalcPotentialCollisions(coObjects, coEvents);
 
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)

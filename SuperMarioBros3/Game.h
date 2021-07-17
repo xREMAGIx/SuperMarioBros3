@@ -44,6 +44,9 @@ class CGame
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 
+	float max_cam_x = 0.0f;
+	float max_cam_y = 0.0f;
+
 	//Screen
 	int screen_width = SCREEN_WIDTH;
 	int screen_height = SCREEN_HEIGHT;
@@ -102,7 +105,20 @@ public:
 		if (cam_y < 0)
 			cam_y = 0;
 
+		if (cam_x > max_cam_x - screen_width) {
+			cam_x = max_cam_x - screen_width;
+		}
+
+		if (cam_y > max_cam_y) {
+			cam_y = max_cam_y;
+		}
+
 	}
+	void SetMaxCamPos(float x, float y) {
+		max_cam_x = x;
+		max_cam_y = y;
+	}
+
 	D3DXVECTOR2 GetCamPos()
 	{
 		return D3DXVECTOR2(cam_x, cam_y);
