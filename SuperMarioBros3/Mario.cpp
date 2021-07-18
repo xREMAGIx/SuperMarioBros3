@@ -287,6 +287,25 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
+			//Touch VenusFireTrap
+			if (dynamic_cast<CVenusFireTrap*>(e->obj)) // if e->obj is Goomba 
+			{
+				CVenusFireTrap* venusFireTrap = dynamic_cast<CVenusFireTrap*>(e->obj);
+				if (untouchable == 0)
+				{
+					
+					if (level > MARIO_LEVEL_SMALL)
+					{
+						level = MARIO_LEVEL_SMALL;
+						StartUntouchable();
+					}
+					else {
+						DebugOut(L"[INFO] Touch Goomba Die\n");
+						SetState(MARIO_STATE_DIE);
+					}
+				}
+			}
+
 			//Touch Question Block
 			if (dynamic_cast<CQuestionBlock*>(e->obj)) 
 			{

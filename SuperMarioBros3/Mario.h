@@ -58,11 +58,16 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
 	void SetState(int state);
+
+	int GetUntouchable() { return this->untouchable; };
+
+	int GetLevel() { return this->level; };
 	void SetLevel(int l) { level = l;  
 		if (l == MARIO_LEVEL_BIG) {
 			this->y += -MARIO_BIG_BBOX_HEIGHT + 1;
 		}
 	}
+
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void StartDie() { dt_die = GetTickCount(); }
 
