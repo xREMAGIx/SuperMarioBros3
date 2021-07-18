@@ -53,6 +53,7 @@ class CGame
 
 	D3DCOLOR background_color = BACKGROUND_COLOR;
 
+
 	//Scene
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;

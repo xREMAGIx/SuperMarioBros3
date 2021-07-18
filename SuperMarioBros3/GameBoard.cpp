@@ -29,6 +29,20 @@ void CBoard::Update(DWORD dt)
 
 void CBoard::Render()
 {
+	/*
+	CGame* game = CGame::GetInstance();
+
+	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
+
+	RECT r;
+	r.left = 0;
+	r.top = game->GetScreenHeight() - BOARD_MARGIN_BOTTOM - BOARD_HEIGHT;
+	r.right = game->GetScreenWidth() - 16;
+	r.bottom = game->GetScreenHeight() - BOARD_MARGIN_BOTTOM;
+
+	d3ddv->ColorFill(background, NULL, D3DCOLOR_XRGB(255, 255, 255));
+	*/
+
 	LPSPRITE sprite;
 	sprite = CSprites::GetInstance()->Get(40046);
 	sprite->Draw(x, y); 

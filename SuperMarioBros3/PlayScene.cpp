@@ -424,8 +424,21 @@ void CPlayScene::Render()
 {
 	map->Render();
 
-	for (int i = 0; i < objects.size(); i++)
+	CGame* game = CGame::GetInstance();
+	D3DXVECTOR2 cam = game->GetCamPos();
+
+	float l = cam.x - 32,
+		t = cam.y,
+		r = cam.x + game->GetScreenWidth(),
+		b = cam.y + game->GetScreenHeight();
+
+	for (int i = 0; i < objects.size(); i++) {
+		float posX = objects[i]->x;
+		float posY = objects[i]->y;
+
+		if (posX < l || posX > r || posY > b || posY < t) continue;
 		objects[i]->Render();
+	}
 
 	gameBoard->Render();
 }
