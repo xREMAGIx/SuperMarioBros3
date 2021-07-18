@@ -19,10 +19,6 @@ void CBoard::Update(DWORD dt)
 	cy = camPos.y + game->GetScreenHeight() - BOARD_HEIGHT - BOARD_MARGIN_BOTTOM;
 	SetPosition(cx, cy);
 
-	DebugOut(L"[INFO] Cam Y : %f \n", camPos.y);
-
-	DebugOut(L"[INFO] Screen Height : %d \n", game->GetScreenHeight());
-
 	if (state == BOARD_STATE_START &&  GetTickCount() - _count >= 1000)  // 1000 millisecond
 	{
 		time--;

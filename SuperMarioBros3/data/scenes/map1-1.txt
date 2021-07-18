@@ -1,6 +1,6 @@
-#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y
+#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y	bg_r	bg_g	bg_b
 [SETTINGS]
-250	230	0	100	2480	235
+250	230	0	100	2480	235	156	252	240
 
 # id	file_path	transparent_color_r	g	b
 [TEXTURES]

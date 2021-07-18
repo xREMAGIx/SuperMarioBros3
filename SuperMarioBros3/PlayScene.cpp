@@ -29,9 +29,11 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 {
 	DebugOut(L"[INFO] [RUN SETTINGS]\n");
 
+	CGame* game = CGame::GetInstance();
+
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 6) return; // skip invalid lines
+	if (tokens.size() < 9) return; // skip invalid lines
 
 	int scene_width = atoi(tokens[0].c_str());
 	int scene_height = atoi(tokens[1].c_str());
@@ -39,11 +41,13 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 	int cam_y = atoi(tokens[3].c_str());
 	int maxCamX = atoi(tokens[4].c_str());
 	int maxCamY = atoi(tokens[5].c_str());
+	int r = atoi(tokens[6].c_str());
+	int g = atoi(tokens[7].c_str());
+	int b = atoi(tokens[8].c_str());
 
-
-	//CGame::GetInstance()->ReInit(scene_width, scene_height);
-	CGame::GetInstance()->SetCamPos(cam_x, cam_y);
-	CGame::GetInstance()->SetMaxCamPos(maxCamX, maxCamY);
+	game->SetCamPos(cam_x, cam_y);
+	game->SetMaxCamPos(maxCamX, maxCamY);
+	game->SetBackgroundColor(r, b, g);
 }
 
 void CPlayScene::_ParseSection_TEXTURES(string line)

@@ -51,6 +51,8 @@ class CGame
 	int screen_width = SCREEN_WIDTH;
 	int screen_height = SCREEN_HEIGHT;
 
+	D3DCOLOR background_color = BACKGROUND_COLOR;
+
 	//Scene
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene;
@@ -137,6 +139,9 @@ public:
 	//Screen
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
+
+	D3DCOLOR GetBackgroundColor() { return background_color; }
+	void SetBackgroundColor(int r, int g, int b) { background_color = D3DCOLOR_XRGB(r, g, b); }
 
 	~CGame();
 };

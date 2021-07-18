@@ -56,7 +56,7 @@ void Render()
 	if (d3ddv->BeginScene())
 	{
 		// Clear back buffer with a color
-		d3ddv->ColorFill(bb, NULL, BACKGROUND_COLOR);
+		d3ddv->ColorFill(bb, NULL, game->GetBackgroundColor());
 
 		spriteHandler->Begin(D3DXSPRITE_ALPHABLEND);
 		CGame::GetInstance()->GetCurrentScene()->Render();
