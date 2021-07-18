@@ -10,6 +10,7 @@
 #define FIREBALL_SPEED 0.05f
 
 #define FIREBALL_STATE_THROWN 100
+#define FIREBALL_STATE_DESTROYED 200
 
 #define FIREBALL_ANI_SET_ID 333
 
@@ -18,6 +19,7 @@
 
 class CFireball : public CGameObject
 {
+
 public:
 	CFireball();
 	virtual void Render();

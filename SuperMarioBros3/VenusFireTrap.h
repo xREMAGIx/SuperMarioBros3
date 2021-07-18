@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "FireBall.h"
 
 #define VENUS_FIRE_TRAP_WIDTH 16
 #define VENUS_FIRE_TRAP_HEIGHT 32
@@ -26,6 +27,7 @@ class CVenusFireTrap: public CGameObject
 {
 	DWORD dt_show;
 	DWORD dt_fire;
+	CFireball* fireball;
 
 public:
 	CVenusFireTrap();

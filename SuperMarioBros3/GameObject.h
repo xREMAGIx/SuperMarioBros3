@@ -55,6 +55,7 @@ public:
 	float vy;
 
 	int nx;
+	int ny;
 
 	int state;
 
@@ -83,6 +84,9 @@ public:
 
 	void SetDirection(int nx) { this->nx = nx; }
 	int GetDirection() { return this->nx; }
+
+	void SetDirectionY(int ny) { this->ny = ny; }
+	int GetDirectionY() { return this->ny; }
 
 	//Collision
 	void RenderBoundingBox();

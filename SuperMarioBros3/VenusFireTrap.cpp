@@ -5,6 +5,8 @@
 CVenusFireTrap::CVenusFireTrap()
 {
 	SetState(VENUS_FIRE_TRAP_STATE_SHOWING);
+	SetDirection(-1);
+	fireball = new CFireball();
 	//score = new CPoint();
 	//score->SetPointId(POINT_ID_100);
 }
@@ -22,61 +24,92 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 
-	vector<LPCOLLISIONEVENT> coEvents;
-	vector<LPCOLLISIONEVENT> coEventsResult;
+	if (state == VENUS_FIRE_TRAP_STATE_SHOWING) {
+		LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+		CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
-	coEvents.clear();
-	if (state != VENUS_FIRE_TRAP_STATE_HIDDEN)
-	{
-		CalcPotentialCollisions(coObjects, coEvents);
-		//score->Update(dt, coObjects);
+		int new_nx, new_ny;
+		if (mario->y > y + VENUS_FIRE_TRAP_HEIGHT / 2) {
+			new_ny = 1;
+		}
+		else {
+			new_ny = -1;
+		}
+
+		if (mario->x > x + VENUS_FIRE_TRAP_WIDTH) {
+			new_nx = 1;
+		}
+		else {
+			new_nx = -1;
+		}
+
+		SetDirection(new_nx);
+		SetDirectionY(new_ny);
 	}
 
 	if (state == VENUS_FIRE_TRAP_STATE_HIDDEN) {
 		//score->Update(dt, coObjects);
 	}
-	/*
-	if (dt_show != 0 && GetTickCount() - dt_show > VENUS_FIRE_TRAP_TIME_SHOW)
+	
+	if (dt_fire != 0 && GetTickCount() - dt_fire > VENUS_FIRE_TRAP_TIME_SHOW)
 	{
-		DebugOut(L"[INFO] Load file map resources\n");
-		SetState(VENUS_FIRE_TRAP_STATE_SHOWING);
-	}
-	*/
+		SetState(VENUS_FIRE_TRAP_STATE_SHOOT);
+		fireball->SetDirection(nx);
+		fireball->SetDirectionY(ny);
 
-	// No collision occured, proceed normally
-	if (coEvents.size() == 0)
-	{
-		x += dx;
-		y += dy;
-	}
-	else
-	{
-		float min_tx, min_ty, nx = 0, ny;
-		float rdx = 0;
-		float rdy = 0;
-
-		// TODO: This is a very ugly designed function!!!!
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
-
-		// block 
-		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.4f;
-
-		// Collision logic with world
-		for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-			LPCOLLISIONEVENT e = coEventsResult[i];
-
+		int fireball_x;
+		if (nx < 0) {
+			fireball_x = x - 8;
 		}
+		else {
+			fireball_x = x + VENUS_FIRE_TRAP_WIDTH + 8;
+		}
+		int fireball_y = y + 6;
+
+		fireball->SetPosition(fireball_x, fireball_y);
+		fireball->SetState(FIREBALL_STATE_THROWN);
+
+		StopFire();
 	}
 
-	// clean up collision events
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+	if (fireball->GetState() == FIREBALL_STATE_THROWN) {
+		fireball->Update(dt, coObjects);
+	}
 }
 
 void CVenusFireTrap::Render()
 {
-	animation_set->at(0)->Render(x, y, -1, 255);
+	int ani = VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT;
+
+	switch (state)
+	{
+		case VENUS_FIRE_TRAP_STATE_SHOWING: {
+			if (ny > 0) {
+				ani = VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT;
+			}
+			else {
+				ani = VENUS_FIRE_TRAP_ANI_LOOK_UP_LEFT;
+			}
+			break;
+		}
+		case VENUS_FIRE_TRAP_STATE_SHOOT: {
+			if (ny > 0) {
+				ani = VENUS_FIRE_TRAP_ANI_LOOK_DOWN_LEFT_SHOOT;
+			}
+			else {
+				ani = VENUS_FIRE_TRAP_ANI_LOOK_UP_LEFT_SHOOT;
+			}
+			break;
+		}
+		default:
+			break;
+	}
+
+	if (fireball->GetState() == FIREBALL_STATE_THROWN) {
+		fireball->Render();
+	}
+
+	animation_set->at(ani)->Render(x, y, nx, 255);
 }
 
 void CVenusFireTrap::SetState(int state)
@@ -90,8 +123,6 @@ void CVenusFireTrap::SetState(int state)
 			break;
 		} 
 		case VENUS_FIRE_TRAP_STATE_SHOWING: {
-			//y += VENUS_FIRE_TRAP_BBOX_HEIGHT;
-			//StartShow();
 			StartFire();
 			break;
 		}
