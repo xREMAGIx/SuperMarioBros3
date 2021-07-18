@@ -286,7 +286,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-
+			/*
 			//Touch VenusFireTrap
 			if (dynamic_cast<CVenusFireTrap*>(e->obj)) // if e->obj is Goomba 
 			{
@@ -305,6 +305,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
+			*/
 
 			//Touch Question Block
 			if (dynamic_cast<CQuestionBlock*>(e->obj)) 
@@ -319,10 +320,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
-
 			//Interact with chimney
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
+				CChimney* chimney = dynamic_cast<CChimney*>(e->obj);
+				if (e->ny < 0)
+				{
+					CGameObject* chimney_obj = chimney->GetChimneyObject();
+					if (dynamic_cast<CVenusFireTrap*>(chimney_obj)->GetState()== VENUS_FIRE_TRAP_STATE_SHOW) {
+						chimney->SetState(CHIMNEY_STATE_CANCEL);
+					}
+					
+				}
 			}
 
 			//Interact with coin
