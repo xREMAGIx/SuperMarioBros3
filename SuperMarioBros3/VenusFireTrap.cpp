@@ -4,11 +4,10 @@
 
 CVenusFireTrap::CVenusFireTrap()
 {
-	SetState(VENUS_FIRE_TRAP_STATE_SHOWING);
+	SetState(VENUS_FIRE_TRAP_STATE_WATING);
 	SetDirection(-1);
 	fireball = new CFireball();
-	//score = new CPoint();
-	//score->SetPointId(POINT_ID_100);
+	current_ani = VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT;
 }
 
 
@@ -24,7 +23,9 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 
-	if (state == VENUS_FIRE_TRAP_STATE_SHOWING) {
+	y += dy; 
+
+	if (state == VENUS_FIRE_TRAP_STATE_WATING) {
 		LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
 		CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 
@@ -47,8 +48,31 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetDirectionY(new_ny);
 	}
 
+	//Hidding
 	if (state == VENUS_FIRE_TRAP_STATE_HIDDEN) {
-		//score->Update(dt, coObjects);
+		if (y > initial_y + VENUS_FIRE_TRAP_HEIGHT) {
+			y = initial_y + VENUS_FIRE_TRAP_HEIGHT;
+			vy = 0;
+			StartShow();
+		}
+	}
+	else {
+		if (dt_hide != 0 && GetTickCount() - dt_hide > VENUS_FIRE_TRAP_TIME_HIDE) {
+			SetState(VENUS_FIRE_TRAP_STATE_HIDDEN);
+		}
+	}
+
+	//Showing
+	if (state == VENUS_FIRE_TRAP_STATE_SHOWING) {
+		if (y < initial_y - VENUS_FIRE_TRAP_HEIGHT) {
+			y = initial_y - VENUS_FIRE_TRAP_HEIGHT;
+			SetState(VENUS_FIRE_TRAP_STATE_WATING);
+		}
+	}
+	else {
+		if (dt_show != 0 && GetTickCount() - dt_show > VENUS_FIRE_TRAP_TIME_SHOW) {
+			SetState(VENUS_FIRE_TRAP_STATE_SHOWING);
+		}
 	}
 	
 	if (dt_fire != 0 && GetTickCount() - dt_fire > VENUS_FIRE_TRAP_TIME_SHOW)
@@ -70,6 +94,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		fireball->SetState(FIREBALL_STATE_THROWN);
 
 		StopFire();
+		StopShow();
 	}
 
 	if (fireball->GetState() == FIREBALL_STATE_THROWN) {
@@ -79,25 +104,23 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CVenusFireTrap::Render()
 {
-	int ani = VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT;
-
 	switch (state)
 	{
-		case VENUS_FIRE_TRAP_STATE_SHOWING: {
+		case VENUS_FIRE_TRAP_STATE_WATING: {
 			if (ny > 0) {
-				ani = VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT;
+				current_ani = VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT;
 			}
 			else {
-				ani = VENUS_FIRE_TRAP_ANI_LOOK_UP_LEFT;
+				current_ani = VENUS_FIRE_TRAP_ANI_LOOK_UP_LEFT;
 			}
 			break;
 		}
 		case VENUS_FIRE_TRAP_STATE_SHOOT: {
 			if (ny > 0) {
-				ani = VENUS_FIRE_TRAP_ANI_LOOK_DOWN_LEFT_SHOOT;
+				current_ani = VENUS_FIRE_TRAP_ANI_LOOK_DOWN_LEFT_SHOOT;
 			}
 			else {
-				ani = VENUS_FIRE_TRAP_ANI_LOOK_UP_LEFT_SHOOT;
+				current_ani = VENUS_FIRE_TRAP_ANI_LOOK_UP_LEFT_SHOOT;
 			}
 			break;
 		}
@@ -109,7 +132,7 @@ void CVenusFireTrap::Render()
 		fireball->Render();
 	}
 
-	animation_set->at(ani)->Render(x, y, nx, 255);
+	animation_set->at(current_ani)->Render(x, y, nx, 255);
 }
 
 void CVenusFireTrap::SetState(int state)
@@ -118,11 +141,16 @@ void CVenusFireTrap::SetState(int state)
 	switch (state)
 	{
 		case VENUS_FIRE_TRAP_STATE_HIDDEN: {
-			y -= VENUS_FIRE_TRAP_BBOX_HEIGHT;
-			StartShow();
+			vy = VENUS_FIRE_TRAP_SPEED;
 			break;
-		} 
+		}
 		case VENUS_FIRE_TRAP_STATE_SHOWING: {
+			vy = -VENUS_FIRE_TRAP_SPEED;
+			break;
+		}
+		case VENUS_FIRE_TRAP_STATE_WATING: {
+			vy = 0;
+			StartWaiting();
 			StartFire();
 			break;
 		}

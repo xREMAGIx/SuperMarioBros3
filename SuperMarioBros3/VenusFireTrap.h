@@ -4,7 +4,7 @@
 
 #define VENUS_FIRE_TRAP_WIDTH 16
 #define VENUS_FIRE_TRAP_HEIGHT 32
-#define VENUS_FIRE_TRAP_SPEED 0.05f
+#define VENUS_FIRE_TRAP_SPEED 0.04f
 
 
 #define VENUS_FIRE_TRAP_BBOX_WIDTH 16
@@ -20,14 +20,19 @@
 #define VENUS_FIRE_TRAP_ANI_LOOK_UP_LEFT_SHOOT 2
 #define VENUS_FIRE_TRAP_ANI_LOOK_UP_LEFT 3
 
-#define VENUS_FIRE_TRAP_TIME_SHOW 1000
+#define VENUS_FIRE_TRAP_TIME_SHOW 2000
+#define VENUS_FIRE_TRAP_TIME_HIDE 3000
 #define VENUS_FIRE_TRAP_TIME_FIRE 1000
 
 class CVenusFireTrap: public CGameObject
 {
 	DWORD dt_show;
+	DWORD dt_hide;
 	DWORD dt_fire;
 	CFireball* fireball;
+
+	float initial_y;
+	int current_ani;
 
 public:
 	CVenusFireTrap();
@@ -36,8 +41,20 @@ public:
 	virtual void Render();
 	virtual void SetState(int state);
 
-	void StartShow() { dt_show = GetTickCount(); }
-	void StopShow() { dt_show = 0; }
+	void StartShow() { 
+		dt_hide = 0; 
+		dt_show = GetTickCount(); 
+		initial_y = y;
+	}
+	void StopShow() { 
+		dt_show = 0; 
+		dt_hide = GetTickCount(); 		
+		initial_y = y;
+	}
+	void StartWaiting() {
+		dt_show = 0;
+		dt_hide = 0;
+	}
 	void StartFire() { dt_fire = GetTickCount(); }
 	void StopFire() { dt_fire = 0; }
 };
