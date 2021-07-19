@@ -54,12 +54,11 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdx = 0;
 		float rdy = 0;
 
-		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		// block 
-		x += min_tx * dx + nx * 0.5f;		// nx*0.5f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.5f;
+		x += min_tx * dx + nx * 0.4f;		// nx*0.5f : need to push out a bit to avoid overlapping next frame
+		y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
@@ -74,11 +73,14 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (ny != 0) vy = 0;
 				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
 				if (state != PARA_GOOMBA_STATE_WALKING_WITHOUT_WING && state != PARA_GOOMBA_STATE_DIE) {
+					
 					if (e->ny < 0)
 					{
 						if (jumpCount == 12) {
 							SetState(PARA_GOOMBA_STATE_JUMP_BIG);
 							jumpCount = 0;
+							leftWing->SetState(SMALLWING_STATE_IDLE);
+							rightWing->SetState(SMALLWING_STATE_IDLE);
 						}
 						else if (jumpCount == 4 || jumpCount == 8) {
 							SetState(PARA_GOOMBA_STATE_JUMP_SMALL);
@@ -90,16 +92,6 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 					}
 				}
-			}
-
-			//Touch question block
-			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Block 
-			{
-				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
-				this->vy = current_vy;
-				this->vx = current_vx;
-				y += dy;
-				x += dx;
 			}
 
 			//Touch question block
@@ -132,6 +124,16 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->vx = -current_vx;
 					this->nx = -nx;
 				}
+			}
+
+			//Touch CGoomba
+			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Block 
+			{
+				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+				this->vy = current_vy;
+				this->vx = current_vx;
+				y += dy;
+				x += dx;
 			}
 		}
 	}
@@ -184,9 +186,13 @@ void CParaGoomba::SetState(int state)
 			break;
 		case PARA_GOOMBA_STATE_JUMP_SMALL:
 			vy = -PARA_GOOMBA_JUMP_SPEED;
+			leftWing->SetState(SMALLWING_STATE_FLYING);
+			rightWing->SetState(SMALLWING_STATE_FLYING);
 			break;
 		case PARA_GOOMBA_STATE_JUMP_BIG:
 			vy = -PARA_GOOMBA_JUMP_SPEED * 3;
+			leftWing->SetState(SMALLWING_STATE_FLYING);
+			rightWing->SetState(SMALLWING_STATE_FLYING);
 			break;
 		case PARA_GOOMBA_STATE_WALKING_WITHOUT_WING:
 		case PARA_GOOMBA_STATE_WALKING: {

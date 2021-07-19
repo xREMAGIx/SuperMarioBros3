@@ -406,6 +406,8 @@ void CPlayScene::Update(DWORD dt)
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;
 
+		CGame::GetInstance()->SetCamPos(cx, cy);
+
 		vector<LPGAMEOBJECT> coObjects;
 
 		grid->GetListObject(coObjects, objects, cx, cy);
@@ -417,7 +419,6 @@ void CPlayScene::Update(DWORD dt)
 			coObjects[i]->Update(dt, &coObjects);
 		}
 	
-		CGame::GetInstance()->SetCamPos(cx, cy);
 	}
 	gameBoard->Update(dt);
 }
