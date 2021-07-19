@@ -233,8 +233,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						switch (greenKoopa->GetState())
 						{
 						case GREEN_KOOPA_STATE_SHELL: {
-							greenKoopa->SetDirection(-nx);
-							greenKoopa->SetState(GREEN_KOOPA_STATE_SHELL_SCROLL);
+							if (state == MARIO_STATE_RUNNING) {
+								x += dx;
+								SetCurrentAni(MARIO_ANI_HOLDING);
+								greenKoopa->SetState(GREEN_KOOPA_STATE_SHELL_HOLD);
+								greenKoopa->SetPosition(x + MARIO_WIDTH + 2, y - 2);
+							}
+							else {
+								SetState(MARIO_STATE_KICK);
+								greenKoopa->SetDirection(-nx);
+								greenKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+							}
 							break;
 						}
 						case GREEN_KOOPA_STATE_SHELL_SCROLL:
@@ -283,8 +292,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						switch (redKoopa->GetState())
 						{
 							case RED_KOOPA_STATE_SHELL: {
-								redKoopa->SetDirection(-nx);
-								redKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+								if (state == MARIO_STATE_RUNNING) {
+									SetCurrentAni(MARIO_ANI_HOLDING);
+									redKoopa->SetPosition(x + MARIO_WIDTH + 2, y + 2);
+								}
+								else {
+									SetCurrentAni(MARIO_ANI_KICK);
+									redKoopa->SetDirection(-nx);
+									redKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+								}
 								break;
 							}
 							case RED_KOOPA_STATE_SHELL_SCROLL:
@@ -306,26 +322,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
-			/*
-			//Touch VenusFireTrap
-			if (dynamic_cast<CVenusFireTrap*>(e->obj)) // if e->obj is Goomba 
-			{
-				CVenusFireTrap* venusFireTrap = dynamic_cast<CVenusFireTrap*>(e->obj);
-				if (untouchable == 0)
-				{
-					
-					if (level > MARIO_LEVEL_SMALL)
-					{
-						level = MARIO_LEVEL_SMALL;
-						StartUntouchable();
-					}
-					else {
-						DebugOut(L"[INFO] Touch Goomba Die\n");
-						SetState(MARIO_STATE_DIE);
-					}
-				}
-			}
-			*/
 
 			//Touch Question Block
 			if (dynamic_cast<CQuestionBlock*>(e->obj)) 
@@ -412,6 +408,10 @@ void CMario::Render()
 			current_ani = MARIO_ANI_DIE;
 			break;
 		}
+		case MARIO_STATE_KICK: {
+			current_ani = MARIO_ANI_KICK;
+			break;
+		}
 		default:
 			if (vx == 0) {
 				if (level == MARIO_LEVEL_BIG) {
@@ -421,6 +421,17 @@ void CMario::Render()
 					current_ani = MARIO_ANI_IDLE_LEFT;
 				}
 			}
+			else {
+				if (vx > MARIO_WALKING_SPEED * 1.5 || vx < -MARIO_WALKING_SPEED * 1.5) {
+					if (level == MARIO_LEVEL_BIG) {
+						current_ani = MARIO_ANI_BIG_IDLE_LEFT;
+					}
+					else {
+						current_ani = MARIO_ANI_RUNNING;
+					}
+				}
+			}
+			
 			break;
 	}
 
@@ -442,7 +453,6 @@ void CMario::SetState(int state)
 		case MARIO_STATE_WALKING_LEFT:
 		case MARIO_STATE_JUMP_LEFT:
 		{
-			DebugOut(L"[INFO] MARIO_STATE_WALKING_LEFT!\n");
 			vx = -MARIO_WALKING_SPEED;
 			nx = -1;
 			break;

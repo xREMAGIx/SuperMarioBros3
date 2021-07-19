@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-#define MARIO_WIDTH 14
+#define MARIO_WIDTH 16
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_JUMP_SPEED_Y		0.3f
 #define MARIO_GRAVITY			0.001f
@@ -20,6 +20,8 @@
 #define MARIO_STATE_JUMP_RIGHT		500
 #define MARIO_STATE_DIE				600
 #define MARIO_STATE_RUNNING			700
+#define MARIO_STATE_HOLDING			800
+#define MARIO_STATE_KICK		900
 
 //Animate
 #define MARIO_ANI_IDLE_LEFT			0
@@ -29,11 +31,14 @@
 #define MARIO_ANI_BIG_WALKING_LEFT		4
 #define MARIO_ANI_BIG_JUMPING_LEFT		5
 #define MARIO_ANI_DIE		6
+#define MARIO_ANI_RUNNING		7
+#define MARIO_ANI_HOLDING		8
+#define MARIO_ANI_KICK		9
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 
-#define MARIO_BIG_BBOX_WIDTH  15
+#define MARIO_BIG_BBOX_WIDTH  16
 #define MARIO_BIG_BBOX_HEIGHT 27
 
 #define MARIO_SMALL_BBOX_WIDTH  13
@@ -72,6 +77,10 @@ public:
 		if (l == MARIO_LEVEL_BIG) {
 			this->y += -MARIO_BIG_BBOX_HEIGHT + 1;
 		}
+	}
+
+	void SetCurrentAni(int current_ani) {
+		this->current_ani = current_ani;
 	}
 
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }

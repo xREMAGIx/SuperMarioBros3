@@ -4,7 +4,7 @@
 
 #define GOOMBA_WIDTH 16
 #define GOOMBA_HEIGHT 16
-#define GOOMBA_SPEED 0.05f
+#define GOOMBA_SPEED 0.04f
 #define GOOMBA_GRAVITY	0.001f
 #define GOOMBA_JUMP_SPEED 0.1f
 

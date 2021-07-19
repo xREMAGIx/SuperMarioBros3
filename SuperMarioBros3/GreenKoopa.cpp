@@ -16,7 +16,8 @@ void CGreenKoopa::GetBoundingBox(float& left, float& top, float& right, float& b
 	switch (state)
 	{
 	case GREEN_KOOPA_STATE_SHELL:
-	case GREEN_KOOPA_STATE_SHELL_SCROLL: {
+	case GREEN_KOOPA_STATE_SHELL_SCROLL:
+	case GREEN_KOOPA_STATE_SHELL_HOLD: {
 		bottom = y + GREEN_KOOPA_BBOX_SHELL_HEIGHT;
 		break;
 	}
@@ -38,6 +39,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObjects, coEvents);
+	
 
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -168,6 +170,7 @@ void CGreenKoopa::Render()
 		break;
 	}
 	case GREEN_KOOPA_STATE_SHELL:
+	case GREEN_KOOPA_STATE_SHELL_HOLD:
 	{
 		ani = GREEN_KOOPA_ANI_SHELL;
 		break;
