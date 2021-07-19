@@ -9,7 +9,6 @@ CInvisiblePlatform::CInvisiblePlatform(int width)
 
 void CInvisiblePlatform::Render()
 {
-	//RenderBoundingBox();
 }
 
 void CInvisiblePlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -18,4 +17,9 @@ void CInvisiblePlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y;
 	r = x + width;
 	b = y + INVISIBLE_PLATFORM_BBOX_HEIGHT;
+}
+
+void CInvisiblePlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	CGameObject::Update(dt, coObjects);
 }

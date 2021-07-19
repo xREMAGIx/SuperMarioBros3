@@ -4,7 +4,7 @@
 CParaKoopa::CParaKoopa()
 {
 	this->wing = new CBigWing(this->x + PARA_KOOPA_WING_X, this->y + PARA_KOOPA_WING_Y);
-	SetState(PARA_KOOPA_STATE_WALKING);
+	SetState(PARA_KOOPA_STATE_JUMP);
 }
 
 
@@ -14,10 +14,18 @@ void CParaKoopa::GetBoundingBox(float& left, float& top, float& right, float& bo
 	top = y;
 	right = x + PARA_KOOPA_BBOX_WIDTH;
 
-	if (state == PARA_KOOPA_STATE_DIE)
-		bottom = y + PARA_KOOPA_BBOX_HEIGHT_DIE;
-	else
+	switch (state)
+	{
+	case PARA_KOOPA_STATE_SHELL:
+	case PARA_KOOPA_STATE_SHELL_SCROLL:
+	case PARA_KOOPA_STATE_SHELL_HOLD: {
+		bottom = y + PARA_KOOPA_BBOX_SHELL_HEIGHT;
+		break;
+	}
+	default:
 		bottom = y + PARA_KOOPA_BBOX_HEIGHT;
+		break;
+	}
 }
 
 void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -25,6 +33,9 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 
 	vy += PARA_KOOPA_GRAVITY * dt;
+
+	float current_vy = vy;
+	float current_vx = vx;
 
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
@@ -52,6 +63,8 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx * 0.5f;		// nx*0.5f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.5f; 
 
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
 
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
@@ -62,13 +75,35 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (e->ny < 0)
-				{
-					vy = 0;
+				if (state == PARA_KOOPA_STATE_FLY) {
+					if (e->ny < 0)
+					{
+						SetState(PARA_KOOPA_STATE_JUMP);
+					}
 				}
 				x += dx;
 			}
 
+			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
+			{
+				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
+				if (state == PARA_KOOPA_STATE_FLY) {
+					if (e->ny < 0)
+					{
+						SetState(PARA_KOOPA_STATE_JUMP);
+					}
+				}
+			}
+
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
+			{
+				this->vy = current_vy;
+				this->vx = current_vx;
+				x += dx;
+				y += dy;
+			}
+
+			/*
 			//Touch question block
 			if (dynamic_cast<CQuestionBlock*>(e->obj)) // if e->obj is Block 
 			{
@@ -100,6 +135,7 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				x += dx;
 				y += dy;
 			}
+			*/
 
 		}
 	}
@@ -120,13 +156,37 @@ void CParaKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CParaKoopa::Render()
 {
-
-	int ani = PARA_KOOPA_ANI_WALKING;
-	if (state == PARA_KOOPA_STATE_DIE) {
-		ani = PARA_KOOPA_ANI_DIE;
+	int ani;
+	switch (state)
+	{
+	case PARA_KOOPA_STATE_FLY:
+	case PARA_KOOPA_STATE_JUMP: {
+		ani = PARA_KOOPA_ANI_WALKING;
+		wing->Render();
+		break;
 	}
+	case PARA_KOOPA_STATE_RESPAWN:
+	{
+		ani = PARA_KOOPA_ANI_RESPAWN;
+		break;
+	}
+	case PARA_KOOPA_STATE_SHELL:
+	case PARA_KOOPA_STATE_SHELL_HOLD:
+	{
+		ani = PARA_KOOPA_ANI_SHELL;
+		break;
+	}
+	case PARA_KOOPA_STATE_SHELL_SCROLL:
+	{
+		ani = PARA_KOOPA_ANI_SHELL_SCROLL;
+		break;
+	}
+	default:
+		ani = PARA_KOOPA_ANI_WALKING;
+		break;
+	}
+
 	animation_set->at(ani)->Render(x, y, -nx, 255);
-	wing->Render();
 }
 
 void CParaKoopa::SetState(int state)
@@ -134,12 +194,29 @@ void CParaKoopa::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case PARA_KOOPA_STATE_DIE:
-		y += PARA_KOOPA_BBOX_HEIGHT - PARA_KOOPA_BBOX_HEIGHT_DIE + 1;
-		vx = 0;
-		vy = 0;
-		break;
-	case PARA_KOOPA_STATE_WALKING:
-		vx = -PARA_KOOPA_SPEED;
+		case PARA_KOOPA_STATE_JUMP: {
+			vy = -PARA_KOOPA_JUMP_SPEED;
+			vx = -PARA_KOOPA_SPEED;
+			SetState(PARA_KOOPA_STATE_FLY);
+			break;
+		}
+		case PARA_KOOPA_STATE_RESPAWN: {
+			y += -PARA_KOOPA_BBOX_HEIGHT + PARA_KOOPA_BBOX_SHELL_HEIGHT + 1;
+			vx = 0;
+			break;
+		}
+		case PARA_KOOPA_STATE_SHELL: {
+			y += -PARA_KOOPA_BBOX_HEIGHT + PARA_KOOPA_BBOX_SHELL_HEIGHT + 1;
+			vx = 0;
+			break;
+		}
+		case PARA_KOOPA_STATE_SHELL_SCROLL: {
+			vx = nx * PARA_KOOPA_SCROLL;
+			break;
+		}
+		case PARA_KOOPA_STATE_WALKING: {
+			vx = -PARA_KOOPA_SPEED;
+			break;
+		}
 	}
 }

@@ -17,8 +17,9 @@ void CParaGoomba::GetBoundingBox(float& left, float& top, float& right, float& b
 	top = y;
 	right = x + PARA_GOOMBA_BBOX_WIDTH;
 
-	if (state == PARA_GOOMBA_STATE_DIE)
+	if (state == PARA_GOOMBA_STATE_DIE) {
 		bottom = y + PARA_GOOMBA_BBOX_HEIGHT_DIE;
+	}
 	else
 		bottom = y + PARA_GOOMBA_BBOX_HEIGHT;
 }
@@ -126,7 +127,7 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
-			//Touch CGoomba
+			//Touch  CGoomba
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Block 
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
