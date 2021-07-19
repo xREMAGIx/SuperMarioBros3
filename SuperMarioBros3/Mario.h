@@ -6,6 +6,8 @@
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_JUMP_SPEED_Y		0.3f
 #define MARIO_GRAVITY			0.001f
+#define MARIO_DEL_ACCEL_SPEED		0.01f
+#define MARIO_ACCEL_SPEED		0.005f
 
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
@@ -17,6 +19,8 @@
 #define MARIO_STATE_JUMP_LEFT		400
 #define MARIO_STATE_JUMP_RIGHT		500
 #define MARIO_STATE_DIE				600
+#define MARIO_STATE_RUNNING			700
+
 //Animate
 #define MARIO_ANI_IDLE_LEFT			0
 #define MARIO_ANI_WALKING_LEFT		1
@@ -45,6 +49,7 @@ class CMario : public CGameObject
 	int untouchable;
 	DWORD untouchable_start;
 	DWORD dt_die;
+	int current_ani;
 
 public:
 
@@ -52,6 +57,7 @@ public:
 	{
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
+		current_ani = MARIO_ANI_IDLE_LEFT;
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

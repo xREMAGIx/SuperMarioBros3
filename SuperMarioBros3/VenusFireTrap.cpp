@@ -135,7 +135,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
 				CMario* mario = ((CPlayScene*)scene)->GetPlayer();
-				if (mario->GetUntouchable() == 0)
+				if (mario->GetUntouchable() == 0 && mario->GetState() != MARIO_STATE_DIE)
 				{
 
 					if (mario->GetLevel() > MARIO_LEVEL_SMALL)
@@ -145,6 +145,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					else {
 						DebugOut(L"[INFO] Touch Venus Die\n");
+
 						mario->SetState(MARIO_STATE_DIE);
 					}
 				}

@@ -539,7 +539,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				}
 				break;
 			}
-			case DIK_Z:
+			case DIK_X:
 			{
 				CMapPoint* point = map_points.at(current_point);
 
@@ -556,7 +556,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 		switch (KeyCode)
 		{
-		case DIK_SPACE:
+		case DIK_X:
 			if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
 				mario->SetState(MARIO_STATE_JUMP);
 			}
@@ -578,23 +578,32 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	if (mario->GetState() == MARIO_STATE_DIE) return;
 
 	if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
-		if (game->IsKeyDown(DIK_RIGHT)) {
-			mario->SetState(MARIO_STATE_WALKING_RIGHT);
+		
+		if (game->IsKeyDown(DIK_RIGHT) && game->IsKeyDown(DIK_Z)) {
+			mario->SetState(MARIO_STATE_RUNNING);
 		}
-		else if (game->IsKeyDown(DIK_LEFT)) {
-			mario->SetState(MARIO_STATE_WALKING_LEFT);
+		else if (game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_Z)) {
+			mario->SetState(MARIO_STATE_RUNNING);
 		}
-		else
-			mario->SetState(MARIO_STATE_IDLE);
+		else {
+			if (game->IsKeyDown(DIK_RIGHT)) {
+				mario->SetState(MARIO_STATE_WALKING_RIGHT);
+			}
+			else if (game->IsKeyDown(DIK_LEFT)) {
+				mario->SetState(MARIO_STATE_WALKING_LEFT);
+			}
+			else
+				mario->SetState(MARIO_STATE_IDLE);
+		}
 	}
 	else {
 		if (game->IsKeyDown(DIK_RIGHT)) {
 			mario->SetState(MARIO_STATE_JUMP_RIGHT);
+
 		}
 		else if (game->IsKeyDown(DIK_LEFT)) {
 			mario->SetState(MARIO_STATE_JUMP_LEFT);
 		}
 	}
-
 	}
 }

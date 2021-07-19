@@ -16,6 +16,26 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
+	if (state == MARIO_STATE_RUNNING) {
+		vx += (nx / abs(nx)) * MARIO_ACCEL_SPEED;
+			if (vx > MARIO_WALKING_SPEED*2 || vx < -MARIO_WALKING_SPEED * 2) {
+				vx = (nx / abs(nx)) * MARIO_WALKING_SPEED * 2;
+			}
+	}
+	else {
+		vx -= (nx / abs(nx)) * MARIO_DEL_ACCEL_SPEED;
+		if (nx > 0) {
+			if (vx < 0) {
+				vx = 0;
+			}
+		}
+		else {
+			if (vx > 0) {
+				vx = 0;
+			}
+		}
+	}
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -362,7 +382,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::Render()
 {
-	int ani;
+	
 	switch (state)
 	{
 		case MARIO_STATE_JUMP:
@@ -370,10 +390,10 @@ void CMario::Render()
 		case MARIO_STATE_JUMP_LEFT:
 		{
 			if (level == MARIO_LEVEL_BIG) {
-				ani = MARIO_ANI_BIG_JUMPING_LEFT;
+				current_ani = MARIO_ANI_BIG_JUMPING_LEFT;
 			}
 			else {
-				ani = MARIO_ANI_JUMPING_LEFT;
+				current_ani = MARIO_ANI_JUMPING_LEFT;
 			}
 			break;
 		}
@@ -381,28 +401,30 @@ void CMario::Render()
 		case MARIO_STATE_WALKING_LEFT:
 		{
 			if (level == MARIO_LEVEL_BIG) {
-				ani = MARIO_ANI_BIG_WALKING_LEFT;
+				current_ani = MARIO_ANI_BIG_WALKING_LEFT;
 			}
 			else {
-				ani = MARIO_ANI_WALKING_LEFT;
+				current_ani = MARIO_ANI_WALKING_LEFT;
 			}
 			break;
 		}
 		case MARIO_STATE_DIE: {
-			ani = MARIO_ANI_DIE;
+			current_ani = MARIO_ANI_DIE;
 			break;
 		}
 		default:
-			if (level == MARIO_LEVEL_BIG) {
-				ani = MARIO_ANI_BIG_IDLE_LEFT;
-			}
-			else {
-				ani = MARIO_ANI_IDLE_LEFT;
+			if (vx == 0) {
+				if (level == MARIO_LEVEL_BIG) {
+					current_ani = MARIO_ANI_BIG_IDLE_LEFT;
+				}
+				else {
+					current_ani = MARIO_ANI_IDLE_LEFT;
+				}
 			}
 			break;
 	}
 
-	animation_set->at(ani)->Render(x, y, nx, 255);
+	animation_set->at(current_ani)->Render(x, y, nx, 255);
 }
 
 void CMario::SetState(int state)
@@ -420,6 +442,7 @@ void CMario::SetState(int state)
 		case MARIO_STATE_WALKING_LEFT:
 		case MARIO_STATE_JUMP_LEFT:
 		{
+			DebugOut(L"[INFO] MARIO_STATE_WALKING_LEFT!\n");
 			vx = -MARIO_WALKING_SPEED;
 			nx = -1;
 			break;
@@ -433,8 +456,11 @@ void CMario::SetState(int state)
 			StartDie();
 			break;
 		}
+		case MARIO_STATE_RUNNING: {
+			break;
+		}
 		case MARIO_STATE_IDLE: {
-			vx = 0;
+
 			break;
 		}
 	}

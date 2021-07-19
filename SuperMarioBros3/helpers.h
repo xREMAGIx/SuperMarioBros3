@@ -25,6 +25,8 @@
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 256
 
+#define CAM_MARGIN_BOTTOM 48
+
 #define MAX_FRAME_RATE 60
 
 #define MAP_WOLRD_ID 1
