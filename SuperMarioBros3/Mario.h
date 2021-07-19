@@ -61,6 +61,7 @@ class CMario : public CGameObject
 	DWORD untouchable_start;
 	DWORD dt_die;
 	int current_ani;
+	int down;
 
 public:
 

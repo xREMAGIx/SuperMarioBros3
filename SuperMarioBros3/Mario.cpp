@@ -378,7 +378,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CMario::Render()
 {
-	
 	switch (state)
 	{
 		case MARIO_STATE_JUMP:
@@ -483,10 +482,17 @@ void CMario::SetState(int state)
 			StartDie();
 			break;
 		}
-		case MARIO_STATE_RUNNING: {
+		case MARIO_STATE_DOWN: {
+			if (level == MARIO_LEVEL_BIG) {
+				down = 1;
+			}
 			break;
 		}
 		case MARIO_STATE_IDLE: {
+			if (down == 1) {
+				y += MARIO_SMALL_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT - 1;
+				down = 0;
+			}
 			break;
 		}
 	}
@@ -497,7 +503,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	left = x;
 	top = y;
 
-	if (level == MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_BIG && state != MARIO_STATE_DOWN)
 	{
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;
