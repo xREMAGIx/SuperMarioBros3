@@ -36,11 +36,13 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
+	float current_vy = vy;
+	float current_vx = vx;
+
 	coEvents.clear();
 
 	CalcPotentialCollisions(coObjects, coEvents);
 	
-
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
 	{
@@ -60,6 +62,9 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		y += min_ty * dy + ny * 0.4f;
 
+		if (nx != 0) vx = 0;
+		if (ny != 0) vy = 0;
+
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
@@ -68,38 +73,20 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//Walk on invisible wall
 			if (dynamic_cast<CInvisibleWall*>(e->obj)) // if e->obj is Block 
 			{
-				if (nx != 0) {
-					this->vx = -vx;
+				if (e->nx != 0) {
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
-				if (ny != 0) vy = 0;
 			}
 
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
 			{
 				CInvisibleBlock* block = dynamic_cast<CInvisibleBlock*>(e->obj);
-				if (ny != 0) vy = 0;
-
 				if (e->nx != 0)
 				{
 					x += dx;
 					y += dy;
-				}
-			}
-
-			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
-			{
-				if (nx != 0)
-				{
-					vx = -vx;
-					nx = -nx;
-				}
-				if (ny != 0) vy = 0;
-				CInvisiblePlatform* block = dynamic_cast<CInvisiblePlatform*>(e->obj);
-				if (e->ny < 0)
-				{
-					vy = 0;
 				}
 			}
 
@@ -109,34 +96,39 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
-					nx = -nx;
+					if (state == RED_KOOPA_STATE_SHELL_SCROLL) {
+						block->SetState(QUESTION_BLOCK_STATE_OPENED);
+					}
+					this->vx = -current_vx;
+					this->nx = -nx;
 				}
 
 			}
 
 			//Touch other Goomba
-			if (dynamic_cast<CGreenKoopa*>(e->obj)) // if e->obj is Block 
+			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
 			{
-				CGreenKoopa* block = dynamic_cast<CGreenKoopa*>(e->obj);
+				CRedKoopa* block = dynamic_cast<CRedKoopa*>(e->obj);
 				if (e->nx != 0)
 				{
-					vx = -vx;
-					nx = -nx;
+					this->vx = -current_vx;
+					this->nx = -nx;
 				}
 			}
 
 			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
-				if (state != GREEN_KOOPA_STATE_SHELL_SCROLL) {
+				if (state != RED_KOOPA_STATE_SHELL_SCROLL) {
 					CEnemyWall* block = dynamic_cast<CEnemyWall*>(e->obj);
 					if (e->nx != 0)
 					{
-						this->vx = -vx;
+						this->vx = -current_vx;
 						this->nx = -nx;
 					}
 				}
 				else {
+					this->vy = current_vy;
+					this->vx = current_vx;
 					x += dx;
 					y += dy;
 				}
@@ -147,7 +139,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CChimney* block = dynamic_cast<CChimney*>(e->obj);
 				if (e->nx != 0)
 				{
-					this->vx = -vx;
+					this->vx = -current_vx;
 					this->nx = -nx;
 				}
 			}

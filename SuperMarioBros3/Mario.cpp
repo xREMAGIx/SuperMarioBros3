@@ -385,13 +385,24 @@ void CMario::Render()
 		case MARIO_STATE_JUMP_RIGHT:
 		case MARIO_STATE_JUMP_LEFT:
 		{
-			if (level == MARIO_LEVEL_BIG) {
-				current_ani = MARIO_ANI_BIG_JUMPING_LEFT;
+			if (vx > MARIO_WALKING_SPEED * 1.5 || vx < -MARIO_WALKING_SPEED * 1.5) {
+				if (level == MARIO_LEVEL_BIG) {
+					current_ani = MARIO_ANI_BIG_FLYING;
+				}
+				else {
+					current_ani = MARIO_ANI_FLYING;
+				}
+				break;
 			}
 			else {
-				current_ani = MARIO_ANI_JUMPING_LEFT;
+				if (level == MARIO_LEVEL_BIG) {
+					current_ani = MARIO_ANI_BIG_JUMPING_LEFT;
+				}
+				else {
+					current_ani = MARIO_ANI_JUMPING_LEFT;
+				}
+				break;
 			}
-			break;
 		}
 		case MARIO_STATE_WALKING_RIGHT:
 		case MARIO_STATE_WALKING_LEFT:
@@ -412,6 +423,12 @@ void CMario::Render()
 			current_ani = MARIO_ANI_KICK;
 			break;
 		}
+		case MARIO_STATE_DOWN: {
+			if (level == MARIO_LEVEL_BIG) {
+				current_ani = MARIO_ANI_BIG_DOWN;
+			}
+			break;
+		}
 		default:
 			if (vx == 0) {
 				if (level == MARIO_LEVEL_BIG) {
@@ -424,7 +441,7 @@ void CMario::Render()
 			else {
 				if (vx > MARIO_WALKING_SPEED * 1.5 || vx < -MARIO_WALKING_SPEED * 1.5) {
 					if (level == MARIO_LEVEL_BIG) {
-						current_ani = MARIO_ANI_BIG_IDLE_LEFT;
+						current_ani = MARIO_ANI_BIG_RUNNING;
 					}
 					else {
 						current_ani = MARIO_ANI_RUNNING;
@@ -470,7 +487,6 @@ void CMario::SetState(int state)
 			break;
 		}
 		case MARIO_STATE_IDLE: {
-
 			break;
 		}
 	}

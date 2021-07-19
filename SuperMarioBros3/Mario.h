@@ -11,6 +11,7 @@
 
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
+
 //State
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	100
@@ -22,6 +23,7 @@
 #define MARIO_STATE_RUNNING			700
 #define MARIO_STATE_HOLDING			800
 #define MARIO_STATE_KICK		900
+#define MARIO_STATE_DOWN		1000
 
 //Animate
 #define MARIO_ANI_IDLE_LEFT			0
@@ -34,6 +36,10 @@
 #define MARIO_ANI_RUNNING		7
 #define MARIO_ANI_HOLDING		8
 #define MARIO_ANI_KICK		9
+#define MARIO_ANI_BIG_DOWN		10
+#define MARIO_ANI_BIG_RUNNING		11
+#define MARIO_ANI_FLYING		12
+#define MARIO_ANI_BIG_FLYING		13
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -41,8 +47,8 @@
 #define MARIO_BIG_BBOX_WIDTH  16
 #define MARIO_BIG_BBOX_HEIGHT 27
 
-#define MARIO_SMALL_BBOX_WIDTH  13
-#define MARIO_SMALL_BBOX_HEIGHT 15
+#define MARIO_SMALL_BBOX_WIDTH  16
+#define MARIO_SMALL_BBOX_HEIGHT 16
 
 #define MARIO_UNTOUCHABLE_TIME 5000
 #define MARIO_DIE_TIME 3000
@@ -75,7 +81,7 @@ public:
 	int GetLevel() { return this->level; };
 	void SetLevel(int l) { level = l;  
 		if (l == MARIO_LEVEL_BIG) {
-			this->y += -MARIO_BIG_BBOX_HEIGHT + 1;
+			y += MARIO_SMALL_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT - 1;
 		}
 	}
 
@@ -85,5 +91,4 @@ public:
 
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void StartDie() { dt_die = GetTickCount(); }
-
 };

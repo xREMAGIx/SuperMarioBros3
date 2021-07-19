@@ -561,6 +561,9 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				mario->SetState(MARIO_STATE_JUMP);
 			}
 			break;
+		case DIK_U:
+			mario->SetLevel(MARIO_LEVEL_BIG);
+			break;
 		}
 	}
 }
@@ -591,6 +594,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 			}
 			else if (game->IsKeyDown(DIK_LEFT)) {
 				mario->SetState(MARIO_STATE_WALKING_LEFT);
+			}
+			else if (game->IsKeyDown(DIK_DOWN)) {
+				mario->SetState(MARIO_STATE_DOWN);
 			}
 			else
 				mario->SetState(MARIO_STATE_IDLE);
