@@ -106,7 +106,9 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CMario* mario = ((CPlayScene*)scene)->GetPlayer();
 				if (state != MUSHSHROOM_STATE_SHOWING) // if e->obj is Block 
 				{
-					mario->SetLevel(MARIO_LEVEL_BIG);
+					if (mario->GetLevel() == MARIO_LEVEL_SMALL) {
+						mario->SetLevel(MARIO_LEVEL_BIG);
+					}
 					SetState(MUSHSHROOM_STATE_EARNED);
 				}
 			}

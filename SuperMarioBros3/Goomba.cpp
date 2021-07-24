@@ -54,8 +54,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	coEvents.clear();
 
 	if (state != GOOMBA_STATE_DIE) {
-		vy += GOOMBA_GRAVITY * dt;	
-		CalcPotentialCollisions(coObjects, coEvents);
+		vy += GOOMBA_GRAVITY * dt;		
 	}
 
 	float current_vy = vy;
@@ -63,6 +62,9 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	
 	if (state == GOOMBA_STATE_DIE || state == GOOMBA_STATE_JUMP_DIE) {
 		score->Update(dt, coObjects);
+	}
+	else {
+		CalcPotentialCollisions(coObjects, coEvents);
 	}
 
 	// No collision occured, proceed normally

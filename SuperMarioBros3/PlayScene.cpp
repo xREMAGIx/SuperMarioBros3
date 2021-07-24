@@ -21,7 +21,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 */
 
 GameMap* map;
-GameMap* layer;
 Grid* grid;
 CBoard* gameBoard;
 
@@ -432,7 +431,7 @@ void CPlayScene::Render()
 
 	CSprites* sprites = CSprites::GetInstance();
 
-	float l = cam.x - 32,
+	float l = cam.x,
 		t = cam.y,
 		r = cam.x + game->GetScreenWidth(),
 		b = cam.y + game->GetScreenHeight();
@@ -443,6 +442,8 @@ void CPlayScene::Render()
 	int end_row = (r / map->cellW);
 	int init_col = (t / map->cellH);
 	int end_col = (b / map->cellH);
+
+
 	
 	for (int i = init_col; i < end_col; i++)
 	{
@@ -476,7 +477,7 @@ void CPlayScene::Render()
 		float posX = objects[i]->x;
 		float posY = objects[i]->y;
 
-		if (posX < l || posX > r || posY > b || posY < t) continue;
+		if (posX < l - 32 || posX > r || posY > b || posY < t) continue;
 		objects[i]->Render();
 	}
 
@@ -502,7 +503,6 @@ void CPlayScene::Unload()
 	objects.clear();
 	player = NULL;
 	map = NULL;
-	layer = NULL;
 	marioWorld = NULL;
 
 	for (int i = 0; i < mapPoints.size(); i++)

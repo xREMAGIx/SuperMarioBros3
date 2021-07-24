@@ -34,6 +34,7 @@ public:
 	RECT GetSourceRect(int index);
 	void LoadMap(LPCWSTR filepath);
 	void Render();
+	int getTilesetId() { return tilesetId; }
 	int getRows() { return numRows; }
 	int getCols() { return numCols; }
 	int getTileW() { return cellW; }
