@@ -24,7 +24,7 @@
 #define MARIO_STATE_HOLDING			800
 #define MARIO_STATE_KICK		900
 #define MARIO_STATE_DOWN		1000
-
+#define MARIO_STATE_ATTACK		1100
 //Animate
 #define MARIO_ANI_IDLE_LEFT			0
 #define MARIO_ANI_WALKING_LEFT		1
@@ -40,9 +40,17 @@
 #define MARIO_ANI_BIG_RUNNING		11
 #define MARIO_ANI_FLYING		12
 #define MARIO_ANI_BIG_FLYING		13
+#define MARIO_ANI_TAIL_IDLE_LEFT		14
+#define MARIO_ANI_TAIL_WALKING_LEFT		15
+#define MARIO_ANI_TAIL_JUMPING_LEFT		16
+#define MARIO_ANI_TAIL_DOWN		17
+#define MARIO_ANI_TAIL_RUNNING		18
+#define MARIO_ANI_TAIL_FLYING		19
+#define MARIO_ANI_TAIL_ATTACK		20
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define	MARIO_LEVEL_TAIL		3
 
 #define MARIO_BIG_BBOX_WIDTH  16
 #define MARIO_BIG_BBOX_HEIGHT 27
@@ -52,7 +60,7 @@
 
 #define MARIO_UNTOUCHABLE_TIME 5000
 #define MARIO_DIE_TIME 3000
-
+#define MARIO_ATTACK_TIME 500
 
 class CMario : public CGameObject
 {
@@ -60,6 +68,7 @@ class CMario : public CGameObject
 	int untouchable;
 	DWORD untouchable_start;
 	DWORD dt_die;
+	DWORD dt_attack;
 	int current_ani;
 	int down;
 
@@ -81,8 +90,27 @@ public:
 
 	int GetLevel() { return this->level; };
 	void SetLevel(int l) { level = l;  
-		if (l == MARIO_LEVEL_BIG) {
+		if (l == MARIO_LEVEL_BIG || l == MARIO_LEVEL_TAIL) {
 			y += MARIO_SMALL_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT - 1;
+		}
+	}
+
+	void SetDownLevel() {
+		switch (level)
+		{
+		case MARIO_LEVEL_TAIL: {
+			SetLevel(MARIO_LEVEL_BIG);
+			StartUntouchable();
+			break;
+		}
+		case MARIO_LEVEL_BIG: {
+			SetLevel(MARIO_LEVEL_SMALL);
+			StartUntouchable();
+			break;
+		}
+		default:
+			SetState(MARIO_STATE_DIE);
+			break;
 		}
 	}
 
@@ -92,4 +120,6 @@ public:
 
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void StartDie() { dt_die = GetTickCount(); }
+	void StartAttack() { dt_attack = GetTickCount(); }
+	void StopAttack() { dt_attack = 0; }
 };

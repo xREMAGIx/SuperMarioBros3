@@ -60,12 +60,18 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
-	if (dt_die!=0 && GetTickCount() - dt_die > MARIO_DIE_TIME)
+	if (dt_die!= 0 && GetTickCount() - dt_die > MARIO_DIE_TIME)
 	{
 		CBoard* game_board = CBoard::GetInstance();
 		game_board->RemoveLives();
 		game_board->SetState(BOARD_STATE_IDLE);
 		CGame::GetInstance()->SwitchScene(MAP_WOLRD_ID);
+	}
+
+	if (dt_attack != 0 && GetTickCount() - dt_attack > MARIO_ATTACK_TIME)
+	{
+		SetState(MARIO_STATE_IDLE);
+		StopAttack();
 	}
 
 	// No collision occured, proceed normally
@@ -380,25 +386,47 @@ void CMario::Render()
 {
 	switch (state)
 	{
+		case MARIO_STATE_ATTACK: {
+			if (level == MARIO_LEVEL_TAIL) {
+				current_ani = MARIO_ANI_TAIL_ATTACK;
+			}
+			break;
+		}
 		case MARIO_STATE_JUMP:
 		case MARIO_STATE_JUMP_RIGHT:
 		case MARIO_STATE_JUMP_LEFT:
 		{
 			if (vx > MARIO_WALKING_SPEED * 1.5 || vx < -MARIO_WALKING_SPEED * 1.5) {
-				if (level == MARIO_LEVEL_BIG) {
-					current_ani = MARIO_ANI_BIG_FLYING;
-				}
-				else {
-					current_ani = MARIO_ANI_FLYING;
+				switch (level)
+				{
+					case MARIO_LEVEL_TAIL: {
+						current_ani = MARIO_ANI_TAIL_FLYING;
+						break;
+					}
+					case MARIO_LEVEL_BIG: {
+						current_ani = MARIO_ANI_BIG_FLYING;
+						break;
+					}
+					default:
+						current_ani = MARIO_ANI_FLYING;
+						break;
 				}
 				break;
 			}
 			else {
-				if (level == MARIO_LEVEL_BIG) {
-					current_ani = MARIO_ANI_BIG_JUMPING_LEFT;
-				}
-				else {
-					current_ani = MARIO_ANI_JUMPING_LEFT;
+				switch (level)
+				{
+					case MARIO_LEVEL_TAIL: {
+						current_ani = MARIO_ANI_TAIL_JUMPING_LEFT;
+						break;
+					}
+					case MARIO_LEVEL_BIG: {
+						current_ani = MARIO_ANI_BIG_JUMPING_LEFT;
+						break;
+					}
+					default:
+						current_ani = MARIO_ANI_JUMPING_LEFT;
+						break;
 				}
 				break;
 			}
@@ -406,11 +434,19 @@ void CMario::Render()
 		case MARIO_STATE_WALKING_RIGHT:
 		case MARIO_STATE_WALKING_LEFT:
 		{
-			if (level == MARIO_LEVEL_BIG) {
-				current_ani = MARIO_ANI_BIG_WALKING_LEFT;
-			}
-			else {
-				current_ani = MARIO_ANI_WALKING_LEFT;
+			switch (level)
+			{
+				case MARIO_LEVEL_TAIL: {
+					current_ani = MARIO_ANI_TAIL_WALKING_LEFT;
+					break;
+				}
+				case MARIO_LEVEL_BIG: {
+					current_ani = MARIO_ANI_BIG_WALKING_LEFT;
+					break;
+				}
+				default:
+					current_ani = MARIO_ANI_WALKING_LEFT;
+					break;
 			}
 			break;
 		}
@@ -430,27 +466,46 @@ void CMario::Render()
 		}
 		default:
 			if (vx == 0) {
-				if (level == MARIO_LEVEL_BIG) {
-					current_ani = MARIO_ANI_BIG_IDLE_LEFT;
-				}
-				else {
-					current_ani = MARIO_ANI_IDLE_LEFT;
+				switch (level)
+				{
+					case MARIO_LEVEL_TAIL: {
+						current_ani = MARIO_ANI_TAIL_IDLE_LEFT;
+						break;
+					}
+					case MARIO_LEVEL_BIG: {
+						current_ani = MARIO_ANI_BIG_IDLE_LEFT;
+						break;
+					}
+					default:
+						current_ani = MARIO_ANI_IDLE_LEFT;
+						break;
 				}
 			}
 			else {
 				if (vx > MARIO_WALKING_SPEED * 1.5 || vx < -MARIO_WALKING_SPEED * 1.5) {
-					if (level == MARIO_LEVEL_BIG) {
-						current_ani = MARIO_ANI_BIG_RUNNING;
-					}
-					else {
-						current_ani = MARIO_ANI_RUNNING;
-					}
+					switch (level)
+						{
+						case MARIO_LEVEL_TAIL: {
+							current_ani = MARIO_ANI_TAIL_RUNNING;
+							break;
+						}
+						case MARIO_LEVEL_BIG: {
+							current_ani = MARIO_ANI_BIG_RUNNING;
+							break;
+						}
+						default:
+							current_ani = MARIO_ANI_RUNNING;
+							break;
+						}
+					break;
 				}
 			}
-			
 			break;
 	}
-
+	if (state == MARIO_STATE_ATTACK) {
+		animation_set->at(current_ani)->Render(x, y, -nx, 255);
+		return;
+	}
 	animation_set->at(current_ani)->Render(x, y, nx, 255);
 }
 
@@ -459,6 +514,10 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
+		case MARIO_STATE_ATTACK: {
+			StartAttack();
+			break;
+		}
 		case MARIO_STATE_WALKING_RIGHT: 
 		case MARIO_STATE_JUMP_RIGHT:
 		{
@@ -503,7 +562,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	left = x;
 	top = y;
 
-	if (level == MARIO_LEVEL_BIG && state != MARIO_STATE_DOWN)
+	if ((level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TAIL) && state != MARIO_STATE_DOWN)
 	{
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;
