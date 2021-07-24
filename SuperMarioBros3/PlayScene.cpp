@@ -486,7 +486,6 @@ void CPlayScene::Render()
 		}
 	}
 	
-
 	gameBoard->Render();
 }
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
+#include "MarioTail.h"
 
 #define MARIO_WIDTH 16
 #define MARIO_WALKING_SPEED		0.1f
@@ -72,6 +73,8 @@ class CMario : public CGameObject
 	int current_ani;
 	int down;
 
+	CMarioTail* tailAttack;
+
 public:
 
 	CMario() : CGameObject()
@@ -79,6 +82,7 @@ public:
 		level = MARIO_LEVEL_SMALL;
 		untouchable = 0;
 		current_ani = MARIO_ANI_IDLE_LEFT;
+		tailAttack = new CMarioTail();
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

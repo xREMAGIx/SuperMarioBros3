@@ -16,6 +16,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
+	if (state == MARIO_STATE_ATTACK) {
+		tailAttack->Update(dt, coObjects);
+	}
+
 	if (state == MARIO_STATE_RUNNING) {
 		vx += (nx / abs(nx)) * MARIO_ACCEL_SPEED;
 			if (vx > MARIO_WALKING_SPEED*2 || vx < -MARIO_WALKING_SPEED * 2) {
@@ -515,6 +519,8 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 		case MARIO_STATE_ATTACK: {
+			tailAttack->SetPosition(x, y);
+			tailAttack->SetDirection(nx);
 			StartAttack();
 			break;
 		}

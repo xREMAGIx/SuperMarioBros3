@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Hud">
       <UniqueIdentifier>{27a02166-1293-4300-94b2-2bd60e341731}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\CharactersItems">
+      <UniqueIdentifier>{f7cfef72-c50b-49cd-81bc-65d1215f8b83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CharactersItems">
+      <UniqueIdentifier>{b5231dba-af93-49fc-9ecf-080597cd87d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -203,6 +209,9 @@
     </ClCompile>
     <ClCompile Include="Boomerang.cpp">
       <Filter>Source Files\EnemiesItems</Filter>
+    </ClCompile>
+    <ClCompile Include="MarioTail.cpp">
+      <Filter>Source Files\CharactersItems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -354,6 +363,9 @@
     </ClInclude>
     <ClInclude Include="Boomerang.h">
       <Filter>Header Files\EnemiesItems</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioTail.h">
+      <Filter>Header Files\CharactersItems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -220,6 +220,8 @@ void CGoomba::SetState(int state)
 		case GOOMBA_STATE_JUMP_DIE: {
 			vy = -GOOMBA_JUMP_SPEED;
 			vx = 0;
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
 			CBoard* game_board = CBoard::GetInstance();
 			game_board->AddPoint(100);
 			StartDie();

@@ -6,7 +6,7 @@
 #define GOOMBA_HEIGHT 16
 #define GOOMBA_SPEED 0.07f
 #define GOOMBA_GRAVITY	0.001f
-#define GOOMBA_JUMP_SPEED 0.1f
+#define GOOMBA_JUMP_SPEED 0.2f
 
 #define TIME_GOOMBA_DIE 700
 

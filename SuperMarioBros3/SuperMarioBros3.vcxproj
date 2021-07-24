@@ -175,6 +175,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapPoint.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="MarioTail.cpp" />
     <ClCompile Include="MarioWorld.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="MusicBox.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="GameBoard.h" />
     <ClInclude Include="InvisiblePlatform.h" />
     <ClInclude Include="ItemBox.h" />
+    <ClInclude Include="MarioTail.h" />
     <ClInclude Include="MusicBox.h" />
     <ClInclude Include="PlayerFont.h" />
     <ClInclude Include="Point.h" />
