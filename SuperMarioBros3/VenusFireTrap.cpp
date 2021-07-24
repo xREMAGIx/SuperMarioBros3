@@ -81,7 +81,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//Showing
 		if (state == VENUS_FIRE_TRAP_STATE_SHOWING) {
 			if (y < initial_y - VENUS_FIRE_TRAP_HEIGHT) {
-				y = initial_y - VENUS_FIRE_TRAP_HEIGHT;
+				y = initial_y - VENUS_FIRE_TRAP_HEIGHT - 3;
 				SetState(VENUS_FIRE_TRAP_STATE_WATING);
 			}
 		}
@@ -120,8 +120,8 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else
 	{
 		// block 
-		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-		y += min_ty * dy + ny * 0.4f;
+		//x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		//y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;

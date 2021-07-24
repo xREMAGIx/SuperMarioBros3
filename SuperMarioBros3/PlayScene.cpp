@@ -439,14 +439,17 @@ void CPlayScene::Render()
 
 	vector<CChimneyLayout*> listChimneyMap;
 
-	for (int i = 0; i < map->numRows; i++)
+	int init_row = (l / map->cellW);
+	int end_row = (r / map->cellW);
+	int init_col = (t / map->cellH);
+	int end_col = (b / map->cellH);
+	
+	for (int i = init_col; i < end_col; i++)
 	{
-		for (int j = 0; j < map->numCols; j++)
+		for (int j = init_row; j < end_row; j++)
 		{
 			float posX = j * map->cellW;
 			float posY = i * map->cellH;
-
-			if (posX < l || posX > r || posY > b || posY < t) continue;
 
 			if (sprites->Get(map->getTitle(i, j)) != NULL) {
 				switch (map->getTitle(i, j))
@@ -467,6 +470,7 @@ void CPlayScene::Render()
 			}
 		}
 	}
+	
 
 	for (int i = 0; i < objects.size(); i++) {
 		float posX = objects[i]->x;
@@ -481,6 +485,7 @@ void CPlayScene::Render()
 			listChimneyMap[i]->Render();
 		}
 	}
+	
 
 	gameBoard->Render();
 }
