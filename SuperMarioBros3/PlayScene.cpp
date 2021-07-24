@@ -634,11 +634,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 	if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
 		
-		if (game->IsKeyDown(DIK_RIGHT) && game->IsKeyDown(DIK_Z)) {
-			mario->SetState(MARIO_STATE_RUNNING);
-		}
-		else if (game->IsKeyDown(DIK_LEFT) && game->IsKeyDown(DIK_Z)) {
-			mario->SetState(MARIO_STATE_RUNNING);
+		if ((game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) && game->IsKeyDown(DIK_Z)) {
+			if (mario->GetState() != MARIO_STATE_HOLDING) {
+				mario->SetState(MARIO_STATE_RUNNING);
+			}
 		}
 		else {
 			if (game->IsKeyDown(DIK_RIGHT)) {

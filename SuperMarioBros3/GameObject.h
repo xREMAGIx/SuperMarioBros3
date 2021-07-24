@@ -59,6 +59,8 @@ public:
 
 	int state;
 
+	int upsidedown = 0;
+
 	DWORD dt;
 	LPANIMATION_SET animation_set;
 
@@ -80,6 +82,11 @@ public:
 	void SetId(int id) { this->id = id; }
 	int GetId() {
 		return this->id;
+	}
+
+	void SetUpSideDown(int upsidedown) { this->upsidedown = upsidedown; }
+	int GetUpSideDown() {
+		return this->upsidedown;
 	}
 
 	void SetDirection(int nx) { this->nx = nx; }

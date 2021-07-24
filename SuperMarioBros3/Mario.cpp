@@ -20,7 +20,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		tailAttack->Update(dt, coObjects);
 	}
 
-	if (state == MARIO_STATE_RUNNING) {
+	if (state == MARIO_STATE_RUNNING || state == MARIO_STATE_HOLDING) {
 		vx += (nx / abs(nx)) * MARIO_ACCEL_SPEED;
 			if (vx > MARIO_WALKING_SPEED*2 || vx < -MARIO_WALKING_SPEED * 2) {
 				vx = (nx / abs(nx)) * MARIO_WALKING_SPEED * 2;
@@ -51,7 +51,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy += MARIO_GRAVITY * dt;
 
-
+	//
 	// turn off collision when die 
 	if (state != MARIO_STATE_DIE) {
 		CalcPotentialCollisions(coObjects, coEvents);
@@ -301,10 +301,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						switch (redKoopa->GetState())
 						{
+							case RED_KOOPA_STATE_HOLDED: {
+								if (state == MARIO_STATE_HOLDING) {
+									redKoopa->SetPosition(x, y - 2);
+								}
+								break;
+							}
 							case RED_KOOPA_STATE_SHELL: {
 								if (state == MARIO_STATE_RUNNING) {
-									SetCurrentAni(MARIO_ANI_HOLDING);
-									redKoopa->SetPosition(x + MARIO_WIDTH + 2, y + 2);
+									SetState(MARIO_STATE_HOLDING);
+									redKoopa->SetState(RED_KOOPA_STATE_HOLDED);
 								}
 								else {
 									SetCurrentAni(MARIO_ANI_KICK);
@@ -466,6 +472,10 @@ void CMario::Render()
 			if (level == MARIO_LEVEL_BIG) {
 				current_ani = MARIO_ANI_BIG_DOWN;
 			}
+			break;
+		}
+		case MARIO_STATE_HOLDING: {
+			current_ani = MARIO_ANI_HOLDING;
 			break;
 		}
 		default:

@@ -22,8 +22,10 @@ CSprites* CSprites::GetInstance()
 
 void CSprite::Draw(float x, float y, int alpha)
 {
+	
 	CGame* game = CGame::GetInstance();
 	game->Draw(x, y, texture, left, top, right, bottom, alpha);
+	
 }
 
 void CSprite::DrawFlipX(float x, float y, int alpha) {
@@ -32,7 +34,7 @@ void CSprite::DrawFlipX(float x, float y, int alpha) {
 	D3DXMATRIX oldMt;
 	spriteHandler->GetTransform(&oldMt);
 	D3DXMATRIX newMt;
-
+	
 	D3DXVECTOR2 top_left = D3DXVECTOR2(x, y);
 
 	D3DXVECTOR2 rotate = D3DXVECTOR2(-1, 1);
@@ -45,6 +47,29 @@ void CSprite::DrawFlipX(float x, float y, int alpha) {
 	x -= (right - left);
 
 	CGame::GetInstance()->DrawFlipX(x, y, texture, left, top, right, bottom, alpha);
+
+	spriteHandler->SetTransform(&oldMt);
+}
+
+void CSprite::DrawFlipY(float x, float y, int alpha) {
+	LPD3DXSPRITE spriteHandler = CGame::GetInstance()->GetSpriteHandler();
+
+	D3DXMATRIX oldMt;
+	spriteHandler->GetTransform(&oldMt);
+	D3DXMATRIX newMt;
+
+	D3DXVECTOR2 top_left = D3DXVECTOR2(x, y);
+
+	D3DXVECTOR2 rotate = D3DXVECTOR2(1, -1);
+
+	D3DXMatrixTransformation2D(&newMt, &top_left, 0.0f, &rotate, NULL, 0.0f, NULL);
+	D3DXMATRIX finalMt = newMt * oldMt;
+
+	spriteHandler->SetTransform(&finalMt);
+
+	y -= (bottom - top);
+
+	CGame::GetInstance()->DrawFlipY(x, y, texture, left, top, right, bottom, alpha);
 
 	spriteHandler->SetTransform(&oldMt);
 }

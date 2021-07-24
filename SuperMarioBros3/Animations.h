@@ -33,6 +33,8 @@ public:
 	void Add(int spriteId, DWORD time = 0);
 
 	void Render(float x, float y, float direction, int alpha = 255);
+
+	void RenderFlipY(float x, float y, float direction, int alpha = 255);
 };
 
 typedef CAnimation* LPANIMATION;

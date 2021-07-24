@@ -20,6 +20,7 @@ public:
 
 	void Draw(float x, float y, int alpha = 255);
 	void DrawFlipX(float x, float y, int alpha = 255);
+	void DrawFlipY(float x, float y, int alpha = 255);
 };
 
 typedef CSprite* LPSPRITE;

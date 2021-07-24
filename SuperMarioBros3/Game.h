@@ -67,6 +67,7 @@ public:
 	void ReInit(int scene_width, int scene_height);
 	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha);
 	void DrawFlipX(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha);
+	void DrawFlipY(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha);
 	LPDIRECT3DTEXTURE9 LoadTexture(LPCWSTR texturePath, D3DCOLOR transparentColor);
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
 	D3DPRESENT_PARAMETERS GetParameters() { return d3dpp; }

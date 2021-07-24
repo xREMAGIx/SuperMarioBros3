@@ -200,7 +200,12 @@ void CGoomba::Render()
 		ani = -1;
 	}
 	if (ani != -1) {
-		animation_set->at(ani)->Render(x, y, -nx, 255);
+		if (upsidedown == 1) {
+			animation_set->at(ani)->RenderFlipY(x, y, -nx, 255);
+		}
+		else {
+			animation_set->at(ani)->Render(x, y, -nx, 255);
+		}
 	}
 }
 
