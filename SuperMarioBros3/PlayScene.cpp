@@ -425,15 +425,48 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	map->Render();
+	//map->Render();
 
 	CGame* game = CGame::GetInstance();
 	D3DXVECTOR2 cam = game->GetCamPos();
+
+	CSprites* sprites = CSprites::GetInstance();
 
 	float l = cam.x - 32,
 		t = cam.y,
 		r = cam.x + game->GetScreenWidth(),
 		b = cam.y + game->GetScreenHeight();
+
+	vector<CChimneyLayout*> listChimneyMap;
+
+	for (int i = 0; i < map->numRows; i++)
+	{
+		for (int j = 0; j < map->numCols; j++)
+		{
+			float posX = j * map->cellW;
+			float posY = i * map->cellH;
+
+			if (posX < l || posX > r || posY > b || posY < t) continue;
+
+			if (sprites->Get(map->getTitle(i, j)) != NULL) {
+				switch (map->getTitle(i, j))
+				{
+				case 150:
+				case 151:
+				case 223:
+				case 224: {
+					CChimneyLayout* chimney_block = new CChimneyLayout(map->getTitle(i, j), posX, posY);
+					listChimneyMap.push_back(chimney_block);
+					break;
+				}
+				default:
+					sprites->Get(map->getTitle(i, j))->Draw(posX, posY);
+					break;
+				}
+				
+			}
+		}
+	}
 
 	for (int i = 0; i < objects.size(); i++) {
 		float posX = objects[i]->x;
@@ -441,6 +474,12 @@ void CPlayScene::Render()
 
 		if (posX < l || posX > r || posY > b || posY < t) continue;
 		objects[i]->Render();
+	}
+
+	if (listChimneyMap.size() > 0) {
+		for (int i = 0; i < listChimneyMap.size(); i++) {
+			listChimneyMap[i]->Render();
+		}
 	}
 
 	gameBoard->Render();

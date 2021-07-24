@@ -155,3 +155,9 @@ GameMap* GameMap::GetInstance()
 	if (__instance == NULL) __instance = new GameMap();
 	return __instance;
 }
+
+void CChimneyLayout::Render()
+{
+	CSprites* sprites = CSprites::GetInstance();
+	sprites->Get(id)->Draw(x, y);
+}

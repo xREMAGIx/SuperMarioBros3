@@ -43,9 +43,26 @@ public:
 	void _ParseSection_MAP(string line);
 
 	static GameMap* GetInstance();
+	int getTitle(int x, int y);
 
 private:
 	static GameMap* __instance;
-	int getTitle(int x, int y);
+};
+
+
+class CChimneyLayout
+{
+public:
+	int id;
+	int x;
+	int y;
+
+	CChimneyLayout(int id, int x, int y) {
+		this->id = id;
+		this->x = x;
+		this->y = y;
+	}
+
+	void Render();
 };
 
