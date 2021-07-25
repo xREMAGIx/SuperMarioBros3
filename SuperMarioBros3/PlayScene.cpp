@@ -46,7 +46,7 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 
 	game->SetCamPos(cam_x, cam_y);
 	game->SetMaxCamPos(maxCamX, maxCamY);
-	game->SetBackgroundColor(r, b, g);
+	game->SetBackgroundColor(r, g, b);
 }
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
@@ -261,7 +261,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_INTRO_PLAYER_FONT: {
+		int scene_id = atof(tokens[4].c_str());
 		obj = new CPlayerFont();
+		choosePlayer = (CPlayerFont*)obj;
+		choosePlayer->SetSceneId(scene_id);
 		break;
 	}
 	case OBJECT_TYPE_VENUS_FIRE_TRAP: {
@@ -381,14 +384,27 @@ void CPlayScene::Load()
 
 void CPlayScene::Update(DWORD dt)
 {
-	if (marioWorld != NULL) {
+	CGame* game = CGame::GetInstance();
+
+	if (choosePlayer != NULL) {
+		choosePlayer->Update(dt);
+
+
+		float cx, cy;
+		choosePlayer->GetPosition(cx, cy);
+
+		cx -= game->GetScreenWidth() / 2;
+		cy -= game->GetScreenHeight() / 2;
+
+		CGame::GetInstance()->SetCamPos(cx, cy);
+	}
+	else if (marioWorld != NULL) {
 		marioWorld->Update(dt);
 
 		
 		float cx, cy;
 		marioWorld->GetPosition(cx, cy);
 
-		CGame* game = CGame::GetInstance();
 		cx -= game->GetScreenWidth() / 2;
 		cy -= game->GetScreenHeight() / 2;	
 
@@ -443,14 +459,13 @@ void CPlayScene::Render()
 	int init_col = (t / map->cellH);
 	int end_col = (b / map->cellH);
 
-
 	
 	for (int i = init_col; i < end_col; i++)
 	{
 		for (int j = init_row; j < end_row; j++)
 		{
-			float posX = j * map->cellW;
-			float posY = i * map->cellH;
+			int posX = j * map->cellW;
+			int posY = i * map->cellH;
 
 			if (sprites->Get(map->getTitle(i, j)) != NULL) {
 				switch (map->getTitle(i, j))
@@ -486,8 +501,14 @@ void CPlayScene::Render()
 			listChimneyMap[i]->Render();
 		}
 	}
+
+	if (choosePlayer != NULL) {
+		choosePlayer->Render();
+	}
+	else {
+		gameBoard->Render();
+	}
 	
-	gameBoard->Render();
 }
 
 /*
@@ -504,6 +525,7 @@ void CPlayScene::Unload()
 	player = NULL;
 	map = NULL;
 	marioWorld = NULL;
+	choosePlayer = NULL;
 
 	for (int i = 0; i < mapPoints.size(); i++)
 		delete mapPoints[i];
@@ -518,11 +540,34 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 	CMarioWorld* mario_world = ((CPlayScene*)scence)->GetMarioWorld();
 	vector<CMapPoint*> map_points = ((CPlayScene*)scence)->GetMapPoints();
+	CPlayerFont* choosePlayer = ((CPlayScene*)scence)->GetChoosePlayer();
 
 	int current_point = ((CPlayScene*)scence)->GetCurrentMapPoint();
 
-
-	if (mario_world != NULL) {
+	if (mario != NULL) {
+		// disable control key when Mario die 
+		if (mario->GetState() == MARIO_STATE_DIE) return;
+		switch (KeyCode)
+		{
+			case DIK_X:
+				if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
+					mario->SetState(MARIO_STATE_JUMP);
+				}
+				break;
+			case DIK_U:
+				mario->SetLevel(MARIO_LEVEL_BIG);
+				break;
+			case DIK_T:
+				mario->SetLevel(MARIO_LEVEL_TAIL);
+				break;
+			case DIK_Z:
+				if (mario->GetLevel() == MARIO_LEVEL_TAIL) {
+					mario->SetState(MARIO_STATE_ATTACK);
+					break;
+				}
+		}
+	}
+	else if (mario_world != NULL) {
 		if (mario_world->GetState() == MARIO_WORLD_STATE_MOVING) return;
 		switch (KeyCode)
 		{
@@ -595,27 +640,17 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		}
 	}
 	else {
-		// disable control key when Mario die 
-		if (mario->GetState() == MARIO_STATE_DIE) return;
-
 		switch (KeyCode)
 		{
-		case DIK_X:
-			if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
-				mario->SetState(MARIO_STATE_JUMP);
-			}
-			break;
-		case DIK_U:
-			mario->SetLevel(MARIO_LEVEL_BIG);
-			break;
-		case DIK_T:
-			mario->SetLevel(MARIO_LEVEL_TAIL);
-			break;
-		case DIK_Z:
-			if (mario->GetLevel() == MARIO_LEVEL_TAIL) {
-			mario->SetState(MARIO_STATE_ATTACK);
-			break;
-			}
+			case DIK_DOWN:
+				choosePlayer->SetState(PLAYER_FONT_STATE_TWO);
+				break;
+			case DIK_UP:
+				choosePlayer->SetState(PLAYER_FONT_STATE_ONE);
+				break;
+			case DIK_X:
+				CGame::GetInstance()->SwitchScene(choosePlayer->GetSceneId());
+				break;
 		}
 	}
 }
@@ -626,42 +661,40 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	CMarioWorld* mario_world = ((CPlayScene*)scence)->GetMarioWorld();
 	CMario* mario = ((CPlayScene*)scence)->GetPlayer();
 
-	if (mario_world != NULL) {
-	}
-	else {
+	if(mario != NULL) {
 	// disable control key when Mario die 
-	if (mario->GetState() == MARIO_STATE_DIE || mario->GetState() == MARIO_STATE_ATTACK) return;
+		if (mario->GetState() == MARIO_STATE_DIE || mario->GetState() == MARIO_STATE_ATTACK) return;
 
-	if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
+		if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
 		
-		if ((game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) && game->IsKeyDown(DIK_Z)) {
-			if (mario->GetState() != MARIO_STATE_HOLDING) {
-				mario->SetState(MARIO_STATE_RUNNING);
+			if ((game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) && game->IsKeyDown(DIK_Z)) {
+				if (mario->GetState() != MARIO_STATE_HOLDING) {
+					mario->SetState(MARIO_STATE_RUNNING);
+				}
+			}
+			else {
+				if (game->IsKeyDown(DIK_RIGHT)) {
+					mario->SetState(MARIO_STATE_WALKING_RIGHT);
+				}
+				else if (game->IsKeyDown(DIK_LEFT)) {
+					mario->SetState(MARIO_STATE_WALKING_LEFT);
+				}
+				else if (game->IsKeyDown(DIK_DOWN)) {
+					mario->SetState(MARIO_STATE_DOWN);
+				}
+				else {
+					mario->SetState(MARIO_STATE_IDLE);
+				}
+			
 			}
 		}
 		else {
 			if (game->IsKeyDown(DIK_RIGHT)) {
-				mario->SetState(MARIO_STATE_WALKING_RIGHT);
+				mario->SetState(MARIO_STATE_JUMP_RIGHT);
 			}
 			else if (game->IsKeyDown(DIK_LEFT)) {
-				mario->SetState(MARIO_STATE_WALKING_LEFT);
+				mario->SetState(MARIO_STATE_JUMP_LEFT);
 			}
-			else if (game->IsKeyDown(DIK_DOWN)) {
-				mario->SetState(MARIO_STATE_DOWN);
-			}
-			else {
-				mario->SetState(MARIO_STATE_IDLE);
-			}
-			
 		}
-	}
-	else {
-		if (game->IsKeyDown(DIK_RIGHT)) {
-			mario->SetState(MARIO_STATE_JUMP_RIGHT);
-		}
-		else if (game->IsKeyDown(DIK_LEFT)) {
-			mario->SetState(MARIO_STATE_JUMP_LEFT);
-		}
-	}
 	}
 }

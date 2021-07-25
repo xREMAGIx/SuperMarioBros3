@@ -11,8 +11,13 @@
 
 class CPlayerFont : public CGameObject
 {
+	int sceneId;
+public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render();
 	void SetState(int state);
+
+	int GetSceneId() { return sceneId; }
+	void SetSceneId(int sceneId) { this->sceneId = sceneId; }
 };

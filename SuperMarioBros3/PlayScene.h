@@ -34,7 +34,7 @@
 class CPlayScene : public CScene
 {
 protected:
-	CPlayerFont choosePlayer;
+	CPlayerFont* choosePlayer;
 	CMario* player;					// A play scene has to have player, right? 
 	vector<LPGAMEOBJECT> objects;
 	CMarioWorld* marioWorld;
@@ -60,6 +60,7 @@ public:
 
 	CMario* GetPlayer() { return player; }
 	CMarioWorld* GetMarioWorld() { return marioWorld; }
+	CPlayerFont* GetChoosePlayer() { return choosePlayer; }
 
 	vector<LPGAMEOBJECT> GetObjectList() { return objects; }
 	void SetObjectList(vector<LPGAMEOBJECT> objects) { objects = this->objects;}
