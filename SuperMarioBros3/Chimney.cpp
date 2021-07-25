@@ -18,6 +18,7 @@ CChimney::CChimney(int width, int height, int _id_item, int ani_set_id, int x, i
 	}
 
 	//General setup
+	SetState(CHIMNEY_STATE_IDLE);
 }
 
 

@@ -87,6 +87,10 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						y += dy;
 					}
+					if (e->nx != 0)
+					{
+						x += dx;
+					}
 				}
 			}
 
@@ -135,8 +139,6 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
-	
-
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
 				CChimney* block = dynamic_cast<CChimney*>(e->obj);
@@ -144,6 +146,20 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					this->vx = -current_vx;
 					this->nx = -nx;
+				}
+			}
+
+			if (dynamic_cast<CBrick*>(e->obj)) // if e->obj is Block 
+			{
+				CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+				if (e->nx != 0)
+				{
+					this->vx = -current_vx;
+					this->nx = -nx;
+
+					if (state == RED_KOOPA_STATE_SHELL_SCROLL) {
+						brick->SetState(BRICK_STATE_BREAK);
+					}
 				}
 			}
 		}
@@ -200,8 +216,8 @@ void CRedKoopa::SetState(int state)
 			break;
 		}
 		case RED_KOOPA_STATE_SHELL: {
-			y += - RED_KOOPA_BBOX_HEIGHT + RED_KOOPA_BBOX_SHELL_HEIGHT + 1;
 			vx = 0;
+			y += - RED_KOOPA_BBOX_HEIGHT + RED_KOOPA_BBOX_SHELL_HEIGHT + 1;
 			break;
 		}
 		case RED_KOOPA_STATE_SHELL_SCROLL: {

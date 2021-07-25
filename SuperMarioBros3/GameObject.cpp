@@ -151,3 +151,27 @@ void CGameObject::Clear()
 CGameObject::~CGameObject()
 {
 }
+
+bool CGameObject::IsCollisedWith(LPGAMEOBJECT objPointer)
+{
+	RECT rectThis, rect1;
+
+	// this
+	float l = 0, t = 0, r = 0, b = 0;
+	this->GetBoundingBox(l, t, r, b);
+	rectThis.left = (int)l;
+	rectThis.top = (int)t;
+	rectThis.right = (int)r;
+	rectThis.bottom = (int)b;
+
+	//obj
+	float l1, t1, r1, b1;
+	objPointer->GetBoundingBox(l1, t1, r1, b1);
+	rect1.left = (int)l1;
+	rect1.top = (int)t1;
+	rect1.right = (int)r1;
+	rect1.bottom = (int)b1;
+
+
+	return CGame::GetInstance()->isCollision(rectThis, rect1);
+}

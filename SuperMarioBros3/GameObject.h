@@ -108,7 +108,7 @@ public:
 		float& ny,
 		float& rdx,
 		float& rdy);
-
+	bool IsCollisedWith(LPGAMEOBJECT objPointer);
 
 
 	//Animation

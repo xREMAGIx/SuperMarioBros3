@@ -3,13 +3,6 @@
 
 #include "Game.h"
 #include "Mario.h"
-#include "Goomba.h"
-#include "Block.h"
-#include "Brick.h"
-#include "QuestionBlock.h"
-#include "InvisibleBlock.h"
-#include "Cloud.h"
-#include "GreenKoopa.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -359,8 +352,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->ny < 0)
 				{
 					CGameObject* chimney_obj = chimney->GetChimneyObject();
-					if (dynamic_cast<CVenusFireTrap*>(chimney_obj)->GetState()== VENUS_FIRE_TRAP_STATE_SHOW) {
-						chimney->SetState(CHIMNEY_STATE_CANCEL);
+					if (chimney_obj != NULL) {
+						if (dynamic_cast<CVenusFireTrap*>(chimney_obj)->GetState()== VENUS_FIRE_TRAP_STATE_SHOW) {
+							chimney->SetState(CHIMNEY_STATE_CANCEL);
+						}
 					}
 					
 				}
@@ -417,7 +412,6 @@ void CMario::Render()
 			if (level == MARIO_LEVEL_TAIL) {
 				current_ani = MARIO_ANI_TAIL_ATTACK;
 			}
-			tailAttack->Render();
 			break;
 		}
 		case MARIO_STATE_JUMP:

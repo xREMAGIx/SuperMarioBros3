@@ -172,11 +172,6 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->nx = -nx;
 				}
 			}
-
-			if (dynamic_cast<CMario*>(e->obj)) // if e->obj is Mario 
-			{	
-				if (nx != 0) vx = 0;
-			}
 		}
 	}
 

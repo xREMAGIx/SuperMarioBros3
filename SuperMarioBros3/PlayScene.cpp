@@ -386,34 +386,7 @@ void CPlayScene::Update(DWORD dt)
 {
 	CGame* game = CGame::GetInstance();
 
-	if (choosePlayer != NULL) {
-		choosePlayer->Update(dt);
-
-
-		float cx, cy;
-		choosePlayer->GetPosition(cx, cy);
-
-		cx -= game->GetScreenWidth() / 2;
-		cy -= game->GetScreenHeight() / 2;
-
-		CGame::GetInstance()->SetCamPos(cx, cy);
-	}
-	else if (marioWorld != NULL) {
-		marioWorld->Update(dt);
-
-		
-		float cx, cy;
-		marioWorld->GetPosition(cx, cy);
-
-		cx -= game->GetScreenWidth() / 2;
-		cy -= game->GetScreenHeight() / 2;	
-
-		CGame::GetInstance()->SetCamPos(cx, cy);
-		
-	}
-	else {
-		if (player == NULL) return;
-
+	if (player != NULL) {
 		float cx, cy;
 		player->GetPosition(cx, cy);
 
@@ -433,9 +406,35 @@ void CPlayScene::Update(DWORD dt)
 		{
 			coObjects[i]->Update(dt, &coObjects);
 		}
-	
+
+		gameBoard->Update(dt);
 	}
-	gameBoard->Update(dt);
+
+	else if (marioWorld != NULL) {
+		marioWorld->Update(dt);
+		float cx, cy;
+		marioWorld->GetPosition(cx, cy);
+
+		cx -= game->GetScreenWidth() / 2;
+		cy -= game->GetScreenHeight() / 2;
+
+		CGame::GetInstance()->SetCamPos(cx, cy);
+		gameBoard->Update(dt);
+		
+	}
+	else {
+		if (choosePlayer == NULL) return;
+
+		choosePlayer->Update(dt);
+
+		float cx, cy;
+		choosePlayer->GetPosition(cx, cy);
+
+		cx -= game->GetScreenWidth() / 2;
+		cy -= game->GetScreenHeight() / 2;
+
+		CGame::GetInstance()->SetCamPos(cx, cy);
+	}
 }
 
 void CPlayScene::Render()
