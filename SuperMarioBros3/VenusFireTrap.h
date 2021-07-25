@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "FireBall.h"
+#include "Point.h"
 
 #define VENUS_FIRE_TRAP_WIDTH 16
 #define VENUS_FIRE_TRAP_HEIGHT 32
@@ -15,6 +16,7 @@
 #define VENUS_FIRE_TRAP_STATE_WATING 300
 #define VENUS_FIRE_TRAP_STATE_SHOOT 400
 #define VENUS_FIRE_TRAP_STATE_SHOW 500
+#define VENUS_FIRE_TRAP_STATE_DIE 600
 
 #define VENUS_FIRE_TRAP_ANI_LOOK_DOWN_LEFT_SHOOT 0
 #define VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT 1
@@ -31,6 +33,7 @@ class CVenusFireTrap: public CGameObject
 	DWORD dt_hide;
 	DWORD dt_fire;
 	CFireball* fireball;
+	CPoint* score;
 
 	float initial_y;
 	int current_ani;

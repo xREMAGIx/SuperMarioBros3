@@ -92,6 +92,8 @@ public:
 
 	int GetUntouchable() { return this->untouchable; };
 
+	CMarioTail* GetTail() { return this->tailAttack; };
+
 	int GetLevel() { return this->level; };
 	void SetLevel(int l) { level = l;  
 		if (l == MARIO_LEVEL_BIG || l == MARIO_LEVEL_TAIL) {

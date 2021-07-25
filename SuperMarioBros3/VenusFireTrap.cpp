@@ -8,6 +8,8 @@ CVenusFireTrap::CVenusFireTrap()
 	fireball = new CFireball();
 	SetState(VENUS_FIRE_TRAP_STATE_WATING);
 	current_ani = VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT;
+	score = new CPoint();
+	score->SetPointId(POINT_ID_100);
 }
 
 
@@ -123,34 +125,21 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 		//y += min_ty * dy + ny * 0.4f;
 
-		if (nx != 0) vx = 0;
-		if (ny != 0) vy = 0;
-
 		// Collision logic with Mario
+		
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<CMario*>(e->obj)) // if e->obj is Block 
+			if (dynamic_cast<CMarioTail*>(e->obj)) // if e->obj is Block 
 			{
+				DebugOut(L"[INFO] Touch Tail\n");
 				LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
-				CMario* mario = ((CPlayScene*)scene)->GetPlayer();
-				if (mario->GetUntouchable() == 0 && mario->GetState() != MARIO_STATE_DIE)
-				{
-
-					if (mario->GetLevel() > MARIO_LEVEL_SMALL)
-					{
-						mario->SetLevel(MARIO_LEVEL_SMALL);
-						mario->StartUntouchable();
-					}
-					else {
-						DebugOut(L"[INFO] Touch Venus Die\n");
-
-						mario->SetState(MARIO_STATE_DIE);
-					}
-				}
+				CMarioTail* marioTail = ((CPlayScene*)scene)->GetPlayer()->GetTail();
+				SetState(VENUS_FIRE_TRAP_STATE_DIE);
 			}
 		}
+		
 	}
 
 	// clean up collision events
@@ -161,6 +150,10 @@ void CVenusFireTrap::Render()
 {
 	switch (state)
 	{
+		case VENUS_FIRE_TRAP_STATE_DIE: {
+			current_ani = -1;
+			break;
+		}
 		case VENUS_FIRE_TRAP_STATE_WATING: {
 			if (ny > 0) {
 				current_ani = VENUS_FIRE_TRAP_SPRITE_LOOK_DOWN_LEFT;
@@ -186,8 +179,9 @@ void CVenusFireTrap::Render()
 	if (fireball->GetState() == FIREBALL_STATE_THROWN) {
 		fireball->Render();
 	}
-
-	animation_set->at(current_ani)->Render(x, y, nx, 255);
+	if (current_ani != -1) {
+		animation_set->at(current_ani)->Render(x, y, nx, 255);
+	}
 }
 
 void CVenusFireTrap::SetState(int state)
@@ -212,6 +206,16 @@ void CVenusFireTrap::SetState(int state)
 			vy = 0;
 			StartWaiting();
 			StartFire();
+			break;
+		}
+		case VENUS_FIRE_TRAP_STATE_DIE: {
+			vy = 0;
+			StopShow();
+			StopFire();
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
+			CBoard* game_board = CBoard::GetInstance();
+			game_board->AddPoint(100);
 			break;
 		}
 		default: 

@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 
-#define MARIO_TAIL_BBOX_WIDTH 16
+#define MARIO_TAIL_BBOX_WIDTH 24
 #define MARIO_TAIL_BBOX_HEIGHT 16
 
 #define MARIO_TAIL_OFFSET_WIDTH 8

@@ -14,7 +14,7 @@
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy 
-	CGameObject::Update(dt);
+	CGameObject::Update(dt, coObjects);
 
 	if (state == MARIO_STATE_ATTACK) {
 		tailAttack->Update(dt, coObjects);
@@ -372,6 +372,23 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				coin->SetState(COIN_STATE_EARNED);
 			}
+
+			//Interact with venus
+			if (dynamic_cast<CVenusFireTrap*>(e->obj)) // if e->obj is Block 
+			{
+				if (GetUntouchable() == 0 && GetState() != MARIO_STATE_DIE)
+				{
+					if (GetLevel() > MARIO_LEVEL_SMALL)
+					{
+						SetLevel(MARIO_LEVEL_SMALL);
+						StartUntouchable();
+					}
+					else {
+						SetState(MARIO_STATE_DIE);
+					}
+				}
+			}
+
 			//Jump touch music box
 			
 			if (dynamic_cast<CMusicBox*>(e->obj)) // if e->obj is Block 
@@ -400,6 +417,7 @@ void CMario::Render()
 			if (level == MARIO_LEVEL_TAIL) {
 				current_ani = MARIO_ANI_TAIL_ATTACK;
 			}
+			tailAttack->Render();
 			break;
 		}
 		case MARIO_STATE_JUMP:

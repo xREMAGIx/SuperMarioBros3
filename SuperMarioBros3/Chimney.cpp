@@ -1,6 +1,6 @@
 #include "Chimney.h"
 
-CChimney::CChimney(int width, int height, int _id_item, int ani_set_id, int x, int y)
+CChimney::CChimney(int width, int height, int _id_item, int ani_set_id, int x, int y, vector<LPGAMEOBJECT>* objects)
 {
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	this->width = width;
@@ -13,6 +13,7 @@ CChimney::CChimney(int width, int height, int _id_item, int ani_set_id, int x, i
 		object->SetAnimationSet(ani_set);
 		object->SetId(_id_item);
 		dynamic_cast<CVenusFireTrap*>(object)->SetPosition(x + 8, y - VENUS_FIRE_TRAP_HEIGHT);
+		objects->push_back(object);
 		break;
 	}
 
@@ -22,9 +23,11 @@ CChimney::CChimney(int width, int height, int _id_item, int ani_set_id, int x, i
 
 void CChimney::Render()
 {
+	/*
 	if (object != NULL && state != CHIMNEY_STATE_CANCEL) {
 		object->Render();
 	}
+	*/
 }
 
 void CChimney::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -32,7 +35,7 @@ void CChimney::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CGameObject::Update(dt, coObjects);
 
 	if (object != NULL && state != CHIMNEY_STATE_CANCEL) {
-		object->Update(dt, coObjects);
+		//object->Update(dt, coObjects);
 	}
 	else {
 		if (dt_reset != 0 && GetTickCount() - dt_reset > TIME_CHIMNEY_RESET) {

@@ -224,7 +224,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int height = atof(tokens[5].c_str());
 		int itemId = atof(tokens[6].c_str());
 		int aniSetId = atof(tokens[7].c_str());
-		obj = new CChimney(width, height, itemId, aniSetId, x, y);
+		obj = new CChimney(width, height, itemId, aniSetId, x, y, &objects);
 		break;
 	}
 	case OBJECT_TYPE_ENEMY_WALL:

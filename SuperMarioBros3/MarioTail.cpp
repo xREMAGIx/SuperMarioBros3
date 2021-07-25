@@ -48,18 +48,32 @@ void CMarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// TODO: This is a very ugly designed function!!!!
 		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
+		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+		y += min_ty * dy + ny * 0.4f;
+
+		DebugOut(L"[INFO] Size: %d\n", coEventsResult.size());
+
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			DebugOut(L"[INFO] Touch with tail\n");
 
-			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Block 
+			DebugOut(L"[INFO] Touch with tail id: %d\n", e->obj->GetId());
+
+			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is CGoomba 
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 				goomba->SetUpSideDown(1);
 				goomba->SetState(GOOMBA_STATE_JUMP_DIE);
+			}
+
+			if (dynamic_cast<CVenusFireTrap*>(e->obj)) // if e->obj is CGoomba 
+			{
+				DebugOut(L"[INFO] Touch with tail id: %d\n", e->obj->GetId());
+
+				CVenusFireTrap* venus = dynamic_cast<CVenusFireTrap*>(e->obj);
+				venus->SetState(VENUS_FIRE_TRAP_STATE_DIE);
 			}
 		}
 	}
@@ -69,7 +83,10 @@ void CMarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 }
 
 void CMarioTail::Render()
-{	
+{
+	LPSPRITE sprite;
+	sprite = CSprites::GetInstance()->Get(20022);
+	sprite->Draw(x + MARIO_TAIL_OFFSET_WIDTH, y + MARIO_TAIL_OFFSET_HEIGHT);
 }
 
 void CMarioTail::SetState(int state)
