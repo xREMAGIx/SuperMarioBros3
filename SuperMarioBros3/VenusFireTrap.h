@@ -26,12 +26,14 @@
 #define VENUS_FIRE_TRAP_TIME_SHOW 2000
 #define VENUS_FIRE_TRAP_TIME_HIDE 3000
 #define VENUS_FIRE_TRAP_TIME_FIRE 1000
+#define VENUS_FIRE_TRAP_TIME_DIE 700
 
 class CVenusFireTrap: public CGameObject
 {
 	DWORD dt_show;
 	DWORD dt_hide;
 	DWORD dt_fire;
+	DWORD dt_die;
 	CFireball* fireball;
 	CPoint* score;
 
@@ -61,4 +63,10 @@ public:
 	}
 	void StartFire() { dt_fire = GetTickCount(); }
 	void StopFire() { dt_fire = 0; }
+
+	void StartDie() {
+		dt_show = 0;
+		dt_hide = 0;
+		dt_die = GetTickCount(); 
+	}
 };

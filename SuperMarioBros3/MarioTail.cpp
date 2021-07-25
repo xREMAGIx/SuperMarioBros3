@@ -32,10 +32,12 @@ void CMarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (dynamic_cast<CGoomba*>(e))
 		{
 			CGoomba* goomba = dynamic_cast<CGoomba*>(e);
-			if (this->IsCollisedWith(goomba))
-			{
-				goomba->SetUpSideDown(1);
-				goomba->SetState(GOOMBA_STATE_JUMP_DIE);
+			if (goomba->GetState() != GOOMBA_STATE_JUMP_DIE) {
+				if (this->IsCollisedWith(goomba))
+				{
+					goomba->SetUpSideDown(1);
+					goomba->SetState(GOOMBA_STATE_JUMP_DIE);
+				}
 			}
 		}
 
@@ -46,6 +48,15 @@ void CMarioTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				brick->SetState(BRICK_STATE_BREAK);
 			}			
+		}
+
+		if (dynamic_cast<CVenusFireTrap*>(e))
+		{
+			CVenusFireTrap* venus = dynamic_cast<CVenusFireTrap*>(e);
+			if (this->IsCollisedWith(venus))
+			{
+				venus->SetState(VENUS_FIRE_TRAP_STATE_DIE);
+			}
 		}
 	}
 }
