@@ -114,7 +114,7 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 			}
 
@@ -129,7 +129,7 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 			}
 		}

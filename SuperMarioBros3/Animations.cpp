@@ -19,9 +19,9 @@ void CAnimation::Add(int spriteId, DWORD time)
 }
 
 // NOTE: sometimes Animation object is NULL ??? HOW ??? 
-void CAnimation::Render(float x, float y, float direction, int alpha)
+void CAnimation::Render(float x, float y, int direction, int alpha)
 {
-	DWORD now = GetTickCount();
+	DWORD now = GetTickCount64();
 	if (currentFrame == -1)
 	{
 		currentFrame = 0;
@@ -45,9 +45,9 @@ void CAnimation::Render(float x, float y, float direction, int alpha)
 	}
 }
 
-void CAnimation::RenderFlipY(float x, float y, float direction, int alpha)
+void CAnimation::RenderFlipY(float x, float y, int direction, int alpha)
 {
-	DWORD now = GetTickCount();
+	DWORD now = GetTickCount64();
 	if (currentFrame == -1)
 	{
 		currentFrame = 0;

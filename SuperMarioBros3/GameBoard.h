@@ -46,12 +46,12 @@ class CBoard : public CGameObject
 	DWORD _count;
 	CFont* code;
 	vector<CItemBox*> itemBoxes;
-	LPDIRECT3DSURFACE9 background;
 
 public:
 	static CBoard* GetInstance();
 	CBoard()
 	{
+		 _count = 0;
 		worldId = 0;
 		time = 0;
 		lives = 4;

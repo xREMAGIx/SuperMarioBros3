@@ -92,14 +92,14 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		fireball->SetDirection(this->nx);
 		fireball->SetDirectionY(this->ny);
 
-		int fireball_x;
+		float fireball_x;
 		if (this->nx < 0) {
 			fireball_x = x - 8;
 		}
 		else {
 			fireball_x = x + VENUS_FIRE_TRAP_WIDTH + 8;
 		}
-		int fireball_y = y + 6;
+		float fireball_y = y + 6;
 
 		fireball->SetPosition(fireball_x, fireball_y);
 		fireball->SetState(FIREBALL_STATE_THROWN);

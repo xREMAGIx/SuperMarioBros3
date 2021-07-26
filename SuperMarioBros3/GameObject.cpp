@@ -12,6 +12,13 @@ CGameObject::CGameObject(float x, float y)
 {
 	this->x = x;
 	this->y = y;
+	vx = vy = 0;
+	nx = 1;
+	ny = 0;
+	animation_set = 0;
+	dt = 0;
+	dx = dy = 0;
+	id = state = -1;
 }
 
 CGameObject::CGameObject()
@@ -20,6 +27,10 @@ CGameObject::CGameObject()
 	vx = vy = 0;
 	nx = 1;
 	ny = 0;
+	animation_set = 0;
+	dt = 0;
+	dx = dy = 0;
+	id = state = -1;
 }
 
 void CGameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

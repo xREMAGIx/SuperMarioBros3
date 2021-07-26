@@ -1,6 +1,6 @@
 #include "Chimney.h"
 
-CChimney::CChimney(int width, int height, int _id_item, int ani_set_id, int x, int y, vector<LPGAMEOBJECT>* objects)
+CChimney::CChimney(int width, int height, int _id_item, int ani_set_id, float x, float y, vector<LPGAMEOBJECT>* objects)
 {
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
 	this->width = width;
@@ -39,7 +39,7 @@ void CChimney::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//object->Update(dt, coObjects);
 	}
 	else {
-		if (dt_reset != 0 && GetTickCount() - dt_reset > TIME_CHIMNEY_RESET) {
+		if (dt_reset != 0 && GetTickCount64() - dt_reset > TIME_CHIMNEY_RESET) {
 			SetState(CHIMNEY_STATE_IDLE);
 			StopReset();
 		}

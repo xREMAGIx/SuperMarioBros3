@@ -87,7 +87,7 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (nx != 0) {
 					this->vx = -vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 				
 			}
@@ -96,7 +96,7 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (nx != 0) {
 					this->vx = -vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				};
 			}
 

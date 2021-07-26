@@ -58,8 +58,8 @@ void CMarioWorld::SetState(int state)
 	switch (state)
 	{
 	case MARIO_WORLD_STATE_MOVING: {
-		nx = (moving_x - x) / abs(moving_x - x);
-		ny = (moving_y - y) / abs(moving_y - y);
+		nx = static_cast<int>((moving_x - x) / abs(moving_x - x));
+		ny = static_cast<int>((moving_y - y) / abs(moving_y - y));
 
 		if (moving_x - x != 0) {
 			vx = nx*MARIO_WORLD_WALKING_SPEED;

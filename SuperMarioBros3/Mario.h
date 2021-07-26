@@ -93,8 +93,12 @@ public:
 
 	CMario() : CGameObject()
 	{
-		level = MARIO_LEVEL_SMALL;
+		dt_attack = 0;
+		dt_die = 0;
+		down = 0;
 		untouchable = 0;
+		untouchable_start = 0;
+		level = MARIO_LEVEL_SMALL;
 		current_ani = MARIO_ANI_IDLE_LEFT;
 		tailAttack = new CMarioTail();
 		fireball = new CMarioFireball();

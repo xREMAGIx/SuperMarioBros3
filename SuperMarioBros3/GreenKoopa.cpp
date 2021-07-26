@@ -75,7 +75,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (e->nx != 0) {
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 			}
 
@@ -100,7 +100,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						block->SetState(QUESTION_BLOCK_STATE_OPENED);
 					}
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 
 			}
@@ -112,7 +112,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 			}
 
@@ -123,7 +123,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->nx != 0)
 					{
 						this->vx = -current_vx;
-						this->nx = -nx;
+						this->nx = -this->nx;
 					}
 				}
 				else {
@@ -140,7 +140,7 @@ void CGreenKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 			}
 		}

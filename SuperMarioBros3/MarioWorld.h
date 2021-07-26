@@ -17,7 +17,9 @@ class CMarioWorld : public CGameObject
 public:
 	CMarioWorld() : CGameObject()
 	{
-
+		moving_x = 0;
+		moving_y = 0;
+		ny = 0;
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

@@ -51,7 +51,7 @@ void Grid::GetListObject(vector<LPGAMEOBJECT>& NewObj, vector<LPGAMEOBJECT>& Lis
 {
 	vector<LPGAMEOBJECT> mapObject;
 
-	for (int i = 0; i < ListObj.size(); i++) {
+	for (UINT i = 0; i < ListObj.size(); i++) {
 		if (!Grid::IsOutOfCamera(cam_x, cam_y, ListObj.at(i)))
 		{
 			mapObject.push_back(ListObj.at(i));

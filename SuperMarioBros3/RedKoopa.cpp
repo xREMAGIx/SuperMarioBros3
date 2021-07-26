@@ -77,7 +77,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->nx != 0)
 					{
 						this->vx = -current_vx;
-						this->nx = -nx;
+						this->nx = -this->nx;
 					}
 				}
 				else {
@@ -99,7 +99,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (e->nx != 0) {
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 			}
 
@@ -123,7 +123,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						block->SetState(QUESTION_BLOCK_STATE_OPENED);
 					}
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 
 			}
@@ -135,7 +135,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 			}
 
@@ -145,7 +145,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 				}
 			}
 
@@ -155,7 +155,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				if (e->nx != 0)
 				{
 					this->vx = -current_vx;
-					this->nx = -nx;
+					this->nx = -this->nx;
 
 					if (state == RED_KOOPA_STATE_SHELL_SCROLL) {
 						brick->SetState(BRICK_STATE_BREAK);

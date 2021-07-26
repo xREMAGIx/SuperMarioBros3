@@ -15,13 +15,13 @@ class CChimney : public CGameObject
 	CGameObject* object;
 
 public:
-	CChimney(int width, int height, int _id_item, int ani_set_id, int x, int y, vector<LPGAMEOBJECT>* objects);
+	CChimney(int width, int height, int _id_item, int ani_set_id, float x, float y, vector<LPGAMEOBJECT>* objects);
 	virtual void Render();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void SetState(int state);
 
-	void SetChimneyObjectPos(int x, int y) {
+	void SetChimneyObjectPos(float x, float y) {
 		object->SetPosition(x, y);
 	}
 

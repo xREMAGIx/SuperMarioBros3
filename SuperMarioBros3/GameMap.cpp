@@ -9,6 +9,16 @@ GameMap* GameMap::__instance = NULL;
 
 GameMap::GameMap()
 {
+	listTile[0][0] = 0;
+	tilesetId = 0;
+	numTilesCols = 0;
+	spacing = 0;
+	numRows = 0;
+	numCols = 0;
+	id = 0;
+	cellW = 0;
+	cellH = 0;
+	currentRow = 0;
 }
 
 
@@ -60,8 +70,7 @@ void GameMap::_ParseSection_READDATA(string line)
 void GameMap::_ParseSection_MAP(string line)
 {
 	vector<string> tokens = split(line);
-	int index;
-	for (int i = 0; i < tokens.size(); i++)
+	for (UINT i = 0; i < tokens.size(); i++)
 	{
 		int tileId = atoi(tokens[i].c_str());
 		listTile[currentRow][i] = tileId;
@@ -139,8 +148,8 @@ void GameMap::Render()
 	{
 		for (int j = 0; j < numCols; j++)
 		{
-			float posX = j * cellW;
-			float posY = i * cellH;
+			float posX = j * cellW * 1.0f;
+			float posY = i * cellH * 1.0f;
 
 			if (posX < l || posX > r || posY > b || posY < t) continue;
 

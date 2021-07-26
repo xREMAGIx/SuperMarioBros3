@@ -12,6 +12,9 @@ using namespace std;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
+	choosePlayer = NULL;
+	player = NULL;
+	marioWorld = NULL;
 	key_handler = new CPlayScenceKeyHandler(this);
 }
 
@@ -36,10 +39,10 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 
 	int scene_width = atoi(tokens[0].c_str());
 	int scene_height = atoi(tokens[1].c_str());
-	int cam_x = atoi(tokens[2].c_str());
-	int cam_y = atoi(tokens[3].c_str());
-	int maxCamX = atoi(tokens[4].c_str());
-	int maxCamY = atoi(tokens[5].c_str());
+	float cam_x = static_cast<float>(atof(tokens[2].c_str()));
+	float cam_y = static_cast<float>(atof(tokens[3].c_str()));
+	float maxCamX = static_cast<float>(atof(tokens[4].c_str()));
+	float maxCamY = static_cast<float>(atof(tokens[5].c_str()));
 	int r = atoi(tokens[6].c_str());
 	int g = atoi(tokens[7].c_str());
 	int b = atoi(tokens[8].c_str());
@@ -115,7 +118,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (UINT i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 		LPANIMATION ani = animations->Get(ani_id);
@@ -137,8 +140,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	int object_type = atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	float x = static_cast<float>(atof(tokens[1].c_str()));
+	float y = static_cast<float>(atof(tokens[2].c_str()));
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
@@ -176,8 +179,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BLOCK: obj = new CBlock(); break;
 	case OBJECT_TYPE_QUESTION_BLOCK: { 
-		int itemId = atof(tokens[4].c_str());
-		int aniSetId = atof(tokens[5].c_str());
+		int itemId = atoi(tokens[4].c_str());
+		int aniSetId = atoi(tokens[5].c_str());
 		obj = new CQuestionBlock(itemId, aniSetId);
 		break; 
 	}
@@ -194,42 +197,42 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_PORTAL:
 	{
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
+		float r = static_cast<float>(atof(tokens[4].c_str()));
+		float b = static_cast<float>(atof(tokens[5].c_str()));
 		int scene_id = atoi(tokens[6].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
 		break;
 	}
 	case OBJECT_TYPE_INVISIBLE_BLOCK: 
 	{
-		int width = atof(tokens[4].c_str());
+		int width = atoi(tokens[4].c_str());
 		obj = new CInvisibleBlock(width);
 		break;
 	}
 	case OBJECT_TYPE_INVISIBLE_PLATFORM:
 	{
-		int width = atof(tokens[4].c_str());
+		int width = atoi(tokens[4].c_str());
 		obj = new CInvisiblePlatform(width);
 		break;
 	}
 	case OBJECT_TYPE_INVISIBLE_WALL:
 	{
-		int height = atof(tokens[4].c_str());
+		int height = atoi(tokens[4].c_str());
 		obj = new CInvisibleWall(height);
 		break;
 	}
 	case OBJECT_TYPE_CHIMNEY:
 	{
-		int width = atof(tokens[4].c_str());
-		int height = atof(tokens[5].c_str());
-		int itemId = atof(tokens[6].c_str());
-		int aniSetId = atof(tokens[7].c_str());
+		int width = atoi(tokens[4].c_str());
+		int height = atoi(tokens[5].c_str());
+		int itemId = atoi(tokens[6].c_str());
+		int aniSetId = atoi(tokens[7].c_str());
 		obj = new CChimney(width, height, itemId, aniSetId, x, y, &objects);
 		break;
 	}
 	case OBJECT_TYPE_ENEMY_WALL:
 	{
-		int height = atof(tokens[4].c_str());
+		int height = atoi(tokens[4].c_str());
 		obj = new CEnemyWall(height);
 		break;
 	}
@@ -237,12 +240,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MAP_POINT:
 	{
 		CMapPoint* point = NULL;
-		int id = atof(tokens[4].c_str());
-		int dTop = atof(tokens[5].c_str());
-		int dRight = atof(tokens[6].c_str());
-		int dBottom = atof(tokens[7].c_str());
-		int dLeft = atof(tokens[8].c_str());
-		int scene_id = atof(tokens[9].c_str());
+		int id = atoi(tokens[4].c_str());
+		int dTop = atoi(tokens[5].c_str());
+		int dRight = atoi(tokens[6].c_str());
+		int dBottom = atoi(tokens[7].c_str());
+		int dLeft = atoi(tokens[8].c_str());
+		int scene_id = atoi(tokens[9].c_str());
 		point = new CMapPoint(id, dTop, dRight, dBottom, dLeft, scene_id);
 		point->SetPosition(x, y);
 		mapPoints.push_back(point);
@@ -254,14 +257,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_MUSIC_BOX: {
 		obj = new CMusicBox();
-		int id = atof(tokens[4].c_str());
+		int id = atoi(tokens[4].c_str());
 		if (id == 1) {
 			obj->SetState(MUSIC_BOX_STATE_HIDDEN);
 		}
 		break;
 	}
 	case OBJECT_TYPE_INTRO_PLAYER_FONT: {
-		int scene_id = atof(tokens[4].c_str());
+		int scene_id = atoi(tokens[4].c_str());
 		obj = new CPlayerFont();
 		choosePlayer = (CPlayerFont*)obj;
 		choosePlayer->SetSceneId(scene_id);
@@ -453,18 +456,18 @@ void CPlayScene::Render()
 
 	vector<CChimneyLayout*> listChimneyMap;
 
-	int init_row = (l / map->cellW);
-	int end_row = (r / map->cellW);
-	int init_col = (t / map->cellH);
-	int end_col = (b / map->cellH);
+	int init_row = static_cast<int>(l / map->cellW);
+	int end_row = static_cast<int>(r / map->cellW);
+	int init_col = static_cast<int>(t / map->cellH);
+	int end_col = static_cast<int>(b / map->cellH);
 
 	
 	for (int i = init_col; i < end_col; i++)
 	{
 		for (int j = init_row; j < end_row; j++)
 		{
-			int posX = j * map->cellW;
-			int posY = i * map->cellH;
+			float posX = j * map->cellW * 1.0f;
+			float posY = i * map->cellH * 1.0f;
 
 			if (sprites->Get(map->getTitle(i, j)) != NULL) {
 				switch (map->getTitle(i, j))
@@ -487,7 +490,7 @@ void CPlayScene::Render()
 	}
 	
 
-	for (int i = 0; i < objects.size(); i++) {
+	for (UINT i = 0; i < objects.size(); i++) {
 		float posX = objects[i]->x;
 		float posY = objects[i]->y;
 
@@ -496,7 +499,7 @@ void CPlayScene::Render()
 	}
 
 	if (listChimneyMap.size() > 0) {
-		for (int i = 0; i < listChimneyMap.size(); i++) {
+		for (UINT i = 0; i < listChimneyMap.size(); i++) {
 			listChimneyMap[i]->Render();
 		}
 	}
@@ -517,7 +520,7 @@ void CPlayScene::Unload()
 {
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 
-	for (int i = 0; i < objects.size(); i++)
+	for (UINT i = 0; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();
@@ -526,7 +529,7 @@ void CPlayScene::Unload()
 	marioWorld = NULL;
 	choosePlayer = NULL;
 
-	for (int i = 0; i < mapPoints.size(); i++)
+	for (UINT i = 0; i < mapPoints.size(); i++)
 		delete mapPoints[i];
 
 	mapPoints.clear();
