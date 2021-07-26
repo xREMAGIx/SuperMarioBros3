@@ -34,6 +34,8 @@ Sprite ID
 32: music box
 33: fire ball
 34: boomerang brother
+35: mario fireball
+36: smoke
 
 Animations ID (id time [..spriteId])
 10101: small mario idle left

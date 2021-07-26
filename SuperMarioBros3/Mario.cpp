@@ -412,6 +412,9 @@ void CMario::Render()
 			if (level == MARIO_LEVEL_TAIL) {
 				current_ani = MARIO_ANI_TAIL_ATTACK;
 			}
+			else if (level == MARIO_LEVEL_FIRE) {
+				current_ani = MARIO_ANI_FIRE_ATTACK;
+			}
 			break;
 		}
 		case MARIO_STATE_JUMP:
@@ -421,6 +424,10 @@ void CMario::Render()
 			if (vx > MARIO_WALKING_SPEED * 1.5 || vx < -MARIO_WALKING_SPEED * 1.5) {
 				switch (level)
 				{
+					case MARIO_LEVEL_FIRE: {
+						current_ani = MARIO_ANI_FIRE_FLYING;
+						break;
+					}
 					case MARIO_LEVEL_TAIL: {
 						current_ani = MARIO_ANI_TAIL_FLYING;
 						break;
@@ -438,6 +445,10 @@ void CMario::Render()
 			else {
 				switch (level)
 				{
+					case MARIO_LEVEL_FIRE: {
+						current_ani = MARIO_ANI_FIRE_JUMPING_LEFT;
+						break;
+					}	
 					case MARIO_LEVEL_TAIL: {
 						current_ani = MARIO_ANI_TAIL_JUMPING_LEFT;
 						break;
@@ -458,6 +469,10 @@ void CMario::Render()
 		{
 			switch (level)
 			{
+				case MARIO_LEVEL_FIRE: {
+					current_ani = MARIO_ANI_FIRE_WALKING_LEFT;
+					break;
+				}
 				case MARIO_LEVEL_TAIL: {
 					current_ani = MARIO_ANI_TAIL_WALKING_LEFT;
 					break;
@@ -481,10 +496,23 @@ void CMario::Render()
 			break;
 		}
 		case MARIO_STATE_DOWN: {
-			if (level == MARIO_LEVEL_BIG) {
-				current_ani = MARIO_ANI_BIG_DOWN;
+			switch (level)
+			{
+				case MARIO_LEVEL_FIRE: {
+					current_ani = MARIO_ANI_FIRE_DOWN;
+					break;
+				}
+				case MARIO_LEVEL_TAIL: {
+					current_ani = MARIO_ANI_TAIL_DOWN;
+					break;
+				}
+				case MARIO_LEVEL_BIG: {
+					current_ani = MARIO_ANI_BIG_DOWN;
+					break;
+				}
+				default:
+					break;
 			}
-			break;
 		}
 		case MARIO_STATE_HOLDING: {
 			current_ani = MARIO_ANI_HOLDING;
@@ -494,6 +522,10 @@ void CMario::Render()
 			if (vx == 0) {
 				switch (level)
 				{
+					case MARIO_LEVEL_FIRE: {
+						current_ani = MARIO_ANI_FIRE_IDLE_LEFT;
+						break;
+					}
 					case MARIO_LEVEL_TAIL: {
 						current_ani = MARIO_ANI_TAIL_IDLE_LEFT;
 						break;
@@ -511,24 +543,28 @@ void CMario::Render()
 				if (vx > MARIO_WALKING_SPEED * 1.5 || vx < -MARIO_WALKING_SPEED * 1.5) {
 					switch (level)
 						{
-						case MARIO_LEVEL_TAIL: {
-							current_ani = MARIO_ANI_TAIL_RUNNING;
-							break;
-						}
-						case MARIO_LEVEL_BIG: {
-							current_ani = MARIO_ANI_BIG_RUNNING;
-							break;
-						}
-						default:
-							current_ani = MARIO_ANI_RUNNING;
-							break;
+							case MARIO_LEVEL_FIRE: {
+								current_ani = MARIO_ANI_FIRE_RUNNING;
+								break;
+							}
+							case MARIO_LEVEL_TAIL: {
+								current_ani = MARIO_ANI_TAIL_RUNNING;
+								break;
+							}
+							case MARIO_LEVEL_BIG: {
+								current_ani = MARIO_ANI_BIG_RUNNING;
+								break;
+							}
+							default:
+								current_ani = MARIO_ANI_RUNNING;
+								break;
 						}
 					break;
 				}
 			}
 			break;
 	}
-	if (state == MARIO_STATE_ATTACK) {
+	if (level == MARIO_LEVEL_TAIL && state == MARIO_STATE_ATTACK) {
 		animation_set->at(current_ani)->Render(x, y, -nx, 255);
 		return;
 	}
@@ -590,7 +626,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	left = x;
 	top = y;
 
-	if ((level == MARIO_LEVEL_BIG || level == MARIO_LEVEL_TAIL) && state != MARIO_STATE_DOWN)
+	if ((level != MARIO_LEVEL_SMALL) && state != MARIO_STATE_DOWN)
 	{
 		right = x + MARIO_BIG_BBOX_WIDTH;
 		bottom = y + MARIO_BIG_BBOX_HEIGHT;

@@ -41,6 +41,7 @@
 #define MARIO_ANI_BIG_RUNNING		11
 #define MARIO_ANI_FLYING		12
 #define MARIO_ANI_BIG_FLYING		13
+
 #define MARIO_ANI_TAIL_IDLE_LEFT		14
 #define MARIO_ANI_TAIL_WALKING_LEFT		15
 #define MARIO_ANI_TAIL_JUMPING_LEFT		16
@@ -49,9 +50,20 @@
 #define MARIO_ANI_TAIL_FLYING		19
 #define MARIO_ANI_TAIL_ATTACK		20
 
+#define MARIO_ANI_FIRE_IDLE_LEFT		21
+#define MARIO_ANI_FIRE_WALKING_LEFT		22
+#define MARIO_ANI_FIRE_JUMPING_LEFT		23
+#define MARIO_ANI_FIRE_DOWN		24
+#define MARIO_ANI_FIRE_RUNNING		25
+#define MARIO_ANI_FIRE_FLYING		26
+#define MARIO_ANI_FIRE_KICKING		27
+#define MARIO_ANI_FIRE_ATTACK		28
+
+//Level
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 #define	MARIO_LEVEL_TAIL		3
+#define	MARIO_LEVEL_FIRE		4
 
 #define MARIO_BIG_BBOX_WIDTH  16
 #define MARIO_BIG_BBOX_HEIGHT 27
@@ -96,7 +108,7 @@ public:
 
 	int GetLevel() { return this->level; };
 	void SetLevel(int l) { level = l;  
-		if (l == MARIO_LEVEL_BIG || l == MARIO_LEVEL_TAIL) {
+		if (l != MARIO_LEVEL_SMALL) {
 			y += MARIO_SMALL_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT - 1;
 		}
 	}

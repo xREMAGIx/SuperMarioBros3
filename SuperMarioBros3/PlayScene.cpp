@@ -553,14 +553,20 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 					mario->SetState(MARIO_STATE_JUMP);
 				}
 				break;
-			case DIK_U:
+			case DIK_1:
+				mario->SetLevel(MARIO_LEVEL_SMALL);
+				break;
+			case DIK_2:
 				mario->SetLevel(MARIO_LEVEL_BIG);
 				break;
-			case DIK_T:
+			case DIK_3:
 				mario->SetLevel(MARIO_LEVEL_TAIL);
 				break;
+			case DIK_4:
+				mario->SetLevel(MARIO_LEVEL_FIRE);
+				break;
 			case DIK_Z:
-				if (mario->GetLevel() == MARIO_LEVEL_TAIL) {
+				if (mario->GetLevel() == MARIO_LEVEL_TAIL || mario->GetLevel() == MARIO_LEVEL_FIRE) {
 					mario->SetState(MARIO_STATE_ATTACK);
 					break;
 				}
