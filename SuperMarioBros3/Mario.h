@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "MarioTail.h"
+#include "MarioFireball.h"
 
 #define MARIO_WIDTH 16
 #define MARIO_WALKING_SPEED		0.1f
@@ -86,6 +87,7 @@ class CMario : public CGameObject
 	int down;
 
 	CMarioTail* tailAttack;
+	CMarioFireball* fireball;
 
 public:
 
@@ -95,6 +97,7 @@ public:
 		untouchable = 0;
 		current_ani = MARIO_ANI_IDLE_LEFT;
 		tailAttack = new CMarioTail();
+		fireball = new CMarioFireball();
 	}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();

@@ -213,6 +213,9 @@
     <ClCompile Include="MarioTail.cpp">
       <Filter>Source Files\CharactersItems</Filter>
     </ClCompile>
+    <ClCompile Include="MarioFireball.cpp">
+      <Filter>Source Files\CharactersItems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\gamedev-intro-tutorials-master\gamedev-intro-tutorials-master\00-Intro\brick.ico">
@@ -365,6 +368,9 @@
       <Filter>Header Files\EnemiesItems</Filter>
     </ClInclude>
     <ClInclude Include="MarioTail.h">
+      <Filter>Header Files\CharactersItems</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioFireball.h">
       <Filter>Header Files\CharactersItems</Filter>
     </ClInclude>
   </ItemGroup>

@@ -13,6 +13,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		tailAttack->Update(dt, coObjects);
 	}
 
+	if (fireball->GetState() == MARIO_FIREBALL_STATE_THROWN) {
+		fireball->Update(dt, coObjects);
+	}
+
 	if (state == MARIO_STATE_RUNNING || state == MARIO_STATE_HOLDING) {
 		vx += (nx / abs(nx)) * MARIO_ACCEL_SPEED;
 			if (vx > MARIO_WALKING_SPEED*2 || vx < -MARIO_WALKING_SPEED * 2) {
@@ -564,9 +568,12 @@ void CMario::Render()
 			}
 			break;
 	}
-	if (level == MARIO_LEVEL_TAIL && state == MARIO_STATE_ATTACK) {
+	if (state == MARIO_STATE_ATTACK && level == MARIO_LEVEL_TAIL) {
 		animation_set->at(current_ani)->Render(x, y, -nx, 255);
 		return;
+	}
+	if (fireball->GetState() == MARIO_FIREBALL_STATE_THROWN) {
+		fireball->Render();
 	}
 	animation_set->at(current_ani)->Render(x, y, nx, 255);
 }
@@ -577,8 +584,16 @@ void CMario::SetState(int state)
 	switch (state)
 	{
 		case MARIO_STATE_ATTACK: {
-			tailAttack->SetPosition(x, y);
-			tailAttack->SetDirection(nx);
+			if (level == MARIO_LEVEL_TAIL) {
+				tailAttack->SetPosition(x, y);
+				tailAttack->SetDirection(nx);
+			}
+			else if (level == MARIO_LEVEL_FIRE) {
+				fireball = new CMarioFireball();
+				fireball->SetPosition(x, y);
+				fireball->SetDirection(nx);
+				fireball->SetState(MARIO_FIREBALL_STATE_THROWN);
+			}
 			StartAttack();
 			break;
 		}
