@@ -341,7 +341,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
 				if (e->ny > 0)
-				{
+				{					
 					if (questionBlock->GetState() == QUESTION_BLOCK_STATE_IDLE)
 					{
 						questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);

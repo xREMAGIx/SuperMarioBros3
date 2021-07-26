@@ -551,7 +551,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		if (mario->GetState() == MARIO_STATE_DIE) return;
 		switch (KeyCode)
 		{
-			case DIK_X:
+			case DIK_S:
 				if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
 					mario->SetState(MARIO_STATE_JUMP);
 				}
@@ -568,7 +568,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			case DIK_4:
 				mario->SetLevel(MARIO_LEVEL_FIRE);
 				break;
-			case DIK_Z:
+			case DIK_A:
 				if (mario->GetLevel() == MARIO_LEVEL_TAIL || mario->GetLevel() == MARIO_LEVEL_FIRE) {
 					mario->SetState(MARIO_STATE_ATTACK);
 					break;
@@ -636,7 +636,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				}
 				break;
 			}
-			case DIK_X:
+			case DIK_S:
 			{
 				CMapPoint* point = map_points.at(current_point);
 
@@ -656,7 +656,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			case DIK_UP:
 				choosePlayer->SetState(PLAYER_FONT_STATE_ONE);
 				break;
-			case DIK_X:
+			case DIK_S:
 				CGame::GetInstance()->SwitchScene(choosePlayer->GetSceneId());
 				break;
 		}

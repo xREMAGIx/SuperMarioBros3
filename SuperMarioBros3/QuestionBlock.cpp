@@ -16,6 +16,7 @@ CQuestionBlock::CQuestionBlock(int _id_item, int ani_set_id) {
 	}
 	//General setup
 	item->SetId(_id_item);
+	SetState(QUESTION_BLOCK_STATE_IDLE);
 }
 
 void CQuestionBlock::Render()
