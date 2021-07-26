@@ -49,6 +49,10 @@
 333	33301
 # SMALLWING
 316	31601	31602
+# MARIO FIREBALL
+135	13501	13601
+# SMOKE
+136	13601
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type

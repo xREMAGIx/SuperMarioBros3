@@ -5,14 +5,14 @@
 CMarioFireball::CMarioFireball()
 {
 	CAnimationSets* animation_sets = CAnimationSets::GetInstance();
-	LPANIMATION_SET ani_set = animation_sets->Get(FIREBALL_ANI_SET_ID);
+	LPANIMATION_SET ani_set = animation_sets->Get(MARIO_FIREBALL_ANI_SET_ID);
 	SetAnimationSet(ani_set);
 	SetState(MARIO_FIREBALL_STATE_DESTROYED);
 }
 
 void CMarioFireball::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == MARIO_FIREBALL_STATE_THROWN) {
+	if (state != MARIO_FIREBALL_STATE_DESTROYED) {
 		left = x;
 		top = y;
 		right = x + MARIO_FIREBALL_WIDTH;
@@ -31,6 +31,12 @@ void CMarioFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += MARIO_FIREBALL_GRAVITY * dt;
 
 	CalcPotentialCollisions(coObjects, coEvents);
+
+	if (dt_destroy != 0 && GetTickCount() - dt_destroy > MARIO_FIREBALL_DESTROYED_TIME)
+	{
+		SetState(MARIO_FIREBALL_STATE_DESTROYED);
+		StopSmoke();
+	}
 
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -69,12 +75,12 @@ void CMarioFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 				goomba->SetUpSideDown(1);
 				goomba->SetState(GOOMBA_STATE_JUMP_DIE);
-				SetState(MARIO_FIREBALL_STATE_DESTROYED);
+				SetState(MARIO_FIREBALL_STATE_DESTROY);
 			}
 
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
-				SetState(MARIO_FIREBALL_STATE_DESTROYED);
+				SetState(MARIO_FIREBALL_STATE_DESTROY);
 			}
 		}
 	}
@@ -86,8 +92,8 @@ void CMarioFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMarioFireball::Render()
 {
 	int ani = MARIO_FIREBALL_ANI_THROWN;
-	if (state == MARIO_FIREBALL_STATE_DESTROYED) {
-		ani = -1;
+	if (state == MARIO_FIREBALL_STATE_DESTROY) {
+		ani = MARIO_FIREBALL_ANI_DESTROYED;
 	}
 	if (ani != -1) {
 		animation_set->at(ani)->Render(x, y, nx, 255);
@@ -100,5 +106,8 @@ void CMarioFireball::SetState(int state)
 	if (state == MARIO_FIREBALL_STATE_THROWN) {
 		vx = nx * MARIO_FIREBALL_SPEED;
 		vy = -MARIO_FIREBALL_SPEED*2;
+	}
+	else if (state == MARIO_FIREBALL_STATE_DESTROY) {
+		StartSmoke();
 	}
 }
