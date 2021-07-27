@@ -46,6 +46,7 @@ class CBoard : public CGameObject
 	DWORD _count;
 	CFont* code;
 	vector<CItemBox*> itemBoxes;
+	LPSPRITE background;
 
 public:
 	static CBoard* GetInstance();
@@ -61,6 +62,7 @@ public:
 		itemBoxes.push_back(new CItemBox());
 		itemBoxes.push_back(new CItemBox());
 		itemBoxes.push_back(new CItemBox());
+		background = CSprites::GetInstance()->Get(40057);
 	}
 	void Update(DWORD dt);
 	virtual void Render();

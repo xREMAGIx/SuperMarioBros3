@@ -1,0 +1,124 @@
+#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y	bg_r	bg_g	bg_b
+[SETTINGS]
+250	230	0	0	1024	392	32	56	236
+
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\mario-luigi.png	68	145	190
+20	textures\npc-misc.png	166	185	255
+50	textures\hud-font.png	81	255	191
+
+# id	file_path	texture_id
+[SPRITES]
+0	data\character-sprite.txt	0
+20	data\misc-sprite.txt	20
+50	data\hud-sprite.txt	50
+						
+# ani_id	file_path	
+[ANIMATIONS]
+0	data\character-animation.txt
+20	data\misc-animation.txt
+50	data\hud-animation.txt
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# MARIO
+101	10101	10102	10103	12101	12102	12103	11801	10104	10105	10106	10107	10108	10109	10110	10111	10112	10113	10114	10115	10116	10117	10118	10119	10120	10121	10122	10123	10124	10125
+# COIN
+208	20801
+# MARIO FIREBALL
+135	13501	13601
+# SMOKE
+136	13601
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 
+# 0 = Mario
+# 6 = Coin
+# 12 = Invisible Wall
+# 13 = Chimney
+# 16 = Invisible Platform
+
+# MARIO
+0	40	375	101
+
+#COIN
+6	177	352	208
+6	193	336	208
+6	209	352	208
+6	225	336	208
+6	241	352	208
+6	257	336	208
+6	273	352	208
+6	257	88	208
+6	337	336	208
+6	353	352	208
+6	369	336	208
+6	385	352	208
+6	401	336	208
+6	417	352	208
+6	433	336	208
+6	481	352	208
+6	497	336	208
+6	513	352	208
+6	529	336	208
+6	545	352	208
+6	561	336	208
+6	625	336	208
+6	641	352	208
+6	657	336	208
+6	673	352	208
+6	689	336	208
+6	705	352	208
+6	721	336	208
+6	769	352	208
+6	785	336	208
+6	801	352	208
+6	817	336	208
+6	833	352	208
+6	849	336	208
+6	865	352	208
+6	609	128	208
+6	625	128	208
+6	641	128	208
+6	593	144	208
+6	609	144	208
+6	641	144	208
+6	657	144	208
+6	577	160	208
+6	593	160	208
+6	657	160	208
+6	673	160	208
+6	577	176	208
+6	673	176	208
+6	577	192	208
+6	593	192	208
+6	657	192	208
+6	673	192	208
+6	593	208	208
+6	609	208	208
+6	641	208	208
+6	657	208	208
+6	609	224	208
+6	625	224	208
+6	641	224	208
+
+#INVISIBLE_WALL
+12	-16	0	0	432
+12	1008	0	0	432
+
+#CHIMNEY
+13	848	368	0	32	64	0	0
+
+#INVISIBLE_PLATFORM
+16	0	409	0	1024
+
+#QUESTION_BLOCK
+3	624	176	210	6	208
+
+[MAP]
+0	mapfiles\map1-3-hidden.txt
+

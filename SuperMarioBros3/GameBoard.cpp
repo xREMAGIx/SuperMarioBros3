@@ -29,9 +29,10 @@ void CBoard::Update(DWORD dt)
 
 void CBoard::Render()
 {
+	background->Draw(x - BOARD_MARGIN_LEFT, y - 1);
 	LPSPRITE sprite;
 	sprite = CSprites::GetInstance()->Get(40046);
-	sprite->Draw(x, y); 
+	sprite->Draw(x, y);
 
 	code->DrawNumber(1, x + BOARD_WORLD_ID_X, y + BOARD_WORLD_ID_Y, 1); // world id
 
