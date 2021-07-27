@@ -29,20 +29,6 @@ void CBoard::Update(DWORD dt)
 
 void CBoard::Render()
 {
-	/*
-	CGame* game = CGame::GetInstance();
-
-	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
-
-	RECT r;
-	r.left = 0;
-	r.top = game->GetScreenHeight() - BOARD_MARGIN_BOTTOM - BOARD_HEIGHT;
-	r.right = game->GetScreenWidth() - 16;
-	r.bottom = game->GetScreenHeight() - BOARD_MARGIN_BOTTOM;
-
-	d3ddv->ColorFill(background, NULL, D3DCOLOR_XRGB(255, 255, 255));
-	*/
-
 	LPSPRITE sprite;
 	sprite = CSprites::GetInstance()->Get(40046);
 	sprite->Draw(x, y); 
@@ -59,8 +45,7 @@ void CBoard::Render()
 	code->DrawNumber(1, x + BOARD_LIVES_X, y + BOARD_LIVES_Y, lives); // lives
 	code->DrawNumber(3, x + BOARD_TIME_X, y + BOARD_TIME_Y, time); // time
 	code->DrawNumber(7, x + BOARD_SCORE_X, y + BOARD_SCORE_Y, score); // score
-	code->DrawNumber(1, x + BOARD_MONEY_X, y + BOARD_MONEY_Y, money); // money
-
+	code->DrawNumber(2, x + BOARD_MONEY_X, y + BOARD_MONEY_Y, money); // money
 	
 	for (int i = 0; i < 3; i++)	//item boxes
 	{

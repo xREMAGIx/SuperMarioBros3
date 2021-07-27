@@ -370,6 +370,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				CCoin* coin = dynamic_cast<CCoin*>(e->obj);
 				coin->SetState(COIN_STATE_EARNED);
+
+				if (e->nx != 0) {
+					this->vx = current_vx;
+					x += dx;
+				}
+
+				if (e->ny > 0)
+				{
+					this->vy = current_vy;
+					y += dy;
+				}
 			}
 
 			//Interact with venus

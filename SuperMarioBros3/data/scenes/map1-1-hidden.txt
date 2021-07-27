@@ -1,0 +1,82 @@
+#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y	bg_r	bg_g	bg_b
+[SETTINGS]
+250	230	0	0	512	235	0	0	0
+
+# id	file_path	transparent_color_r	g	b
+[TEXTURES]
+0	textures\mario-luigi.png	68	145	190
+20	textures\npc-misc.png	166	185	255
+50	textures\hud-font.png	81	255	191
+
+# id	file_path	texture_id
+[SPRITES]
+0	data\character-sprite.txt	0
+20	data\misc-sprite.txt	20
+50	data\hud-sprite.txt	50
+						
+# ani_id	file_path	
+[ANIMATIONS]
+0	data\character-animation.txt
+20	data\misc-animation.txt
+50	data\hud-animation.txt
+
+#
+# id	ani1	ani2	ani3
+#
+[ANIMATION_SETS]
+# MARIO
+101	10101	10102	10103	12101	12102	12103	11801	10104	10105	10106	10107	10108	10109	10110	10111	10112	10113	10114	10115	10116	10117	10118	10119	10120	10121	10122	10123	10124	10125
+# COIN
+208	20801
+# MARIO FIREBALL
+135	13501	13601
+# SMOKE
+136	13601
+
+[OBJECTS]
+# type	x	y	ani_set_id	extra_settings per object type
+# type: 
+# 0 = Mario
+# 6 = Coin
+# 12 = Invisible Wall
+# 13 = Chimney
+# 16 = Invisible Platform
+
+# MARIO
+0	140	32	101
+
+#COIN
+6	209	40	208
+6	225	24	208
+6	241	24	208
+6	257	40	208
+6	257	56	208
+6	241	72	208
+6	225	72	208
+6	257	88	208
+6	257	104	208
+6	241	120	208
+6	225	120	208
+6	209	104	208
+
+#INVISIBLE_WALL
+12	112	0	0	160
+12	384	0	0	64
+
+#CHIMNEY
+13	128	0	0	32	32	0	0
+13	352	0	0	32	32	0	0
+
+#INVISIBLE_PLATFORM
+16	128	160	0	128
+16	256	144	0	16
+16	272	128	0	16
+16	288	112	0	16
+16	304	96	0	16
+16	320	80	0	16
+16	336	64	0	48
+16	160	-16	0	192
+
+[MAP]
+0	mapfiles\map1-1-hidden.txt
+

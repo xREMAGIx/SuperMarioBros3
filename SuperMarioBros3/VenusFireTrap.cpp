@@ -31,6 +31,7 @@ void CVenusFireTrap::GetBoundingBox(float& left, float& top, float& right, float
 
 void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	CGameObject::Update(dt, coObjects);
 	y += dy;
 
 	if (state == VENUS_FIRE_TRAP_STATE_WATING) {
