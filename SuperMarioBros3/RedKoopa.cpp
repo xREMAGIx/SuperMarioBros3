@@ -196,8 +196,12 @@ void CRedKoopa::Render()
 			break;
 	}
 	
-	
-	animation_set->at(ani)->Render(x, y, -nx, 255);
+	if (upsidedown == 1) {
+		animation_set->at(ani)->RenderFlipY(x, y, -nx, 255);
+	}
+	else {
+		animation_set->at(ani)->Render(x, y, -nx, 255);
+	}
 }
 
 void CRedKoopa::SetState(int state)

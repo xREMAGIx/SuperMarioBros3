@@ -311,7 +311,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								}
 								else {
 									SetCurrentAni(MARIO_ANI_KICK);
-									redKoopa->SetDirection(-this->nx);
+									redKoopa->SetDirection(this->nx);
 									redKoopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
 								}
 								break;

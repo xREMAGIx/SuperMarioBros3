@@ -78,7 +78,7 @@
 # 18 = Venus Fire Trap
 
 # MARIO
-0	1800	300	101
+0	50	300	101
 
 # BLOCK
 1	1504	336	0

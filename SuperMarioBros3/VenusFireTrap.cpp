@@ -178,12 +178,12 @@ void CVenusFireTrap::SetState(int state)
 			break;
 		}
 		case VENUS_FIRE_TRAP_STATE_DIE: {
+			StartDie();
 			vy = 0;
 			score->SetPosition(x, y - 32);
 			score->SetState(POINT_STATE_SHOW);
 			CBoard* game_board = CBoard::GetInstance();
 			game_board->AddPoint(100);
-			StartDie();
 			break;
 		}
 		default: 

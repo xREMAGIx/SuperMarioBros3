@@ -28,6 +28,9 @@ void CMarioFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 
+	float current_vy = vy;
+	float current_vx = vx;
+
 	vy += MARIO_FIREBALL_GRAVITY * dt;
 
 	CalcPotentialCollisions(coObjects, coEvents);
@@ -62,14 +65,6 @@ void CMarioFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
-			{
-				if (e->ny < 0)
-				{
-					vy = -MARIO_FIREBALL_SPEED * 2;
-				}
-			}
-
 			if (dynamic_cast<CGoomba*>(e->obj)) // if e->obj is Block 
 			{
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -78,9 +73,70 @@ void CMarioFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(MARIO_FIREBALL_STATE_DESTROY);
 			}
 
+			if (dynamic_cast<CVenusFireTrap*>(e->obj)) // if e->obj is Block 
+			{
+				CVenusFireTrap* venus = dynamic_cast<CVenusFireTrap*>(e->obj);
+				venus->SetState(VENUS_FIRE_TRAP_STATE_DIE);
+				SetState(MARIO_FIREBALL_STATE_DESTROY);
+			}
+
+			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
+			{
+				CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(e->obj);
+				if (koopa->GetState() == RED_KOOPA_STATE_WALKING) {
+					koopa->SetUpSideDown(1);
+					koopa->SetState(RED_KOOPA_STATE_SHELL);
+				}
+				SetState(MARIO_FIREBALL_STATE_DESTROY);
+			}
+
 			if (dynamic_cast<CChimney*>(e->obj)) // if e->obj is Block 
 			{
 				SetState(MARIO_FIREBALL_STATE_DESTROY);
+			}
+
+			if (dynamic_cast<CInvisiblePlatform*>(e->obj)) // if e->obj is Block 
+			{
+				if (e->ny < 0)
+				{
+					vy = -MARIO_FIREBALL_SPEED * 2;
+				}
+
+				if (e->nx != 0)
+				{
+					SetState(MARIO_FIREBALL_STATE_DESTROY);
+				}
+			}
+
+			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
+			{
+				if (e->nx != 0) {
+					this->vx = current_vx;
+					x += dx;
+				}
+
+				if (e->ny > 0)
+				{
+					this->vy = current_vy;
+					y += dy;
+				}
+				else {
+					vy = -MARIO_FIREBALL_SPEED * 2;
+				}
+			}
+
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
+			{
+				if (e->nx != 0) {
+					this->vx = current_vx;
+					x += dx;
+				}
+
+				if (e->ny != 0)
+				{
+					this->vy = current_vy;
+					y += dy;
+				}
 			}
 		}
 	}

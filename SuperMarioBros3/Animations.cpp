@@ -63,12 +63,7 @@ void CAnimation::RenderFlipY(float x, float y, int direction, int alpha)
 			if (currentFrame == frames.size()) currentFrame = 0;
 		}
 	}
-	if (direction < 0) {
-		frames[currentFrame]->GetSprite()->DrawFlipY(x, y, alpha);
-	}
-	else {
-		frames[currentFrame]->GetSprite()->DrawFlipX(x, y, alpha);
-	}
+	frames[currentFrame]->GetSprite()->DrawFlipY(x, y, alpha);
 }
 
 CAnimations* CAnimations::__instance = NULL;
