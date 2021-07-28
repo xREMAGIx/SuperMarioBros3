@@ -68,7 +68,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	// No collision occured, proceed normally
-	if (coEvents.size() == 0)
+	if (coEvents.size() == 0 || state == GOOMBA_STATE_JUMP_DIE)
 	{
 		x += dx;
 		y += dy;

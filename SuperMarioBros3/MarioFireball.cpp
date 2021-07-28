@@ -80,6 +80,14 @@ void CMarioFireball::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				SetState(MARIO_FIREBALL_STATE_DESTROY);
 			}
 
+			if (dynamic_cast<CParaGoomba*>(e->obj)) // if e->obj is Block 
+			{
+				CParaGoomba* paragoomba = dynamic_cast<CParaGoomba*>(e->obj);
+				paragoomba->SetUpSideDown(1);
+				paragoomba->SetState(PARA_GOOMBA_STATE_JUMP_DIE);
+				SetState(MARIO_FIREBALL_STATE_DESTROY);
+			}
+
 			if (dynamic_cast<CRedKoopa*>(e->obj)) // if e->obj is Block 
 			{
 				CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(e->obj);

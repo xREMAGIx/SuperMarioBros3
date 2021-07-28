@@ -8,6 +8,8 @@ CParaGoomba::CParaGoomba(float x, float y)
 	this->rightWing = new CSmallWing(this->x + PARA_GOOMBA_RIGHT_WING_X, this->y + PARA_GOOMBA_RIGHT_WING_Y);
 	rightWing->nx = -1;
 	SetState(PARA_GOOMBA_STATE_WALKING);
+	score = new CPoint();
+	score->SetPointId(POINT_ID_100);
 }
 
 
@@ -28,16 +30,21 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 
-	vy += PARA_GOOMBA_GRAVITY * dt;
-	//
-	// TO-DO: make sure Goomba can interact with the world and to each of them too!
-	// 
+	if (state != PARA_GOOMBA_STATE_DIE) {
+		vy += PARA_GOOMBA_GRAVITY * dt;
+	}
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
 	coEvents.clear();
 
-	CalcPotentialCollisions(coObjects, coEvents);
+	if (state == PARA_GOOMBA_STATE_DIE || state == PARA_GOOMBA_STATE_JUMP_DIE) {
+		score->Update(dt, coObjects);
+	}
+	else {
+		CalcPotentialCollisions(coObjects, coEvents);
+	}
 
 	float current_vy = vy;
 	float current_vx = vx;
@@ -138,11 +145,13 @@ void CParaGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 
-	leftWing->x = x + PARA_GOOMBA_LEFT_WING_X;
-	leftWing->y = y + PARA_GOOMBA_LEFT_WING_Y;
+	if (state != PARA_GOOMBA_STATE_WALKING_WITHOUT_WING) {
+		leftWing->x = x + PARA_GOOMBA_LEFT_WING_X;
+		leftWing->y = y + PARA_GOOMBA_LEFT_WING_Y;
 
-	rightWing->x = x + PARA_GOOMBA_RIGHT_WING_X;
-	rightWing->y = y + PARA_GOOMBA_RIGHT_WING_Y;
+		rightWing->x = x + PARA_GOOMBA_RIGHT_WING_X;
+		rightWing->y = y + PARA_GOOMBA_RIGHT_WING_Y;
+	}
 }
 
 void CParaGoomba::Render()
@@ -160,27 +169,40 @@ void CParaGoomba::Render()
 		break;
 	}
 	case PARA_GOOMBA_STATE_DIE: {
+		score->Render();
 		ani = PARA_GOOMBA_ANI_DIE;
+		break;
+	}
+	case PARA_GOOMBA_STATE_JUMP_DIE: {
+		score->Render();
+		ani = PARA_GOOMBA_ANI_WALKING;
 		break;
 	}
 	default:
 		ani = PARA_GOOMBA_ANI_WALKING;
 		break;
 	}
-
-	animation_set->at(ani)->Render(x, y, -nx, 255);
+	if (dt_die != 0 && GetTickCount() - dt_die > TIME_PARA_GOOMBA_DIE)
+	{
+		ani = -1;
+	}
+	if (ani != -1) {
+		if (upsidedown == 1) {
+			animation_set->at(ani)->RenderFlipY(x, y, -nx, 255);
+		}
+		else {
+			animation_set->at(ani)->Render(x, y, -nx, 255);
+		}
+	}
 }
 
 void CParaGoomba::SetState(int state)
 {
 	CGameObject::SetState(state);
+	CBoard* game_board = CBoard::GetInstance();
+
 	switch (state)
 	{
-		case PARA_GOOMBA_STATE_DIE:
-			y += - PARA_GOOMBA_BBOX_HEIGHT + PARA_GOOMBA_BBOX_HEIGHT_DIE + 1;
-			vx = 0;
-			vy = 0;
-			break;
 		case PARA_GOOMBA_STATE_JUMP_SMALL:
 			vy = -PARA_GOOMBA_JUMP_SPEED;
 			leftWing->SetState(SMALLWING_STATE_FLYING);
@@ -191,6 +213,24 @@ void CParaGoomba::SetState(int state)
 			leftWing->SetState(SMALLWING_STATE_FLYING);
 			rightWing->SetState(SMALLWING_STATE_FLYING);
 			break;
+		case PARA_GOOMBA_STATE_DIE:
+			y += - PARA_GOOMBA_BBOX_HEIGHT + PARA_GOOMBA_BBOX_HEIGHT_DIE + 1;
+			vx = 0;
+			vy = 0;
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
+			game_board->AddPoint(100);
+			break;
+		case PARA_GOOMBA_STATE_JUMP_DIE: {
+			vy = -PARA_GOOMBA_JUMP_SPEED;
+			vx = 0;
+			score->SetPointId(POINT_ID_200);
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
+			game_board->AddPoint(200);
+			StartDie();
+			break;
+		}
 		case PARA_GOOMBA_STATE_WALKING_WITHOUT_WING:
 		case PARA_GOOMBA_STATE_WALKING: {
 			vx = -PARA_GOOMBA_SPEED;

@@ -18,16 +18,18 @@
 #define PARA_GOOMBA_STATE_JUMP_SMALL 300
 #define PARA_GOOMBA_STATE_JUMP_BIG 400
 #define PARA_GOOMBA_STATE_WALKING_WITHOUT_WING 500
-
+#define PARA_GOOMBA_STATE_JUMP_DIE 600
 
 #define PARA_GOOMBA_ANI_WALKING 0
 #define PARA_GOOMBA_ANI_DIE 1
-
 
 #define PARA_GOOMBA_LEFT_WING_X 10
 #define PARA_GOOMBA_LEFT_WING_Y -2
 #define PARA_GOOMBA_RIGHT_WING_X -2
 #define PARA_GOOMBA_RIGHT_WING_Y -2
+
+#define TIME_PARA_GOOMBA_DIE 700
+
 
 class CParaGoomba : public CGameObject
 {
@@ -36,6 +38,9 @@ class CParaGoomba : public CGameObject
 	LPSMALLWING leftWing;
 	LPSMALLWING rightWing;
 
+	DWORD dt_die;
+	CPoint* score;
+
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
@@ -43,4 +48,5 @@ class CParaGoomba : public CGameObject
 public:
 	CParaGoomba(float x, float y);
 	virtual void SetState(int state);
+	void StartDie() { dt_die = GetTickCount(); }
 };
