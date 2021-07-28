@@ -27,6 +27,9 @@
 #define MARIO_STATE_KICK		900
 #define MARIO_STATE_DOWN		1000
 #define MARIO_STATE_ATTACK		1100
+#define MARIO_STATE_SLOW_FLYING		1200
+#define MARIO_STATE_FLYING		1300
+
 //Animate
 #define MARIO_ANI_IDLE_LEFT			0
 #define MARIO_ANI_WALKING_LEFT		1
@@ -86,6 +89,8 @@ class CMario : public CGameObject
 	int current_ani;
 	int down;
 
+	float deflect_gravity = 0.0f;
+
 	CMarioTail* tailAttack;
 	CMarioFireball* fireball;
 
@@ -123,13 +128,14 @@ public:
 	void SetDownLevel() {
 		switch (level)
 		{
+		case MARIO_LEVEL_FIRE:
 		case MARIO_LEVEL_TAIL: {
-			SetLevel(MARIO_LEVEL_BIG);
+			level = MARIO_LEVEL_BIG;
 			StartUntouchable();
 			break;
 		}
 		case MARIO_LEVEL_BIG: {
-			SetLevel(MARIO_LEVEL_SMALL);
+			level = MARIO_LEVEL_SMALL;
 			StartUntouchable();
 			break;
 		}
@@ -147,4 +153,7 @@ public:
 	void StartDie() { dt_die = GetTickCount(); }
 	void StartAttack() { dt_attack = GetTickCount(); }
 	void StopAttack() { dt_attack = 0; }
+
+	void SetSlowFly() { deflect_gravity = MARIO_GRAVITY * 5 / 6; }
+	void ResetSlowFly() { deflect_gravity = 0; }
 };

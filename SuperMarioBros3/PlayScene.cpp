@@ -673,12 +673,31 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	// disable control key when Mario die 
 		if (mario->GetState() == MARIO_STATE_DIE || mario->GetState() == MARIO_STATE_ATTACK) return;
 
-		if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
-		
+		switch (mario->GetState())
+		{
+		case MARIO_STATE_JUMP:
+		case MARIO_STATE_JUMP_RIGHT:
+		case MARIO_STATE_JUMP_LEFT:
+		case MARIO_STATE_SLOW_FLYING: {
+			if (mario->GetLevel() == MARIO_LEVEL_TAIL && game->IsKeyDown(DIK_S)) {
+				mario->SetSlowFly();
+			} else {
+				mario->ResetSlowFly();
+			}
+			if (game->IsKeyDown(DIK_RIGHT)) {
+				mario->SetState(MARIO_STATE_JUMP_RIGHT);
+			}
+			else if (game->IsKeyDown(DIK_LEFT)) {
+				mario->SetState(MARIO_STATE_JUMP_LEFT);
+			}
+			break;
+		}
+		default: {
 			if ((game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) && game->IsKeyDown(DIK_Z)) {
 				if (mario->GetState() != MARIO_STATE_HOLDING) {
 					mario->SetState(MARIO_STATE_RUNNING);
 				}
+
 			}
 			else {
 				if (game->IsKeyDown(DIK_RIGHT)) {
@@ -693,16 +712,20 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 				else {
 					mario->SetState(MARIO_STATE_IDLE);
 				}
-			
+
 			}
+			break;
+		}
+		}
+		/*
+		if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT && MARIO_STATE_SLOW_FLYING) {
+		
+			
 		}
 		else {
-			if (game->IsKeyDown(DIK_RIGHT)) {
-				mario->SetState(MARIO_STATE_JUMP_RIGHT);
-			}
-			else if (game->IsKeyDown(DIK_LEFT)) {
-				mario->SetState(MARIO_STATE_JUMP_LEFT);
-			}
+			
+			
 		}
+		*/
 	}
 }

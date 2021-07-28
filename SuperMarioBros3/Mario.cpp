@@ -45,8 +45,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	coEvents.clear();
 
-	// Simple fall down
-	vy += MARIO_GRAVITY * dt;
+	if (deflect_gravity > 0 && vy > 0) {
+		vy += (MARIO_GRAVITY - deflect_gravity) * dt;
+	}
+	else {
+		vy += MARIO_GRAVITY * dt;
+	}
 
 	//
 	// turn off collision when die 
@@ -153,15 +157,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (goomba->GetState() == GOOMBA_STATE_WALKING)
 						{
-							if (level > MARIO_LEVEL_SMALL)
-							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else {
-								DebugOut(L"[INFO] Touch Goomba Die\n");
-								SetState(MARIO_STATE_DIE);
-							}
+							SetDownLevel();
 						}
 					}
 				}
@@ -201,14 +197,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (goomba->GetState() != PARA_GOOMBA_STATE_DIE)
 						{
-							if (level > MARIO_LEVEL_SMALL)
-							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else {
-								SetState(MARIO_STATE_DIE);
-							}
+							SetDownLevel();
 						}
 					}
 				}
@@ -255,15 +244,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 						case GREEN_KOOPA_STATE_SHELL_SCROLL:
 						case GREEN_KOOPA_STATE_WALKING: {
-							if (level > MARIO_LEVEL_SMALL)
-							{
-								level = MARIO_LEVEL_SMALL;
-								StartUntouchable();
-							}
-							else {
-								DebugOut(L"[INFO] Touch RedGoomba Die\n");
-								SetState(MARIO_STATE_DIE);
-							}
+							SetDownLevel();
 							break;
 						}
 						default:
@@ -318,15 +299,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							}
 							case RED_KOOPA_STATE_SHELL_SCROLL:
 							case RED_KOOPA_STATE_WALKING: {
-								if (level > MARIO_LEVEL_SMALL)
-								{
-									level = MARIO_LEVEL_SMALL;
-									StartUntouchable();
-								}
-								else {
-									DebugOut(L"[INFO] Touch RedGoomba Die\n");
-									SetState(MARIO_STATE_DIE);
-								}
+								SetDownLevel();
 								break;
 							}
 						default:
@@ -388,14 +361,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			{
 				if (GetUntouchable() == 0 && GetState() != MARIO_STATE_DIE)
 				{
-					if (GetLevel() > MARIO_LEVEL_SMALL)
-					{
-						SetLevel(MARIO_LEVEL_SMALL);
-						StartUntouchable();
-					}
-					else {
-						SetState(MARIO_STATE_DIE);
-					}
+					SetDownLevel();
 				}
 			}
 
@@ -638,6 +604,7 @@ void CMario::SetState(int state)
 			break;
 		}
 		case MARIO_STATE_IDLE: {
+			deflect_gravity = 0;
 			if (down == 1) {
 				y += MARIO_SMALL_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT - 1;
 				down = 0;
