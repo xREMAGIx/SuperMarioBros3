@@ -29,6 +29,8 @@ void CBoard::Update(DWORD dt)
 
 void CBoard::Render()
 {
+	LPSPRITE background;
+	background = CSprites::GetInstance()->Get(40057);
 	background->Draw(x - BOARD_MARGIN_LEFT, y - 1);
 	LPSPRITE sprite;
 	sprite = CSprites::GetInstance()->Get(40046);

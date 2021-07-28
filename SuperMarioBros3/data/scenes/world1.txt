@@ -23,7 +23,7 @@
 # MARIO
 430	53001 
 # TREE
-431	53101	
+431	53101
 
 [OBJECTS]
 # type	x	y	ani_set_id	extra_settings per object type
