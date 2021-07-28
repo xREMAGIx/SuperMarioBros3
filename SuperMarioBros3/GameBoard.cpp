@@ -36,14 +36,35 @@ void CBoard::Render()
 	sprite = CSprites::GetInstance()->Get(40046);
 	sprite->Draw(x, y);
 
+	LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+	CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+
 	code->DrawNumber(1, x + BOARD_WORLD_ID_X, y + BOARD_WORLD_ID_Y, 1); // world id
 
-	for (int i = 0; i < 6; i++)	//arrow
-	{
-		code->DrawCharacter(FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y); // world id
+	if (mario != NULL && mario->GetState() == MARIO_STATE_RUNNING) {
+		for (int i = 0; i < 6; i++)	//arrow
+			{
+			if (mario->vx > MARIO_WALKING_SPEED * 2 * i / 6 || mario->vx < -MARIO_WALKING_SPEED * 2 * i / 6) {
+				code->DrawCharacter(FONT_ARROW_WHITE, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
+			}
+			else {
+				code->DrawCharacter(FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
+			}
+		}
+		if (mario->vx >= MARIO_WALKING_SPEED * 2 || mario->vx <= -MARIO_WALKING_SPEED * 2 ) {
+			code->DrawCharacter(FONT_P_WHITE, x + BOARD_P_X, y + BOARD_P_Y); //p
+		}
+		else {
+			code->DrawCharacter(FONT_P_BLACK, x + BOARD_P_X, y + BOARD_P_Y); //p
+		}
 	}
-	code->DrawCharacter(FONT_P_BLACK, x + BOARD_P_X, y + BOARD_P_Y); //p
-
+	else {
+		for (int i = 0; i < 6; i++) {	//arrow
+			code->DrawCharacter(FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
+		}
+		code->DrawCharacter(FONT_P_BLACK, x + BOARD_P_X, y + BOARD_P_Y); //p
+	}
+	
 	code->DrawCharacter(FONT_PLAY_CHARACTER, x + BOARD_PLAY_CHARACTER_X, y + BOARD_PLAY_CHARACTER_Y); // character
 	code->DrawNumber(1, x + BOARD_LIVES_X, y + BOARD_LIVES_Y, lives); // lives
 	code->DrawNumber(3, x + BOARD_TIME_X, y + BOARD_TIME_Y, time); // time

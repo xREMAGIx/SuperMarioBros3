@@ -693,7 +693,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 			break;
 		}
 		default: {
-			if ((game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) && game->IsKeyDown(DIK_Z)) {
+			if ((game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) && game->IsKeyDown(DIK_A)) {
 				if (mario->GetState() != MARIO_STATE_HOLDING) {
 					mario->SetState(MARIO_STATE_RUNNING);
 				}

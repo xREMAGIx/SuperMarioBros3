@@ -17,6 +17,8 @@ using namespace std;
 #define FONT_SPACING 8
 
 #define FONT_PLAY_CHARACTER 40047
+#define FONT_ARROW_WHITE 40049
+#define FONT_P_WHITE 40050
 #define FONT_ARROW_BLACK 40051
 #define FONT_P_BLACK 40052
 
