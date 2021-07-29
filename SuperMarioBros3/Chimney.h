@@ -12,6 +12,8 @@ class CChimney : public CGameObject
 	int width;
 	int height;
 	DWORD dt_reset;
+	int scene_id = -1;
+	int direction = 0;
 	CGameObject* object;
 
 public:
@@ -20,6 +22,13 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void SetState(int state);
+
+	int GetSceneId() { return scene_id; }
+	void SetSceneId(int scene_id) { this->scene_id = scene_id; }
+
+	int GetDirection() { return direction; }
+	void SetDirection(int direction) { this->direction = direction; }
+
 
 	void SetChimneyObjectPos(float x, float y) {
 		object->SetPosition(x, y);

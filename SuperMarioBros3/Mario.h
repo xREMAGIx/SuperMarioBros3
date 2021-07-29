@@ -29,6 +29,7 @@
 #define MARIO_STATE_ATTACK		1100
 #define MARIO_STATE_SLOW_FLYING		1200
 #define MARIO_STATE_FLYING		1300
+#define MARIO_STATE_GO_CHIMNEY		1400
 
 //Animate
 #define MARIO_ANI_IDLE_LEFT			0
@@ -78,14 +79,19 @@
 #define MARIO_UNTOUCHABLE_TIME 5000
 #define MARIO_DIE_TIME 3000
 #define MARIO_ATTACK_TIME 500
+#define MARIO_GO_CHIMNEY_TIME 500
+
 
 class CMario : public CGameObject
 {
 	int level;
 	int untouchable;
+
 	DWORD untouchable_start;
 	DWORD dt_die;
 	DWORD dt_attack;
+	DWORD dt_go_chimney;
+
 	int current_ani;
 	int down;
 
@@ -156,4 +162,6 @@ public:
 
 	void SetSlowFly() { deflect_gravity = MARIO_GRAVITY * 5 / 6; }
 	void ResetSlowFly() { deflect_gravity = 0; }
+
+	void StartGoChimney() { dt_go_chimney = GetTickCount(); }
 };

@@ -54,7 +54,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//
 	// turn off collision when die 
-	if (state != MARIO_STATE_DIE) {
+	if (state != MARIO_STATE_DIE && state != MARIO_STATE_GO_CHIMNEY) {
 		CalcPotentialCollisions(coObjects, coEvents);
 	}
 
@@ -65,13 +65,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
-	if (dt_die!= 0 && GetTickCount() - dt_die > MARIO_DIE_TIME)
+	if (dt_die != 0 && GetTickCount() - dt_die > MARIO_DIE_TIME)
 	{
 		CBoard* game_board = CBoard::GetInstance();
 		game_board->RemoveLives();
 		game_board->SetState(BOARD_STATE_IDLE);
 		CGame::GetInstance()->SwitchScene(MAP_WOLRD_ID);
 	}
+
+	if (dt_go_chimney != 0 && GetTickCount() - dt_go_chimney > MARIO_GO_CHIMNEY_TIME)
+	{
+		CGame::GetInstance()->SwitchScene(4);
+	}
+
 
 	if (dt_attack != 0 && GetTickCount() - dt_attack > MARIO_ATTACK_TIME)
 	{
@@ -334,7 +340,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							chimney->SetState(CHIMNEY_STATE_CANCEL);
 						}
 					}
-					
+					if (state == MARIO_STATE_DOWN) {
+						if (chimney->GetSceneId() != -1) {
+							SetState(MARIO_STATE_GO_CHIMNEY);
+						}
+					}
 				}
 			}
 
@@ -494,6 +504,7 @@ void CMario::Render()
 				default:
 					break;
 			}
+			break;
 		}
 		case MARIO_STATE_HOLDING: {
 			current_ani = MARIO_ANI_HOLDING;
@@ -598,9 +609,14 @@ void CMario::SetState(int state)
 			break;
 		}
 		case MARIO_STATE_DOWN: {
-			if (level == MARIO_LEVEL_BIG) {
+			if (level != MARIO_LEVEL_SMALL) {
 				down = 1;
 			}
+			break;
+		}
+		case MARIO_STATE_GO_CHIMNEY: {
+			vy = MARIO_WALKING_SPEED / 2;
+			StartGoChimney();
 			break;
 		}
 		case MARIO_STATE_IDLE: {

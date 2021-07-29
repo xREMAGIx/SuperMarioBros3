@@ -7,3 +7,4 @@ start	0
 2	data\scenes\map1-1.txt
 3	data\scenes\map1-3.txt
 4	data\scenes\map1-1-hidden.txt
+5	data\scenes\map1-3-hidden.txt

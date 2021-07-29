@@ -227,7 +227,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int height = atoi(tokens[5].c_str());
 		int itemId = atoi(tokens[6].c_str());
 		int aniSetId = atoi(tokens[7].c_str());
+		int direction = atoi(tokens[8].c_str());
+		int screne_id = atoi(tokens[9].c_str());
 		obj = new CChimney(width, height, itemId, aniSetId, x, y, &objects);
+		dynamic_cast<CChimney*>(obj)->SetDirection(direction);
+		dynamic_cast<CChimney*>(obj)->SetSceneId(screne_id);
 		break;
 	}
 	case OBJECT_TYPE_ENEMY_WALL:
@@ -404,15 +408,17 @@ void CPlayScene::Update(DWORD dt)
 		grid->GetListObject(coObjects, objects, cx, cy);
 
 		coObjects[0]->Update(dt, &coObjects);
-
-		for (size_t i = 1; i < coObjects.size(); i++)
-		{
-			coObjects[i]->Update(dt, &coObjects);
+		if (player != NULL && player->GetState() != MARIO_STATE_GO_CHIMNEY) {
+			for (size_t i = 1; i < coObjects.size(); i++)
+			{
+				coObjects[i]->Update(dt, &coObjects);
+			}
 		}
+
+		
 
 		gameBoard->Update(dt);
 	}
-
 	else if (marioWorld != NULL) {
 		marioWorld->Update(dt);
 		float cx, cy;
@@ -551,11 +557,24 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 		if (mario->GetState() == MARIO_STATE_DIE) return;
 		switch (KeyCode)
 		{
-			case DIK_S:
-				if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT) {
+			case DIK_S: {
+				switch (mario->GetState())
+				{
+				case MARIO_STATE_JUMP:
+				case MARIO_STATE_JUMP_RIGHT:
+				case MARIO_STATE_JUMP_LEFT: {
+					if (mario->GetLevel() == MARIO_LEVEL_TAIL && (mario->vx > MARIO_WALKING_SPEED * 1.5 || mario->vx < -MARIO_WALKING_SPEED * 1.5)) {
+						mario->SetState(MARIO_STATE_JUMP);
+					}
+					break;
+				}
+				default: {
 					mario->SetState(MARIO_STATE_JUMP);
+					break;
+				}
 				}
 				break;
+			}
 			case DIK_1:
 				mario->SetLevel(MARIO_LEVEL_SMALL);
 				break;
@@ -675,57 +694,46 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 
 		switch (mario->GetState())
 		{
-		case MARIO_STATE_JUMP:
-		case MARIO_STATE_JUMP_RIGHT:
-		case MARIO_STATE_JUMP_LEFT:
-		case MARIO_STATE_SLOW_FLYING: {
-			if (mario->GetLevel() == MARIO_LEVEL_TAIL && game->IsKeyDown(DIK_S)) {
-				mario->SetSlowFly();
-			} else {
-				mario->ResetSlowFly();
-			}
-			if (game->IsKeyDown(DIK_RIGHT)) {
-				mario->SetState(MARIO_STATE_JUMP_RIGHT);
-			}
-			else if (game->IsKeyDown(DIK_LEFT)) {
-				mario->SetState(MARIO_STATE_JUMP_LEFT);
-			}
-			break;
-		}
-		default: {
-			if ((game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) && game->IsKeyDown(DIK_A)) {
-				if (mario->GetState() != MARIO_STATE_HOLDING) {
-					mario->SetState(MARIO_STATE_RUNNING);
+			case MARIO_STATE_JUMP:
+			case MARIO_STATE_JUMP_RIGHT:
+			case MARIO_STATE_JUMP_LEFT:
+			case MARIO_STATE_SLOW_FLYING: {
+				if (mario->GetLevel() == MARIO_LEVEL_TAIL && game->IsKeyDown(DIK_S)) {
+					mario->SetSlowFly();
+				} else {
+					mario->ResetSlowFly();
 				}
-
-			}
-			else {
 				if (game->IsKeyDown(DIK_RIGHT)) {
-					mario->SetState(MARIO_STATE_WALKING_RIGHT);
+					mario->SetState(MARIO_STATE_JUMP_RIGHT);
 				}
 				else if (game->IsKeyDown(DIK_LEFT)) {
-					mario->SetState(MARIO_STATE_WALKING_LEFT);
+					mario->SetState(MARIO_STATE_JUMP_LEFT);
 				}
-				else if (game->IsKeyDown(DIK_DOWN)) {
-					mario->SetState(MARIO_STATE_DOWN);
+				break;
+			}
+			default: {
+				if ((game->IsKeyDown(DIK_RIGHT) || game->IsKeyDown(DIK_LEFT)) && game->IsKeyDown(DIK_A)) {
+					if (mario->GetState() != MARIO_STATE_HOLDING) {
+						mario->SetState(MARIO_STATE_RUNNING);
+					}
+
 				}
 				else {
-					mario->SetState(MARIO_STATE_IDLE);
+					if (game->IsKeyDown(DIK_RIGHT)) {
+						mario->SetState(MARIO_STATE_WALKING_RIGHT);
+					}
+					else if (game->IsKeyDown(DIK_LEFT)) {
+						mario->SetState(MARIO_STATE_WALKING_LEFT);
+					}
+					else if (game->IsKeyDown(DIK_DOWN)) {
+						mario->SetState(MARIO_STATE_DOWN);
+					}
+					else {
+						mario->SetState(MARIO_STATE_IDLE);
+					}
 				}
-
+				break;
 			}
-			break;
 		}
-		}
-		/*
-		if (mario->GetState() != MARIO_STATE_JUMP && mario->GetState() != MARIO_STATE_JUMP_RIGHT && mario->GetState() != MARIO_STATE_JUMP_LEFT && MARIO_STATE_SLOW_FLYING) {
-		
-			
-		}
-		else {
-			
-			
-		}
-		*/
 	}
 }

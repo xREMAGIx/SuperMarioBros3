@@ -24,11 +24,6 @@ CChimney::CChimney(int width, int height, int _id_item, int ani_set_id, float x,
 
 void CChimney::Render()
 {
-	/*
-	if (object != NULL && state != CHIMNEY_STATE_CANCEL) {
-		object->Render();
-	}
-	*/
 }
 
 void CChimney::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
