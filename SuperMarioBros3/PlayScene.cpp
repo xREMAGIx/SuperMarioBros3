@@ -407,14 +407,19 @@ void CPlayScene::Update(DWORD dt)
 
 		grid->GetListObject(coObjects, objects, cx, cy);
 
-		coObjects[0]->Update(dt, &coObjects);
-		if (player != NULL && player->GetState() != MARIO_STATE_GO_CHIMNEY) {
-			for (size_t i = 1; i < coObjects.size(); i++)
-			{
-				coObjects[i]->Update(dt, &coObjects);
-			}
-		}
+		player->Update(dt, &coObjects);
 
+		if (player->GetState() == MARIO_STATE_GO_CHIMNEY) {
+			CGame::GetInstance()->SwitchScene(changeScene);
+			SetChangeScene(-1);
+			return;
+		};
+
+		
+		for (size_t i = 1; i < coObjects.size(); i++)
+		{
+			coObjects[i]->Update(dt, &coObjects);
+		}
 		
 
 		gameBoard->Update(dt);
@@ -528,7 +533,6 @@ void CPlayScene::Unload()
 
 	for (UINT i = 0; i < objects.size(); i++)
 		delete objects[i];
-
 	objects.clear();
 	player = NULL;
 	map = NULL;
@@ -709,6 +713,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 				else if (game->IsKeyDown(DIK_LEFT)) {
 					mario->SetState(MARIO_STATE_JUMP_LEFT);
 				}
+				if (game->IsKeyDown(DIK_UP)) {
+					mario->SetUp(1);
+				}
 				break;
 			}
 			default: {
@@ -730,6 +737,9 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 					}
 					else {
 						mario->SetState(MARIO_STATE_IDLE);
+					}
+					if (game->IsKeyDown(DIK_UP)) {
+						mario->SetUp(1);
 					}
 				}
 				break;

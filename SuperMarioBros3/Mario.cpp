@@ -73,11 +73,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CGame::GetInstance()->SwitchScene(MAP_WOLRD_ID);
 	}
 
-	if (dt_go_chimney != 0 && GetTickCount() - dt_go_chimney > MARIO_GO_CHIMNEY_TIME)
-	{
-		CGame::GetInstance()->SwitchScene(4);
-	}
-
 
 	if (dt_attack != 0 && GetTickCount() - dt_attack > MARIO_ATTACK_TIME)
 	{
@@ -117,14 +112,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			//Interact with CEnemyWall
-			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
-			{
-				this->vy = current_vy;
-				this->vx = current_vx;
-				y += dy;
-				x += dx;
-			}
+			if (e->obj->GetId() < 0) break;
 
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
@@ -341,7 +329,20 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 					}
 					if (state == MARIO_STATE_DOWN) {
-						if (chimney->GetSceneId() != -1) {
+						if (chimney->GetDirection() == 1 && chimney->GetSceneId() != -1) {
+							CPlayScene* scene = (CPlayScene*)(CGame::GetInstance()->GetCurrentScene());
+							scene->SetChangeScene(chimney->GetSceneId());
+							SetState(MARIO_STATE_GO_CHIMNEY);
+						}
+					}
+					
+				}
+				else if (e->ny > 0)
+				{
+					if (up == 1) {
+						if (chimney->GetDirection() == -1 && chimney->GetSceneId() != -1) {
+							CPlayScene* scene = (CPlayScene*)(CGame::GetInstance()->GetCurrentScene());
+							scene->SetChangeScene(chimney->GetSceneId());
 							SetState(MARIO_STATE_GO_CHIMNEY);
 						}
 					}
@@ -364,6 +365,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					this->vy = current_vy;
 					y += dy;
 				}
+			}
+
+			//Interact with CEnemyWall
+			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
+			{
+				this->vy = current_vy;
+				this->vx = current_vx;
+				y += dy;
+				x += dx;
 			}
 
 			//Interact with venus
@@ -588,6 +598,7 @@ void CMario::SetState(int state)
 		case MARIO_STATE_WALKING_RIGHT: 
 		case MARIO_STATE_JUMP_RIGHT:
 		{
+			up = 0;
 			vx = MARIO_WALKING_SPEED;
 			nx = 1;
 			break;
@@ -595,11 +606,13 @@ void CMario::SetState(int state)
 		case MARIO_STATE_WALKING_LEFT:
 		case MARIO_STATE_JUMP_LEFT:
 		{
+			up = 0;
 			vx = -MARIO_WALKING_SPEED;
 			nx = -1;
 			break;
 		}
 		case MARIO_STATE_JUMP:
+			up = 0;
 			vy = -MARIO_JUMP_SPEED_Y;
 			break;
 		case MARIO_STATE_DIE: {
@@ -621,6 +634,7 @@ void CMario::SetState(int state)
 		}
 		case MARIO_STATE_IDLE: {
 			deflect_gravity = 0;
+			up = 0;
 			if (down == 1) {
 				y += MARIO_SMALL_BBOX_HEIGHT - MARIO_BIG_BBOX_HEIGHT - 1;
 				down = 0;

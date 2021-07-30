@@ -41,6 +41,7 @@ protected:
 	vector<CMapPoint*> mapPoints;
 
 	int currentMapPoint = 0;
+	int changeScene = -1;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_TEXTURES(string line);
@@ -68,6 +69,9 @@ public:
 	vector<CMapPoint*> GetMapPoints() { return mapPoints; }
 	int GetCurrentMapPoint() { return currentMapPoint; }
 	void SetCurrentMapPoint(int index) { this->currentMapPoint = index; }
+
+	int GetChangeScene() { return changeScene; }
+	void SetChangeScene(int index) { this->changeScene = index; }
 
 };
 

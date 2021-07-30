@@ -94,6 +94,7 @@ class CMario : public CGameObject
 
 	int current_ani;
 	int down;
+	int up;
 
 	float deflect_gravity = 0.0f;
 
@@ -106,7 +107,8 @@ public:
 	{
 		dt_attack = 0;
 		dt_die = 0;
-		down = 0;
+		dt_go_chimney = 0;
+		down = up = 0;
 		untouchable = 0;
 		untouchable_start = 0;
 		level = MARIO_LEVEL_SMALL;
@@ -155,6 +157,10 @@ public:
 		this->current_ani = current_ani;
 	}
 
+	void SetUp(int up) {
+		this->up = up;
+	}
+
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	void StartDie() { dt_die = GetTickCount(); }
 	void StartAttack() { dt_attack = GetTickCount(); }
@@ -163,5 +169,5 @@ public:
 	void SetSlowFly() { deflect_gravity = MARIO_GRAVITY * 5 / 6; }
 	void ResetSlowFly() { deflect_gravity = 0; }
 
-	void StartGoChimney() { dt_go_chimney = GetTickCount(); }
+	void StartGoChimney()  { dt_go_chimney = GetTickCount(); } 
 };
