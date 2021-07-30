@@ -95,6 +95,7 @@ class CMario : public CGameObject
 	int current_ani;
 	int down;
 	int up;
+	int without_die_jump;
 
 	float deflect_gravity = 0.0f;
 
@@ -108,7 +109,7 @@ public:
 		dt_attack = 0;
 		dt_die = 0;
 		dt_go_chimney = 0;
-		down = up = 0;
+		down = up = without_die_jump = 0;
 		untouchable = 0;
 		untouchable_start = 0;
 		level = MARIO_LEVEL_SMALL;

@@ -155,6 +155,7 @@
     <ClCompile Include="Chimney.cpp" />
     <ClCompile Include="Cloud.cpp" />
     <ClCompile Include="Coin.cpp" />
+    <ClCompile Include="Deadline.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="EnemyWall.cpp" />
     <ClCompile Include="FireBall.cpp" />
@@ -210,6 +211,7 @@
     <ClInclude Include="Chimney.h" />
     <ClInclude Include="Cloud.h" />
     <ClInclude Include="Coin.h" />
+    <ClInclude Include="Deadline.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="EnemyWall.h" />
     <ClInclude Include="FireBall.h" />

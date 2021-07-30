@@ -28,6 +28,7 @@
 #include "MusicBox.h"
 #include "VenusFireTrap.h"
 #include "BoomerangBrother.h"
+#include "Deadline.h"
 #include "helpers.h"
 
 

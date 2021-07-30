@@ -209,6 +209,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CInvisibleBlock(width);
 		break;
 	}
+	case OBJECT_TYPE_DEADLINE:
+	{
+		int width = atoi(tokens[4].c_str());
+		obj = new CDeadline(width);
+		break;
+	}
 	case OBJECT_TYPE_INVISIBLE_PLATFORM:
 	{
 		int width = atoi(tokens[4].c_str());
@@ -408,6 +414,8 @@ void CPlayScene::Update(DWORD dt)
 		grid->GetListObject(coObjects, objects, cx, cy);
 
 		player->Update(dt, &coObjects);
+
+		if (player == NULL) return;
 
 		if (player->GetState() == MARIO_STATE_GO_CHIMNEY) {
 			CGame::GetInstance()->SwitchScene(changeScene);

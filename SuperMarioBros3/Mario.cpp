@@ -367,6 +367,15 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 
+			//Interact with venus
+			if (dynamic_cast<CVenusFireTrap*>(e->obj)) // if e->obj is Block 
+			{
+				if (GetUntouchable() == 0 && GetState() != MARIO_STATE_DIE)
+				{
+					SetDownLevel();
+				}
+			}
+
 			//Interact with CEnemyWall
 			if (dynamic_cast<CEnemyWall*>(e->obj)) // if e->obj is Block 
 			{
@@ -376,13 +385,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				x += dx;
 			}
 
-			//Interact with venus
-			if (dynamic_cast<CVenusFireTrap*>(e->obj)) // if e->obj is Block 
+			//Interact with CDeadline
+			if (dynamic_cast<CDeadline*>(e->obj)) // if e->obj is Block 
 			{
-				if (GetUntouchable() == 0 && GetState() != MARIO_STATE_DIE)
-				{
-					SetDownLevel();
-				}
+				without_die_jump = 1;
+				SetState(MARIO_STATE_DIE);
 			}
 
 			//Jump touch music box
@@ -616,7 +623,9 @@ void CMario::SetState(int state)
 			vy = -MARIO_JUMP_SPEED_Y;
 			break;
 		case MARIO_STATE_DIE: {
-			vy = -MARIO_DIE_DEFLECT_SPEED;
+			if (without_die_jump != 1) {
+				vy = -MARIO_DIE_DEFLECT_SPEED;
+			}
 			vx = 0;
 			StartDie();
 			break;
