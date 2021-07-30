@@ -261,6 +261,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		mapPoints.push_back(point);
 		return;
 	}
+	case OBJECT_TYPE_PLAYER_POINT:
+	{
+		CPlayerPoint* point = new CPlayerPoint(x, y);
+		playerPoints.push_back(point);
+		return;
+	}
 	case OBJECT_TYPE_INTRO_3_FONT: {
 		obj = new CThirdFont();
 		break;
@@ -542,6 +548,11 @@ void CPlayScene::Unload()
 		delete mapPoints[i];
 
 	mapPoints.clear();
+
+	for (UINT i = 0; i < playerPoints.size(); i++)
+		delete playerPoints[i];
+
+	playerPoints.clear();
 }
 
 void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
@@ -552,8 +563,11 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	CMarioWorld* mario_world = ((CPlayScene*)scence)->GetMarioWorld();
 	vector<CMapPoint*> map_points = ((CPlayScene*)scence)->GetMapPoints();
 	CPlayerFont* choosePlayer = ((CPlayScene*)scence)->GetChoosePlayer();
+	vector<CPlayerPoint*> player_points = ((CPlayScene*)scence)->GetPlayerPoints();
 
 	int current_point = ((CPlayScene*)scence)->GetCurrentMapPoint();
+	UINT current_player_point = ((CPlayScene*)scence)->GetCurrentPlayerPoint();
+
 
 	if (mario != NULL) {
 		// disable control key when Mario die 
@@ -578,6 +592,18 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 				}
 				break;
 			}
+			case DIK_R:
+				if (player_points.size() > 0) {
+					if (current_player_point + 1 < player_points.size()) {
+						mario->SetPosition(player_points.at(current_player_point + 1)->x, player_points.at(current_player_point + 1)->y);
+						((CPlayScene*)scence)->SetCurrentPlayerPoint(current_player_point + 1);
+					}
+					else {
+						((CPlayScene*)scence)->SetCurrentPlayerPoint(0);
+						mario->SetPosition(player_points.at(0)->x, player_points.at(0)->y);
+					}
+				}
+				break;
 			case DIK_1:
 				mario->SetLevel(MARIO_LEVEL_SMALL);
 				break;
@@ -593,8 +619,8 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 			case DIK_A:
 				if (mario->GetLevel() == MARIO_LEVEL_TAIL || mario->GetLevel() == MARIO_LEVEL_FIRE) {
 					mario->SetState(MARIO_STATE_ATTACK);
-					break;
 				}
+				break;
 		}
 	}
 	else if (mario_world != NULL) {

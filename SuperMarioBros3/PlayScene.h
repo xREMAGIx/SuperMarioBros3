@@ -31,6 +31,17 @@
 #include "Deadline.h"
 #include "helpers.h"
 
+class CPlayerPoint
+{
+public:
+	float x;
+	float y;
+
+	CPlayerPoint(float x, float y) {
+		this->x = x;
+		this->y = y;
+	}
+};
 
 class CPlayScene : public CScene
 {
@@ -40,7 +51,9 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 	CMarioWorld* marioWorld;
 	vector<CMapPoint*> mapPoints;
+	vector<CPlayerPoint*> playerPoints;
 
+	int currentPlayerPoint = 0;
 	int currentMapPoint = 0;
 	int changeScene = -1;
 
@@ -74,6 +87,9 @@ public:
 	int GetChangeScene() { return changeScene; }
 	void SetChangeScene(int index) { this->changeScene = index; }
 
+	vector<CPlayerPoint*> GetPlayerPoints() { return playerPoints; }
+	int GetCurrentPlayerPoint() { return currentPlayerPoint; }
+	void SetCurrentPlayerPoint(int index) { this->currentPlayerPoint = index; }
 };
 
 class CPlayScenceKeyHandler : public CScenceKeyHandler
@@ -84,4 +100,3 @@ public:
 	virtual void OnKeyUp(int KeyCode) {};
 	CPlayScenceKeyHandler(CScene* s) :CScenceKeyHandler(s) {};
 };
-
