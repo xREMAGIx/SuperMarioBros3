@@ -78,6 +78,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		game_board->SetState(BOARD_STATE_IDLE);
 		if (game_board->GetLives() == 0) {
 			game_board->ResetLives();
+			CPlayScene* scene = (CPlayScene*)(CGame::GetInstance()->GetCurrentScene());
+			scene->SetCurrentMapPoint(0);
 			CGame::GetInstance()->SwitchScene(0);
 		}
 		else {
@@ -645,6 +647,8 @@ void CMario::SetState(int state)
 			if (without_die_jump != 1) {
 				vy = -MARIO_DIE_DEFLECT_SPEED;
 			}
+			CBoard* game_board = CBoard::GetInstance();
+			game_board->SetState(BOARD_STATE_STOP);
 			vx = 0;
 			StartDie();
 			break;

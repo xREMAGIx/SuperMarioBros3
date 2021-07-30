@@ -90,8 +90,10 @@ void CBoard::SetState(int state)
 	case BOARD_STATE_START:
 		StartCount();
 		break;
-	default: 
+	case BOARD_STATE_IDLE:
 		StopCount();
+		break;
+	default: 
 		break;
 	}
 }

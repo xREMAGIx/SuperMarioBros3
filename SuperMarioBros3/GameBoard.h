@@ -13,6 +13,7 @@
 
 #define BOARD_STATE_IDLE 0
 #define BOARD_STATE_START 1
+#define BOARD_STATE_STOP 2
 
 #define BOARD_TIME_X 123
 #define BOARD_TIME_Y 15
@@ -54,7 +55,7 @@ public:
 		 _count = 0;
 		worldId = 0;
 		time = 0;
-		lives = 1;
+		lives = 4;
 		code = new CFont();
 		score = 0;
 		money = 0;
