@@ -54,7 +54,7 @@ public:
 		 _count = 0;
 		worldId = 0;
 		time = 0;
-		lives = 4;
+		lives = 1;
 		code = new CFont();
 		score = 0;
 		money = 0;
@@ -69,6 +69,9 @@ public:
 
 	void StartCount() { time = 300; _count = GetTickCount(); }
 	void StopCount() { time = 0; }
+	int GetLives() { return lives; }
+	void ResetLives() { lives = 4 ; }
+	void AddLives() { lives++; }
 	void RemoveLives() { lives--; }
 	void AddMoney() { money++; }
 	void AddPoint(int point) { score += point; }

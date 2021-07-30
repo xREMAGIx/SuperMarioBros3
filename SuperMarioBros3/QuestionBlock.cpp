@@ -7,6 +7,9 @@ CQuestionBlock::CQuestionBlock(int _id_item, int ani_set_id) {
 	case OBJECT_TYPE_MUSHROOM:
 		item = new CMushroom();
 		break;
+	case OBJECT_TYPE_GREEN_MUSHROOM:
+		item = new CGreenMushroom();
+		break;
 	default:
 		item = new CCoin();
 		CAnimationSets* animation_sets = CAnimationSets::GetInstance();
@@ -61,6 +64,9 @@ void CQuestionBlock::SetState(int state)
 		{
 		case OBJECT_TYPE_MUSHROOM:
 			dynamic_cast<CMushroom*>(item)->SetState(MUSHSHROOM_STATE_WALKING);
+			break;
+		case OBJECT_TYPE_GREEN_MUSHROOM:
+			dynamic_cast<CGreenMushroom*>(item)->SetState(GREEN_MUSHSHROOM_STATE_WALKING);
 			break;
 		default:
 			dynamic_cast<CCoin*>(item)->SetState(COIN_STATE_JUMP);

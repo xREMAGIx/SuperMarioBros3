@@ -76,7 +76,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CBoard* game_board = CBoard::GetInstance();
 		game_board->RemoveLives();
 		game_board->SetState(BOARD_STATE_IDLE);
-		CGame::GetInstance()->SwitchScene(MAP_WOLRD_ID);
+		if (game_board->GetLives() == 0) {
+			game_board->ResetLives();
+			CGame::GetInstance()->SwitchScene(0);
+		}
+		else {
+			CGame::GetInstance()->SwitchScene(MAP_WOLRD_ID);
+		}
 	}
 
 

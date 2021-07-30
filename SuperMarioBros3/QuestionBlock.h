@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "helpers.h"
 #include "Mushroom.h"
+#include "GreenMushroom.h"
 #include "Coin.h"
 
 //State
