@@ -47,7 +47,6 @@ void CGoomba::GetBoundingBox(float& left, float& top, float& right, float& botto
 void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
-
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -87,10 +86,14 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (ny != 0) vy = 0;
 
+		
+
 		// Collision logic with world
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
+
+			
 
 			//Walk on invisible block
 			if (dynamic_cast<CInvisibleBlock*>(e->obj)) // if e->obj is Block 
@@ -170,6 +173,17 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					this->vx = -current_vx;
 					this->nx = -this->nx;
+				}
+			}
+
+			if (dynamic_cast<CMario*>(e->obj)) // if e->obj is Block 
+			{
+				LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+				CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+			
+				if (mario->GetUntouchable() != 0) {
+					this->vx = current_vx;
+					x += dx;
 				}
 			}
 		}

@@ -65,6 +65,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 
+	if (dt_go_chimney != 0 && GetTickCount() - dt_go_chimney > MARIO_GO_CHIMNEY_TIME)
+	{
+		CPlayScene* scene = (CPlayScene*)(CGame::GetInstance()->GetCurrentScene());
+		CGame::GetInstance()->SwitchScene(scene->GetChangeScene());
+	}
+
 	if (dt_die != 0 && GetTickCount() - dt_die > MARIO_DIE_TIME)
 	{
 		CBoard* game_board = CBoard::GetInstance();
@@ -79,6 +85,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		SetState(MARIO_STATE_IDLE);
 		StopAttack();
 	}
+
 
 	// No collision occured, proceed normally
 	if (coEvents.size() == 0)
@@ -98,13 +105,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
 		//if (rdx != 0 && rdx!=dx)
-		//	x += nx*abs(rdx); 
+			//x += nx*abs(rdx); 
 
 		// block every object first!
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
-		if (nx != 0) vx = 0;
+		if (untouchable == 0) {
+			if(nx != 0)  vx = 0;
+		}
+	
 		if (ny != 0) vy = 0;
 
 		// Collision logic with Goombas
@@ -573,14 +583,17 @@ void CMario::Render()
 			}
 			break;
 	}
+	int alpha = 255;
+	if (untouchable) alpha = 128;
+
 	if (state == MARIO_STATE_ATTACK && level == MARIO_LEVEL_TAIL) {
-		animation_set->at(current_ani)->Render(x, y, -nx, 255);
+		animation_set->at(current_ani)->Render(x, y, -nx, alpha);
 		return;
 	}
 	if (fireball->GetState() == MARIO_FIREBALL_STATE_THROWN) {
 		fireball->Render();
 	}
-	animation_set->at(current_ani)->Render(x, y, nx, 255);
+	animation_set->at(current_ani)->Render(x, y, nx, alpha);
 }
 
 void CMario::SetState(int state)

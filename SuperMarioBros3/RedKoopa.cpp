@@ -162,6 +162,17 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 				}
 			}
+
+			if (dynamic_cast<CMario*>(e->obj)) // if e->obj is Block 
+			{
+				LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+				CMario* mario = ((CPlayScene*)scene)->GetPlayer();
+
+				if (mario->GetUntouchable() != 0) {
+					this->vx = current_vx;
+					x += dx;
+				}
+			}
 		}
 	}
 
