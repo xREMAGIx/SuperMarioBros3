@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Miscs">
+      <UniqueIdentifier>{452f63c9-c3d7-4b1a-8b63-bfc20bed3338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Miscs">
+      <UniqueIdentifier>{49814305-9f52-4c23-a4ec-57f8c47d5e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Hud">
+      <UniqueIdentifier>{e176d2c6-a93b-4c53-a3de-9a4c5971ef0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Hud">
+      <UniqueIdentifier>{9652071e-9a32-4bc9-aa7f-451c81391a12}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -25,9 +37,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Brick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Coin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Collision.cpp">
@@ -75,6 +84,12 @@
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mushroom.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
+    <ClCompile Include="Coin.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -90,9 +105,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Brick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Coin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Collision.h">
@@ -145,6 +157,15 @@
     </ClInclude>
     <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Font.h">
+      <Filter>Header Files\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="Mushroom.h">
+      <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
+      <Filter>Header Files\Miscs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
