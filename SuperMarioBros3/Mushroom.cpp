@@ -1,6 +1,4 @@
 #include "Mushroom.h"
-#include "AssetIDs.h"
-#include "debug.h"
 
 CMushroom::CMushroom(float x, float y) :CGameObject(x	, y)
 {

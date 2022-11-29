@@ -6,6 +6,7 @@
 
 #include "Goomba.h"
 #include "Mushroom.h"
+#include "GreenMushroom.h"
 #include "Coin.h"
 #include "Portal.h"
 
@@ -55,6 +56,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithMushroom(e);
+	else if (dynamic_cast<CGreenMushroom*>(e->obj))
+		OnCollisionWithGreenMushroom(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -102,6 +105,13 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 		level = MARIO_LEVEL_BIG;
 	}
 }
+
+void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e)
+{
+	e->obj->Delete();
+	//TODO: Add lives
+}
+
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {

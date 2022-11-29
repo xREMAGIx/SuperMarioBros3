@@ -9,6 +9,7 @@
 #include "Portal.h"
 #include "Coin.h"
 #include "Mushroom.h"
+#include "GreenMushroom.h"
 #include "Platform.h"
 
 #include "SampleKeyEventHandler.h"
@@ -119,8 +120,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
+
+	// MISC
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
+	case OBJECT_TYPE_GREEN_MUSHROOM: obj = new CGreenMushroom(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{
