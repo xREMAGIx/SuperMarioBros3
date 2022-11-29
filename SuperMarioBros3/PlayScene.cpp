@@ -11,6 +11,9 @@
 #include "Mushroom.h"
 #include "GreenMushroom.h"
 #include "QuestionBlock.h"
+
+#include "Point.h"
+
 #include "Platform.h"
 
 #include "SampleKeyEventHandler.h"
@@ -127,6 +130,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
 	case OBJECT_TYPE_GREEN_MUSHROOM: obj = new CGreenMushroom(x, y); break;
 	case OBJECT_TYPE_QUESTION_BLOCK: obj = new CQuestionBlock(x, y); break;
+
+	// HUD
+	case OBJECT_TYPE_POINT: obj = new CPoint(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{

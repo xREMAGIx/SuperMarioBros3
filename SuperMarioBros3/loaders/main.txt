@@ -17,3 +17,4 @@ height	240
 0	.\textures\mario.png
 10	.\textures\enemies.png
 20	.\textures\npc-misc.png
+40	.\textures\hud-font.png

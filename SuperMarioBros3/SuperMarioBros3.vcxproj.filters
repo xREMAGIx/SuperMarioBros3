@@ -108,6 +108,9 @@
     <ClCompile Include="QuestionBlock.cpp">
       <Filter>Source Files\Miscs</Filter>
     </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>Source Files\Hud</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="QuestionBlock.h">
       <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Header Files\Hud</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
