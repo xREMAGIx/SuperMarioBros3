@@ -54,7 +54,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
-		OnCollisionWithCoin(e);
+		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -90,6 +90,16 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				}
 			}
 		}
+	}
+}
+
+
+void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
+{
+	if (level == MARIO_LEVEL_SMALL) {
+		e->obj->Delete();
+		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+		level = MARIO_LEVEL_BIG;
 	}
 }
 
