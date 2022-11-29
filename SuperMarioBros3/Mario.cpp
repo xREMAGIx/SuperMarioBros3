@@ -7,6 +7,7 @@
 #include "Goomba.h"
 #include "Mushroom.h"
 #include "GreenMushroom.h"
+#include "QuestionBlock.h"
 #include "Coin.h"
 #include "Portal.h"
 
@@ -58,6 +59,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithMushroom(e);
 	else if (dynamic_cast<CGreenMushroom*>(e->obj))
 		OnCollisionWithGreenMushroom(e);
+	else if (dynamic_cast<CQuestionBlock*>(e->obj))
+		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -117,6 +120,20 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	e->obj->Delete();
 	coin++;
+}
+
+
+void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
+{
+	CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
+
+	if (e->ny > 0)
+	{
+		if (questionBlock->GetState() != QUESTION_BLOCK_STATE_OPENED)
+		{
+			questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);
+		}
+	}
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)

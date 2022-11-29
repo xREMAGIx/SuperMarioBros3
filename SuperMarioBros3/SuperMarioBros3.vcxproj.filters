@@ -105,6 +105,9 @@
     <ClCompile Include="GreenMushroom.cpp">
       <Filter>Source Files\Miscs</Filter>
     </ClCompile>
+    <ClCompile Include="QuestionBlock.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -183,6 +186,9 @@
       <Filter>Header Files\Characters</Filter>
     </ClInclude>
     <ClInclude Include="GreenMushroom.h">
+      <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionBlock.h">
       <Filter>Header Files\Miscs</Filter>
     </ClInclude>
   </ItemGroup>
