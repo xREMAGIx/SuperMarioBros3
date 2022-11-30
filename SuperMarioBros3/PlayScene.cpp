@@ -243,6 +243,11 @@ void CPlayScene::Load()
 
 	f.close();
 
+	gameBoard = CBoard::GetInstance();
+	if (player != NULL) {
+		gameBoard->SetState(BOARD_STATE_START);
+	}
+
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
@@ -273,9 +278,10 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetBackBufferWidth() / 2;
 	cy -= game->GetBackBufferHeight() / 2;
 
-	if (cx < 0) cx = 0;
 
-	CGame::GetInstance()->SetCamPos(cx, 0.0f /*cy*/);
+	CGame::GetInstance()->SetCamPos(cx, cy);
+
+	gameBoard->Update(dt);
 
 	PurgeDeletedObjects();
 }
@@ -284,6 +290,8 @@ void CPlayScene::Render()
 {
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+
+	gameBoard->Render();
 }
 
 /*

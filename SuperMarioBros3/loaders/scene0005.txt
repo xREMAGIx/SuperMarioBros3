@@ -9,6 +9,11 @@ loaders\point.txt
 loaders\cloud.txt
 loaders\brick.txt
 loaders\platform.txt
+#HUD
+loaders\item-box.txt
+loaders\font.txt
+loaders\game-board.txt
+
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type

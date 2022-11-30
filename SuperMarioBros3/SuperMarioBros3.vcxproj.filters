@@ -111,6 +111,15 @@
     <ClCompile Include="Point.cpp">
       <Filter>Source Files\Hud</Filter>
     </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <Filter>Source Files\Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBoard.cpp">
+      <Filter>Source Files\Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="Font.cpp">
+      <Filter>Source Files\Hud</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -195,6 +204,12 @@
       <Filter>Header Files\Miscs</Filter>
     </ClInclude>
     <ClInclude Include="Point.h">
+      <Filter>Header Files\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBox.h">
+      <Filter>Header Files\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBoard.h">
       <Filter>Header Files\Hud</Filter>
     </ClInclude>
   </ItemGroup>
