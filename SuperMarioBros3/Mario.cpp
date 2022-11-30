@@ -103,7 +103,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
 	if (level == MARIO_LEVEL_SMALL) {
-		e->obj->Delete();
+		e->obj->SetState(MUSHSHROOM_STATE_EARNED);
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 		level = MARIO_LEVEL_BIG;
 	}
@@ -111,7 +111,7 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e)
 {
-	e->obj->Delete();
+	e->obj->SetState(GREEN_MUSHSHROOM_STATE_EARNED);
 	//TODO: Add lives
 }
 

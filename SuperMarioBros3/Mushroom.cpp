@@ -5,12 +5,20 @@ CMushroom::CMushroom(float x, float y) :CGameObject(x	, y)
 	this->ax = 0;
 	this->ay = MUSHROOM_GRAVITY;
 	this->vx = -MUSHROOM_WALKING_SPEED;
+	this->point_show_start = -1;
+	point = new CPoint(x, y - 16);
+	point->SetType(POINT_TYPE_1000);
 }
 
 void CMushroom::Render()
 {
-	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_MUSHROOM)->Render(x, y);
+	if (state != MUSHSHROOM_STATE_EARNED) {
+		CAnimations* animations = CAnimations::GetInstance();
+		animations->Get(ID_ANI_MUSHROOM)->Render(x, y);
+	}
+	else {
+		point->Render();
+	}
 
 	//RenderBoundingBox();
 }
@@ -48,6 +56,28 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	if (state == MUSHSHROOM_STATE_EARNED) {
+		point->Update(dt, coObjects);
+
+		if ((GetTickCount64() - point_show_start > POINT_SHOW_TIME))
+		{
+			point->Delete();
+			isDeleted = true;
+			return;
+		}
+	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+}
+
+void CMushroom::SetState(int state)
+{
+	if (state == MUSHSHROOM_STATE_EARNED) {
+		point_show_start = GetTickCount64();
+		point->SetPosition(x, y - 16);
+		point->SetState(POINT_STATE_SHOW);
+	}
+
+	CGameObject::SetState(state);
 }
