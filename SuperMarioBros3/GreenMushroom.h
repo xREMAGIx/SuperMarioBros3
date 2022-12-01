@@ -16,10 +16,12 @@
 #define GREEN_MUSHSHROOM_STATE_SHOWING 1
 #define GREEN_MUSHSHROOM_STATE_EARNED 2
 
+
+#define GREEN_MUSHSHROOM_POINT 1000
+
 class CGreenMushroom : public CGameObject {
 protected:
 	CPoint* point;
-	ULONGLONG point_show_start;
 
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 

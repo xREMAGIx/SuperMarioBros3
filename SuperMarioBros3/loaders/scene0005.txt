@@ -46,7 +46,7 @@ loaders\game-board.txt
 401	200	80
 
 #QUESTION BLOCK
-205	200	120
+205	200	120	201
 
 
 #Platform

@@ -12,6 +12,7 @@
 #include "Portal.h"
 
 #include "Collision.h"
+#include "PlayScene.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
@@ -111,15 +112,16 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e)
 {
-	e->obj->SetState(GREEN_MUSHSHROOM_STATE_EARNED);
-	//TODO: Add lives
+	if (e->obj->GetState() != GREEN_MUSHSHROOM_STATE_EARNED) {
+		e->obj->SetState(GREEN_MUSHSHROOM_STATE_EARNED);
+	}
 }
 
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
+	e->obj->SetState(COIN_STATE_EARNED);
 	e->obj->Delete();
-	coin++;
 }
 
 
@@ -281,7 +283,6 @@ void CMario::Render()
 
 	//RenderBoundingBox();
 	
-	DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state)

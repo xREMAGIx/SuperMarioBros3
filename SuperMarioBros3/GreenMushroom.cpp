@@ -1,11 +1,11 @@
 #include "GreenMushroom.h"
+#include "PlayScene.h"
 
 CGreenMushroom::CGreenMushroom(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = GREEN_MUSHROOM_GRAVITY;
 	this->vx = -GREEN_MUSHROOM_WALKING_SPEED;
-	this->point_show_start = -1;
 	point = new CPoint(x, y - 16);
 	point->SetType(POINT_TYPE_UP);
 }
@@ -59,9 +59,8 @@ void CGreenMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state == GREEN_MUSHSHROOM_STATE_EARNED) {
 		point->Update(dt, coObjects);
 
-		if ((GetTickCount64() - point_show_start > POINT_SHOW_TIME))
+		if (point->IsDeleted())
 		{
-			point->Delete();
 			isDeleted = true;
 			return;
 		}
@@ -74,9 +73,16 @@ void CGreenMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CGreenMushroom::SetState(int state)
 {
 	if (state == GREEN_MUSHSHROOM_STATE_EARNED) {
-		point_show_start = GetTickCount64();
 		point->SetPosition(x, y - 16);
 		point->SetState(POINT_STATE_SHOW);
+
+		LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+		if (dynamic_cast<CPlayScene*>(scene))
+		{
+			CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
+			playScene->GetGameBoard()->AddLives();
+			playScene->GetGameBoard()->AddPoint(GREEN_MUSHSHROOM_POINT);
+		}
 	}
 
 	CGameObject::SetState(state);

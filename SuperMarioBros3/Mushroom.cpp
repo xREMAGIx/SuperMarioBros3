@@ -1,11 +1,11 @@
 #include "Mushroom.h"
+#include "PlayScene.h"
 
 CMushroom::CMushroom(float x, float y) :CGameObject(x	, y)
 {
 	this->ax = 0;
 	this->ay = MUSHROOM_GRAVITY;
 	this->vx = -MUSHROOM_WALKING_SPEED;
-	this->point_show_start = -1;
 	point = new CPoint(x, y - 16);
 	point->SetType(POINT_TYPE_1000);
 }
@@ -59,9 +59,8 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state == MUSHSHROOM_STATE_EARNED) {
 		point->Update(dt, coObjects);
 
-		if ((GetTickCount64() - point_show_start > POINT_SHOW_TIME))
+		if (point->IsDeleted())
 		{
-			point->Delete();
 			isDeleted = true;
 			return;
 		}
@@ -74,9 +73,15 @@ void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void CMushroom::SetState(int state)
 {
 	if (state == MUSHSHROOM_STATE_EARNED) {
-		point_show_start = GetTickCount64();
 		point->SetPosition(x, y - 16);
 		point->SetState(POINT_STATE_SHOW);
+
+		LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+		if (dynamic_cast<CPlayScene*>(scene))
+		{
+			CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
+			playScene->GetGameBoard()->AddPoint(MUSHSHROOM_POINT);
+		}
 	}
 
 	CGameObject::SetState(state);

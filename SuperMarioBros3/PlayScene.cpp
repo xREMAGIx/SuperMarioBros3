@@ -129,7 +129,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
 	case OBJECT_TYPE_GREEN_MUSHROOM: obj = new CGreenMushroom(x, y); break;
-	case OBJECT_TYPE_QUESTION_BLOCK: obj = new CQuestionBlock(x, y); break;
+	case OBJECT_TYPE_QUESTION_BLOCK:
+	{
+		int item_id = atoi(tokens[3].c_str());
+		obj = new CQuestionBlock(x, y, item_id); break; 
+	}
 
 	// HUD
 	case OBJECT_TYPE_POINT: obj = new CPoint(x, y); break;

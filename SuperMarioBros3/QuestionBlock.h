@@ -14,12 +14,16 @@
 
 class CQuestionBlock : public CGameObject {
 protected:
+	CGameObject* item;
+
 	virtual void Render();
+	virtual void OnNoCollision(DWORD dt);
+	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CQuestionBlock(float x, float y) : CGameObject(x, y) {}
-	void Update(DWORD dt) {}
+	CQuestionBlock(float x, float y, int item_id);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void SetState(int state);
 };

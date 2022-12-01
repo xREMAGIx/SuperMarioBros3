@@ -38,6 +38,7 @@ public:
 	virtual void Unload();
 
 	LPGAMEOBJECT GetPlayer() { return player; }
+	CBoard* GetGameBoard() { return gameBoard; }
 
 	void Clear();
 	void PurgeDeletedObjects();

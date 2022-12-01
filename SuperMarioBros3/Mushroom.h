@@ -16,10 +16,11 @@
 #define MUSHSHROOM_STATE_SHOWING 1
 #define MUSHSHROOM_STATE_EARNED 2
 
+#define MUSHSHROOM_POINT 1000
+
 class CMushroom : public CGameObject {
 protected: 
 	CPoint* point;
-	ULONGLONG point_show_start;
 
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
