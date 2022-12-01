@@ -21,7 +21,7 @@ loaders\game-board.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	120	10
+101	120	10
 
 #COIN
 201	100	120
@@ -41,8 +41,8 @@ loaders\game-board.txt
 203	240	140
 #GREEN MUSHROOM
 204	250	100
-
-#POINT
+ 
+,  #POINT
 401	200	80
 
 #QUESTION BLOCK

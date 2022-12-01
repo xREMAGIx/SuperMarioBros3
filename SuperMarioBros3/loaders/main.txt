@@ -14,7 +14,7 @@ height	240
 # id	file 
 [TEXTURES]
 -100	.\textures\bbox.png
-0	.\textures\mario.png
+0	.\textures\mario-luigi.png
 10	.\textures\enemies.png
 20	.\textures\npc-misc.png
 40	.\textures\hud-font.png
