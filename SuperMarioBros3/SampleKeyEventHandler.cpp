@@ -16,6 +16,11 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT);
 		break;
+	case DIK_A:
+		if (mario->GetLevel() == MARIO_LEVEL_RACCOON) {
+			mario->SetState(MARIO_STATE_TAIL_ATTACK);
+		}
+		break;
 	case DIK_S:
 		mario->SetState(MARIO_STATE_JUMP);
 		break;
@@ -24,6 +29,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		break;
 	case DIK_2:
 		mario->SetLevel(MARIO_LEVEL_BIG);
+		break;
+	case DIK_3: 
+		mario->SetLevel(MARIO_LEVEL_RACCOON);
 		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
@@ -57,15 +65,21 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
-		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+		if (game->IsKeyDown(DIK_A)) {
+			if (!mario->IsTailAttacking()) {
+				mario->SetState(MARIO_STATE_RUNNING_RIGHT);
+			}
+		}
 		else
 			mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	}
 	else if (game->IsKeyDown(DIK_LEFT))
 	{
-		if (game->IsKeyDown(DIK_A))
-			mario->SetState(MARIO_STATE_RUNNING_LEFT);
+		if (game->IsKeyDown(DIK_A)) {
+			if (!mario->IsTailAttacking()) {
+				mario->SetState(MARIO_STATE_RUNNING_LEFT);
+			}
+		}
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
