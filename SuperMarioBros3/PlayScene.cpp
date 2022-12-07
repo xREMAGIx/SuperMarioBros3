@@ -122,7 +122,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
+
+	//ENEMIES
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
+	case OBJECT_TYPE_RED_GOOMBA: obj = new CRedGoomba(x, y); break;
+	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
+	case OBJECT_TYPE_RED_KOOPA: obj = new CRedKoopa(x, y); break;
+
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
 
 	// MISC

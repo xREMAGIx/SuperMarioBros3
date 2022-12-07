@@ -6,6 +6,10 @@
 #include "Brick.h"
 #include "Mario.h"
 #include "Goomba.h"
+#include "RedGoomba.h"
+#include "Koopa.h"
+#include "RedKoopa.h"
+
 #include "GameBoard.h"
 
 //#include "Koopas.h"

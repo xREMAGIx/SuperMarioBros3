@@ -9,19 +9,25 @@ loaders\point.txt
 loaders\cloud.txt
 loaders\brick.txt
 loaders\platform.txt
+
 #HUD
 loaders\item-box.txt
 loaders\font.txt
 loaders\game-board.txt
 
+#ENEMIES
+loaders\goomba.txt
+loaders\red-goomba.txt
+loaders\koopa.txt
+loaders\red-koopa.txt
+
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
-# type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-101	120	10
+101	100	10
 
 #COIN
 201	100	120
@@ -42,15 +48,20 @@ loaders\game-board.txt
 #GREEN MUSHROOM
 204	250	100
  
-,  #POINT
-401	200	80
+#GOOMBA
+301	250	80
+
+#RED GOOMBA
+302	280	80
+
+#KOOPA
+303	180	60
 
 #QUESTION BLOCK
 205	200	120	201
 
-
 #Platform
-5	100	180	16	15	32	51000	52000	53000
+5	100	180	16	15	320	51000	52000	53000
 5	100	160	16	15	2	51000	52000	53000
 
 #Portal 

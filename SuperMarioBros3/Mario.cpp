@@ -70,6 +70,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	else if (dynamic_cast<CRedGoomba*>(e->obj))
+		OnCollisionWithRedGoomba(e);
+	else if (dynamic_cast<CKoopa*>(e->obj))
+		OnCollisionWithKoopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -116,6 +120,92 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
+{
+	CRedGoomba* goomba = dynamic_cast<CRedGoomba*>(e->obj);
+
+	// jump on top >> kill Goomba and deflect a bit 
+	if (e->ny < 0)
+	{
+		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		{
+			goomba->SetState(GOOMBA_STATE_DIE);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // hit by Goomba
+	{
+		if (untouchable == 0)
+		{
+			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
+
+
+void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
+{
+	CKoopa* koopa = dynamic_cast<CKoopa*>(e->obj);
+
+	// jump on top
+	if (e->ny < 0 && !this->isOnPlatform)
+	{
+		if (koopa->GetState() != KOOPA_STATE_SHELL)
+		{
+			koopa->SetState(KOOPA_STATE_SHELL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else {
+			if (vx > 0) {
+				koopa->SetSpeed(KOOPA_SHELL_SCROLL_SPEED, 0);
+			}
+			else {
+				koopa->SetSpeed(-KOOPA_SHELL_SCROLL_SPEED, 0);
+			}
+			koopa->SetState(KOOPA_STATE_SHELL_SCROLL);
+		}
+	}
+	else // hit by
+	{
+		if (untouchable == 0)
+		{
+			if (koopa->GetState() == KOOPA_STATE_SHELL) {
+				if (vx > 0) {
+					koopa->SetSpeed(KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				else {
+					koopa->SetSpeed(-KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				koopa->SetState(KOOPA_STATE_SHELL_SCROLL);
+			}
+			else if (koopa->GetState() != KOOPA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level -= 1;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
@@ -373,8 +463,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
-	
+	RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
