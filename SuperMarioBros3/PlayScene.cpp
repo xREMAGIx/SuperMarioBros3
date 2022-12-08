@@ -12,7 +12,10 @@
 #include "GreenMushroom.h"
 #include "QuestionBlock.h"
 
+//HUD
 #include "Point.h"
+#include "PlayerFont.h"
+#include "ThirdFont.h"
 
 #include "Platform.h"
 
@@ -143,6 +146,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// HUD
 	case OBJECT_TYPE_POINT: obj = new CPoint(x, y); break;
+	case OBJECT_TYPE_PLAYER_FONT: obj = new CPlayerFont(x, y); break;
+	case OBJECT_TYPE_THIRD_FONT: obj = new CThirdFont(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
 	{
@@ -253,8 +258,8 @@ void CPlayScene::Load()
 
 	f.close();
 
-	gameBoard = CBoard::GetInstance();
 	if (player != NULL) {
+		gameBoard = CBoard::GetInstance();
 		gameBoard->SetState(BOARD_STATE_START);
 	}
 
@@ -291,7 +296,9 @@ void CPlayScene::Update(DWORD dt)
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 
-	gameBoard->Update(dt);
+	if (gameBoard) {
+		gameBoard->Update(dt);
+	}
 
 	PurgeDeletedObjects();
 }
@@ -301,7 +308,9 @@ void CPlayScene::Render()
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 
-	gameBoard->Render();
+	if (gameBoard) {
+		gameBoard->Render();
+	}
 }
 
 /*

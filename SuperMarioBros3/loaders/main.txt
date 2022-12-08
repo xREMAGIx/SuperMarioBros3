@@ -1,13 +1,13 @@
 [SETTINGS]
-start	5
-width	320
-height	240
+start	1
+width	256
+height	256
 
 #id	type	file
 # type: 0: intro, 1: play scene 
 [SCENES]
-0	loaders\intro.txt
-1	loaders\scene01.txt
+0	loaders\load.txt
+1	loaders\intro.txt
 2	loaders\scene02.txt
 5	loaders\scene0005.txt
 
@@ -18,3 +18,4 @@ height	240
 10	.\textures\enemies.png
 20	.\textures\npc-misc.png
 40	.\textures\hud-font.png
+50	.\textures\intro-font.png

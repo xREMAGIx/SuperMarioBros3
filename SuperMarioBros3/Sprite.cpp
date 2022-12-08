@@ -40,13 +40,15 @@ void CSprite::Draw(float x, float y)
 	cy = (FLOAT)floor(cy);
 
 	D3DXMATRIX matTranslation;
-	
+	D3DXMATRIX rotation;
+
 	x = (FLOAT)floor(x);
 	y = (FLOAT)floor(y);
 
+	D3DXMatrixRotationZ(&rotation, 90 * D3DX_PI);
 	D3DXMatrixTranslation(&matTranslation, x - cx, g->GetBackBufferHeight() - y + cy, 0.1f);
 
-	this->sprite.matWorld = (this->matScaling * matTranslation);
+	this->sprite.matWorld = (this->matScaling * rotation * matTranslation);
 
 	g->GetSpriteHandler()->DrawSpritesImmediate(&sprite, 1, 0, 0);
 }

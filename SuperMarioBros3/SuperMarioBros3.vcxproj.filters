@@ -129,6 +129,12 @@
     <ClCompile Include="RedKoopa.cpp">
       <Filter>Source Files\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerFont.cpp">
+      <Filter>Source Files\Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="ThirdFont.cpp">
+      <Filter>Source Files\Hud</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -229,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="RedKoopa.h">
       <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerFont.h">
+      <Filter>Header Files\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="ThirdFont.h">
+      <Filter>Header Files\Hud</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

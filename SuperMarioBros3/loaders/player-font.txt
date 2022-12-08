@@ -1,0 +1,7 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#1 PLAYER
+4050001	8	76	121	101	50
+
+#2 PLAYER
+4050002	133	76	246	101	50
