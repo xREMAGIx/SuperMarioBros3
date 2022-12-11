@@ -6,15 +6,6 @@
 [ASSETS]
 loaders\player-font.txt
 loaders\third-font.txt
-loaders\mario.txt
-
-#HUD
-loaders\item-box.txt
-loaders\font.txt
-loaders\game-board.txt
-
-#[MAPFILE]
-#mapfiles\intro.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -22,13 +13,10 @@ loaders\game-board.txt
 
 # MARIO
 #101	100	10
-
 # CHOOSE PLAYER FONT
 405	71	144	1
-
 # 3 FONT
 406	112	96
 
-
-
-
+[MAPFILE]
+mapfiles\intro.txt

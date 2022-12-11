@@ -11,6 +11,7 @@
 #include "RedKoopa.h"
 
 #include "GameBoard.h"
+#include "GameMap.h"
 
 //#include "Koopas.h"
 
@@ -20,7 +21,7 @@ class CPlayScene: public CScene
 protected: 
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;			
-
+	LPGAMEMAP map;
 	CBoard* gameBoard;
 
 	vector<LPGAMEOBJECT> objects;
@@ -30,9 +31,10 @@ protected:
 
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
+	void _ParseSection_MAPFILE(string line);
 
 	void LoadAssets(LPCWSTR assetFile);
-	
+
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
 

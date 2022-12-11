@@ -37,6 +37,12 @@
     <Filter Include="Header Files\Characters">
       <UniqueIdentifier>{470494de-0431-4985-a900-eb12d7446583}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{0cb8b360-8360-4c5b-a2ca-4685cf53dc87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{c4f6245b-618c-4233-94da-0621dd94d2d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -134,6 +140,9 @@
     </ClCompile>
     <ClCompile Include="ThirdFont.cpp">
       <Filter>Source Files\Hud</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMap.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="ThirdFont.h">
       <Filter>Header Files\Hud</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMap.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

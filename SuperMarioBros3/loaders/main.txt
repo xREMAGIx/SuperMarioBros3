@@ -19,3 +19,4 @@ height	256
 20	.\textures\npc-misc.png
 40	.\textures\hud-font.png
 50	.\textures\intro-font.png
+101	.\mapfiles\intro-bg.png
