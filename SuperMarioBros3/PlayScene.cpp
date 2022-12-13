@@ -27,8 +27,10 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	CScene(id, filePath)
 {
 	player = NULL;
+	marioWorld = NULL;
 	gameBoard = NULL;
 	map = NULL;
+	choosePlayer = NULL;
 	key_handler = new CSampleKeyHandler(this);
 }
 
@@ -128,6 +130,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
+	case OBJECT_TYPE_MARIO_WORLD:
+		if (player != NULL)
+		{
+			DebugOut(L"[ERROR] MARIO WORLD was created before!\n");
+			return;
+		}
+		obj = new CMarioWorld();
+		obj->SetPosition(x, y);
+		marioWorld = (CMarioWorld*)obj;
+
+		DebugOut(L"[INFO] MARIO WORLD object created!\n");
+		break;
 
 	//ENEMIES
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x,y); break;
@@ -149,7 +163,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// HUD
 	case OBJECT_TYPE_POINT: obj = new CPoint(x, y); break;
-	case OBJECT_TYPE_PLAYER_FONT: obj = new CPlayerFont(x, y); break;
+	case OBJECT_TYPE_PLAYER_FONT: 
+	{
+		int scene_id = atoi(tokens[3].c_str());
+		obj = new CPlayerFont(x, y);
+		choosePlayer = (CPlayerFont*)obj;
+		choosePlayer->SetSceneId(scene_id);
+		break;
+	}
 	case OBJECT_TYPE_THIRD_FONT: obj = new CThirdFont(x, y); break;
 
 	case OBJECT_TYPE_PLATFORM:
@@ -281,7 +302,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	if (player != NULL) {
+	if (player != NULL || marioWorld != NULL) {
 		gameBoard = CBoard::GetInstance();
 		gameBoard->SetState(BOARD_STATE_START);
 	}
@@ -366,6 +387,8 @@ void CPlayScene::Unload()
 
 	objects.clear();
 	player = NULL;
+	choosePlayer = NULL;
+	map = NULL;
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }

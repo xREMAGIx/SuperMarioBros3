@@ -4,18 +4,19 @@
 
 # list of object assets to load in this scene
 [ASSETS]
-loaders\player-font.txt
-loaders\third-font.txt
+loaders\mario-world.txt
+
+#HUD
+loaders\item-box.txt
+loaders\font.txt
+loaders\game-board.txt
 
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # See OBJECT_TYPE constants in AssetIDs.h
 
-# CHOOSE PLAYER FONT
-405	121	150	2
-
-# 3 FONT
-406	128	112
+# MARIO
+102	24	47
 
 [MAPFILE]
-mapfiles\intro.txt
+mapfiles\world1.txt

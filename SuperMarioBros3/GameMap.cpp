@@ -119,11 +119,6 @@ void CGameMap::LoadMap(LPCWSTR filepath)
 				int leftPoint = (index % numTilesCols);
 				int topPoint = (index / numTilesCols);
 
-				DebugOut(L"[INFO] leftPoint %d\n", leftPoint * (cellW + spacing));
-				DebugOut(L"[INFO] topPoint %d\n", topPoint * (cellH + spacing));
-				DebugOut(L"[INFO] rightPoint %d\n", (leftPoint + 1) * (cellW + spacing));
-				DebugOut(L"[INFO] bottomPoint %d\n", (topPoint + 1) * (cellH + spacing));
-
 				CSprites::GetInstance()->Add(index++,
 					leftPoint * (cellW + spacing),
 					topPoint * (cellH + spacing),
@@ -146,10 +141,6 @@ void CGameMap::Render()
 	CGame* game = CGame::GetInstance();
 	float camX, camY;
 	game->GetCamPos(camX, camY);
-
-	//DebugOut(L"[INFO] map render %f %f\n", camX, camY);
-	//DebugOut(L"[INFO] map render %d\n", numRows);
-	//DebugOut(L"[INFO] map render %d\n", numCols);
 
 	float l = camX - 32,
 		t = camY,

@@ -23,4 +23,9 @@ public:
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
 	virtual void SetState(int state);
+
+	int GetSceneId() { return sceneId; }
+	void SetSceneId(int sceneId) { this->sceneId = sceneId; }
 };
+
+typedef CPlayerFont* LPPLAYERFONT;

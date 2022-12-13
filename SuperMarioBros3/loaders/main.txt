@@ -8,7 +8,7 @@ height	256
 [SCENES]
 0	loaders\load.txt
 1	loaders\intro.txt
-2	loaders\scene02.txt
+2	loaders\world1.txt
 5	loaders\scene0005.txt
 
 # id	file 
@@ -20,3 +20,4 @@ height	256
 40	.\textures\hud-font.png
 50	.\textures\intro-font.png
 101	.\mapfiles\intro-bg.png
+102	.\mapfiles\world1.png

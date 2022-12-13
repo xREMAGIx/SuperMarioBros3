@@ -4,12 +4,16 @@
 #include "Scene.h"
 #include "GameObject.h"
 #include "Brick.h"
+
 #include "Mario.h"
+#include "MarioWorld.h"
+
 #include "Goomba.h"
 #include "RedGoomba.h"
 #include "Koopa.h"
 #include "RedKoopa.h"
 
+#include "PlayerFont.h"
 #include "GameBoard.h"
 #include "GameMap.h"
 
@@ -23,6 +27,8 @@ protected:
 	LPGAMEOBJECT player;			
 	LPGAMEMAP map;
 	CBoard* gameBoard;
+	LPPLAYERFONT choosePlayer;
+	CMarioWorld* marioWorld;
 
 	vector<LPGAMEOBJECT> objects;
 
@@ -45,6 +51,7 @@ public:
 
 	LPGAMEOBJECT GetPlayer() { return player; }
 	CBoard* GetGameBoard() { return gameBoard; }
+	LPPLAYERFONT GetChoosePlayer() { return choosePlayer; }
 
 	void Clear();
 	void PurgeDeletedObjects();

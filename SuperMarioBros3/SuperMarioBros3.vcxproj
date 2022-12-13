@@ -149,6 +149,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameMap.cpp" />
     <ClCompile Include="Mario.cpp" />
+    <ClCompile Include="MarioWorld.cpp" />
     <ClCompile Include="Mushroom.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="PlayerFont.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Koopa.h" />
     <ClInclude Include="GameMap.h" />
     <ClInclude Include="Mario.h" />
+    <ClInclude Include="MarioWorld.h" />
     <ClInclude Include="Mushroom.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayerFont.h" />

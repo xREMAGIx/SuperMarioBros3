@@ -47,32 +47,34 @@ void CBoard::Render()
 		CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
 		LPGAMEOBJECT mario = playScene->GetPlayer();
 
-		float marioVx, marioVy;
+		if (mario != NULL) {
+			float marioVx, marioVy;
 
-		mario->GetSpeed(marioVx, marioVy);
+			mario->GetSpeed(marioVx, marioVy);
 
-		if (mario != NULL && (mario->GetState() == MARIO_STATE_RUNNING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_LEFT)) {
-			for (int i = 0; i < 6; i++)	//arrow
-			{
-				if (marioVx > MARIO_WALKING_SPEED * 2 * i / 6 || marioVx < -MARIO_WALKING_SPEED * 2 * i / 6) {
-					code->DrawCharacter(ID_SPRITE_FONT_ARROW_WHITE, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
+			if ((mario->GetState() == MARIO_STATE_RUNNING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_LEFT)) {
+				for (int i = 0; i < 6; i++)	//arrow
+				{
+					if (marioVx > MARIO_WALKING_SPEED * 2 * i / 6 || marioVx < -MARIO_WALKING_SPEED * 2 * i / 6) {
+						code->DrawCharacter(ID_SPRITE_FONT_ARROW_WHITE, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
+					}
+					else {
+						code->DrawCharacter(ID_SPRITE_FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
+					}
+				}
+				if (marioVx >= MARIO_WALKING_SPEED * 2 || marioVx <= -MARIO_WALKING_SPEED * 2) {
+					code->DrawCharacter(ID_SPRITE_FONT_P_WHITE, x + BOARD_P_X, y + BOARD_P_Y); //p
 				}
 				else {
-					code->DrawCharacter(ID_SPRITE_FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
+					code->DrawCharacter(ID_SPRITE_FONT_P_BLACK, x + BOARD_P_X, y + BOARD_P_Y); //p
 				}
 			}
-			if (marioVx >= MARIO_WALKING_SPEED * 2 || marioVx <= -MARIO_WALKING_SPEED * 2) {
-				code->DrawCharacter(ID_SPRITE_FONT_P_WHITE, x + BOARD_P_X, y + BOARD_P_Y); //p
-			}
 			else {
+				for (int i = 0; i < 6; i++) {	//arrow
+					code->DrawCharacter(ID_SPRITE_FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
+				}
 				code->DrawCharacter(ID_SPRITE_FONT_P_BLACK, x + BOARD_P_X, y + BOARD_P_Y); //p
 			}
-		}
-		else {
-			for (int i = 0; i < 6; i++) {	//arrow
-				code->DrawCharacter(ID_SPRITE_FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
-			}
-			code->DrawCharacter(ID_SPRITE_FONT_P_BLACK, x + BOARD_P_X, y + BOARD_P_Y); //p
 		}
 	}
 	
