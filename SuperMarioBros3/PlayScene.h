@@ -40,6 +40,7 @@ protected:
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 
+	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_ASSETS(string line);
 	void _ParseSection_OBJECTS(string line);
 	void _ParseSection_MAPFILE(string line);

@@ -39,6 +39,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 #define SCENE_SECTION_ASSETS	1
 #define SCENE_SECTION_OBJECTS	2
 #define SCENE_SECTION_MAPFILE	3
+#define SCENE_SECTION_SETTINGS	4
 
 #define ASSETS_SECTION_UNKNOWN -1
 #define ASSETS_SECTION_SPRITES 1
@@ -67,6 +68,31 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	}
 
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
+}
+
+void CPlayScene::_ParseSection_SETTINGS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 11) return; // skip invalid lines
+
+	int scene_width = atoi(tokens[0].c_str());
+	int sceen_height = atoi(tokens[1].c_str());
+	int cam_x = atoi(tokens[2].c_str());
+	int cam_y = atoi(tokens[3].c_str());
+	int max_cam_x = atoi(tokens[4].c_str());
+	int max_cam_y = atoi(tokens[5].c_str());
+	int min_cam_x = atoi(tokens[6].c_str());
+	int min_cam_y = atoi(tokens[7].c_str());
+	int bg_r = atoi(tokens[8].c_str());
+	int bg_g = atoi(tokens[9].c_str());
+	int bg_b = atoi(tokens[10].c_str());
+
+	CGame* game = CGame::GetInstance();
+	game->SetMaxCamScreen(max_cam_x, max_cam_y);
+	game->SetMinCamScreen(min_cam_x, min_cam_y);
+	game->SetScreenSize(scene_width, sceen_height);
+	game->SetCamPos(cam_x, cam_y);
 }
 
 void CPlayScene::_ParseSection_ASSETS(string line)
@@ -296,6 +322,7 @@ void CPlayScene::Load()
 		string line(str);
 
 		if (line[0] == '#') continue;	// skip comment lines	
+		if (line == "[SETTINGS]") { section = SCENE_SECTION_SETTINGS; continue; };
 		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
 		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
 		if (line == "[MAPFILE]") { 
@@ -308,6 +335,7 @@ void CPlayScene::Load()
 		//
 		switch (section)
 		{ 
+			case SCENE_SECTION_SETTINGS: _ParseSection_SETTINGS(line); break;
 			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;
 			case SCENE_SECTION_MAPFILE: _ParseSection_MAPFILE(line); break;
@@ -341,24 +369,30 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return; 
+	if (marioWorld) {
+		if (gameBoard) {
+			gameBoard->Update(dt);
+		}
+		PurgeDeletedObjects();
+	};
 
-	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
+	if (player) {
+		// Update camera to follow mario
+		float cx, cy;
+		player->GetPosition(cx, cy);
 
-	CGame *game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
+		CGame* game = CGame::GetInstance();
+		cx -= game->GetBackBufferWidth() / 2;
+		cy -= game->GetBackBufferHeight() / 2;
 
+		CGame::GetInstance()->SetCamPos(cx, cy);
 
-	CGame::GetInstance()->SetCamPos(cx, cy);
-
-	if (gameBoard) {
-		gameBoard->Update(dt);
+		if (gameBoard) {
+			gameBoard->Update(dt);
+		}
+		PurgeDeletedObjects();
 	}
 
-	PurgeDeletedObjects();
 }
 
 void CPlayScene::Render()

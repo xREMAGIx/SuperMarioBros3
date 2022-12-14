@@ -50,6 +50,9 @@ class CGame
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 
+	float min_cam_x = 0.0f;
+	float min_cam_y = 0.0f;
+
 	float max_cam_x = 0.0f;
 	float max_cam_y = 0.0f;
 
@@ -112,13 +115,39 @@ public:
 
 	void SetPointSamplerState();
 
-	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
+	void SetCamPos(float x, float y) {
+		cam_x = x * 1.0f;
+		cam_y = y * 1.0f;
+		
+		if (cam_x > max_cam_x - screen_width ) {
+			cam_x = max_cam_x - screen_width;
+		}
+
+		if (cam_y > max_cam_y) {
+			cam_y = max_cam_y;
+		}
+		
+		if (cam_x < min_cam_x)
+			cam_x = min_cam_x;
+
+		if (cam_y < min_cam_y)
+			cam_y = min_cam_y;
+	}
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
+
+	void GetMaxCamScreen(float& x, float& y) { x = max_cam_x; y = max_cam_y; }
+	void SetMaxCamScreen(float x, float y) { max_cam_x = x; max_cam_y = y; }
+
+	void GetMinCamScreen(float& x, float& y) { x = min_cam_x; y = min_cam_y; }
+	void SetMinCamScreen(float x, float y) { min_cam_x = x; min_cam_y = y; }
 
 	//Screen
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
+	void SetScreenSize(int screenWidth, int screenHeight) { screen_width = screenWidth; screen_height = screenHeight; }
+
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
