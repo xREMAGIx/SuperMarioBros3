@@ -160,7 +160,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		int item_id = atoi(tokens[3].c_str());
 		obj = new CQuestionBlock(x, y, item_id); break; 
 	}
-
+	case OBJECT_TYPE_TREE_WORLD: obj = new CTreeWorld(x, y); break;
 	// HUD
 	case OBJECT_TYPE_POINT: obj = new CPoint(x, y); break;
 	case OBJECT_TYPE_PLAYER_FONT: 

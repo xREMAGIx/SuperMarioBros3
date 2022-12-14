@@ -147,6 +147,9 @@
     <ClCompile Include="MarioWorld.cpp">
       <Filter>Source Files\Characters</Filter>
     </ClCompile>
+    <ClCompile Include="TreeWorld.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -259,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="MarioWorld.h">
       <Filter>Header Files\Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeWorld.h">
+      <Filter>Header Files\Miscs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

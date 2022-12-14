@@ -3,7 +3,7 @@
 #include "GameObject.h"
 #include "AssetIDs.h"
 
-#define MARIO_WORLD_BBOX_WIDTH	16
+#define MARIO_WORLD_BBOX_WIDTH	14
 #define MARIO_WORLD_BBOX_HEIGHT	16
 
 #define MARIO_WORLD_STATE_IDLE		0

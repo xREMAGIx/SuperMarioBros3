@@ -8,6 +8,8 @@
 #include "Mario.h"
 #include "MarioWorld.h"
 
+#include "TreeWorld.h"
+
 #include "Goomba.h"
 #include "RedGoomba.h"
 #include "Koopa.h"
