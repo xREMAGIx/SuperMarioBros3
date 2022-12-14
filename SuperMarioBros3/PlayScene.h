@@ -19,6 +19,7 @@
 #include "GameBoard.h"
 #include "GameMap.h"
 
+#include "MapPoint.h"
 //#include "Koopas.h"
 
 
@@ -31,8 +32,10 @@ protected:
 	CBoard* gameBoard;
 	LPPLAYERFONT choosePlayer;
 	CMarioWorld* marioWorld;
-
+	vector<CMapPoint*> mapPoints;
 	vector<LPGAMEOBJECT> objects;
+
+	int currentMapPoint = 0;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -54,6 +57,11 @@ public:
 	LPGAMEOBJECT GetPlayer() { return player; }
 	CBoard* GetGameBoard() { return gameBoard; }
 	LPPLAYERFONT GetChoosePlayer() { return choosePlayer; }
+	CMarioWorld* GetMarioWorld() { return marioWorld; }
+
+	vector<CMapPoint*> GetMapPoints() { return mapPoints; }
+	int GetCurrentMapPoint() { return currentMapPoint; }
+	void SetCurrentMapPoint(int index) { this->currentMapPoint = index; }
 
 	void Clear();
 	void PurgeDeletedObjects();

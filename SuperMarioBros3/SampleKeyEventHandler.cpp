@@ -10,22 +10,112 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
 	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
+	CMarioWorld* mario_world = ((CPlayScene*)scence)->GetMarioWorld();
+	vector<CMapPoint*> map_points = ((CPlayScene*)scence)->GetMapPoints();
 
 	if (!mario) {
-		LPPLAYERFONT choosePlayer = (LPPLAYERFONT)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetChoosePlayer();
+		if (mario_world) {
+			if (mario_world->GetState() == MARIO_WORLD_STATE_MOVING) return;
+			int current_point = ((CPlayScene*)scence)->GetCurrentMapPoint();
 
-		switch (KeyCode)
-		{
+			switch (KeyCode)
+			{
+			case DIK_RIGHT:
+			{
+				CMapPoint* point = map_points.at(current_point);
+
+				if (point->GetDRight() != -1) {
+					CMapPoint* nextPoint = map_points.at(point->GetDRight());
+					float nextPointX, nextPointY;
+
+					nextPoint->GetPosition(nextPointX, nextPointY);
+
+					mario_world->MovingPosition(nextPointX, nextPointY);
+
+					//mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDRight());
+				}
+				break;
+			}
+			case DIK_LEFT:
+			{
+				CMapPoint* point = map_points.at(current_point);
+
+				if (point->GetDLeft() != -1) {
+					CMapPoint* nextPoint = map_points.at(point->GetDLeft());
+					float nextPointX, nextPointY;
+
+					nextPoint->GetPosition(nextPointX, nextPointY);
+
+					mario_world->MovingPosition(nextPointX, nextPointY);
+
+					//mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDLeft());
+				}
+				break;
+			}
 			case DIK_DOWN:
-				choosePlayer->SetState(PLAYER_FONT_STATE_TWO);
+			{
+				CMapPoint* point = map_points.at(current_point);
+
+				if (point->GetDBottom() != -1) {
+					CMapPoint* nextPoint = map_points.at(point->GetDBottom());
+					float nextPointX, nextPointY;
+
+					nextPoint->GetPosition(nextPointX, nextPointY);
+
+					mario_world->MovingPosition(nextPointX, nextPointY);
+
+					//mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDBottom());
+				}
 				break;
+			}
 			case DIK_UP:
-				choosePlayer->SetState(PLAYER_FONT_STATE_ONE);
+			{
+				CMapPoint* point = map_points.at(current_point);
+
+				if (point->GetDTop() != -1) {
+					CMapPoint* nextPoint = map_points.at(point->GetDTop());
+					float nextPointX, nextPointY;
+
+					nextPoint->GetPosition(nextPointX, nextPointY);
+
+					mario_world->MovingPosition(nextPointX, nextPointY);
+
+					//mario_world->SetPosition(nextPoint->x, nextPoint->y);
+					((CPlayScene*)scence)->SetCurrentMapPoint(point->GetDTop());
+				}
 				break;
-			case DIK_S: {
-				int sceneId = choosePlayer->GetSceneId();
-				CGame::GetInstance()->InitiateSwitchScene(sceneId);
+			}
+			case DIK_S:
+			{
+				CMapPoint* point = map_points.at(current_point);
+				int sceneId = point->GetSceneId();
+
+				if (sceneId != -1) {
+					CGame::GetInstance()->InitiateSwitchScene(sceneId);
+				}
 				break;
+			}
+			}
+		}
+		else {
+			LPPLAYERFONT choosePlayer = (LPPLAYERFONT)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetChoosePlayer();
+
+			switch (KeyCode)
+				{
+				case DIK_DOWN:
+					choosePlayer->SetState(PLAYER_FONT_STATE_TWO);
+					break;
+				case DIK_UP:
+					choosePlayer->SetState(PLAYER_FONT_STATE_ONE);
+					break;
+				case DIK_S: {
+					int sceneId = choosePlayer->GetSceneId();
+					CGame::GetInstance()->InitiateSwitchScene(sceneId);
+					break;
+				}
 			}
 		}
 	}

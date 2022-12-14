@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{c4f6245b-618c-4233-94da-0621dd94d2d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Invisibles">
+      <UniqueIdentifier>{cc296c65-c51e-445c-b843-10c9e56e0d50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Invisibles">
+      <UniqueIdentifier>{c448972c-f529-4b0d-9392-f1d8e0526f78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -149,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="TreeWorld.cpp">
       <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
+    <ClCompile Include="MapPoint.cpp">
+      <Filter>Source Files\Invisibles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +274,9 @@
     </ClInclude>
     <ClInclude Include="TreeWorld.h">
       <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="MapPoint.h">
+      <Filter>Header Files\Invisibles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

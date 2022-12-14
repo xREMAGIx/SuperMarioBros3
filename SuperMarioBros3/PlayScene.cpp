@@ -172,7 +172,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_THIRD_FONT: obj = new CThirdFont(x, y); break;
-
+	// INVISIBLE
 	case OBJECT_TYPE_PLATFORM:
 	{
 
@@ -198,8 +198,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
 		obj = new CPortal(x, y, r, b, scene_id);
+		break;
 	}
-	break;
+	case OBJECT_TYPE_MAP_POINT:
+	{
+		CMapPoint* point = NULL;
+		int id = atoi(tokens[4].c_str());
+		int dTop = atoi(tokens[5].c_str());
+		int dRight = atoi(tokens[6].c_str());
+		int dBottom = atoi(tokens[7].c_str());
+		int dLeft = atoi(tokens[8].c_str());
+		int scene_id = atoi(tokens[9].c_str());
+		point = new CMapPoint(id, dTop, dRight, dBottom, dLeft, scene_id);
+		point->SetPosition(x, y);
+		mapPoints.push_back(point);
+		return;
+	}
 
 
 	default:
@@ -389,6 +403,11 @@ void CPlayScene::Unload()
 	player = NULL;
 	choosePlayer = NULL;
 	map = NULL;
+	marioWorld = NULL;
+
+	for (UINT i = 0; i < mapPoints.size(); i++)
+		delete mapPoints[i];
+	mapPoints.clear();
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
