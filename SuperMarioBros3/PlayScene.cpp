@@ -344,6 +344,8 @@ void CPlayScene::Load()
 
 	f.close();
 
+	grid = Grid::GetInstance();
+
 	if (player != NULL || marioWorld != NULL) {
 		gameBoard = CBoard::GetInstance();
 		gameBoard->SetState(BOARD_STATE_START);
@@ -358,18 +360,19 @@ void CPlayScene::Update(DWORD dt)
 	// TO-DO: This is a "dirty" way, need a more organized way 
 
 	vector<LPGAMEOBJECT> coObjects;
-	for (size_t i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}
-
-	for (size_t i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(dt, &coObjects);
-	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
 	if (marioWorld) {
+		for (size_t i = 1; i < objects.size(); i++)
+		{
+			coObjects.push_back(objects[i]);
+		}
+
+		for (size_t i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(dt, &coObjects);
+		}
+
 		if (gameBoard) {
 			gameBoard->Update(dt);
 		}
@@ -380,6 +383,20 @@ void CPlayScene::Update(DWORD dt)
 		// Update camera to follow mario
 		float cx, cy;
 		player->GetPosition(cx, cy);
+		 
+		vector<LPGAMEOBJECT> gridObjects;
+
+		grid->GetListObject(gridObjects, objects, cx, cy);
+
+		for (size_t i = 1; i < gridObjects.size(); i++)
+		{
+			coObjects.push_back(gridObjects[i]);
+		}
+
+		for (size_t i = 0; i < gridObjects.size(); i++)
+		{
+			gridObjects[i]->Update(dt, &coObjects);
+		}
 
 		CGame* game = CGame::GetInstance();
 		cx -= game->GetBackBufferWidth() / 2;

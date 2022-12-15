@@ -154,6 +154,7 @@ public:
 
 	void _ParseSection_TEXTURES(string line);
 
+	bool isCollision(RECT r1, RECT r2);
 
 	~CGame();
 };

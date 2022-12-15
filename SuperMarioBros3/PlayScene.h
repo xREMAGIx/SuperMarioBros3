@@ -3,6 +3,7 @@
 #include "Textures.h"
 #include "Scene.h"
 #include "GameObject.h"
+#include "Grid.h"
 #include "Brick.h"
 
 #include "Mario.h"
@@ -34,6 +35,7 @@ protected:
 	CMarioWorld* marioWorld;
 	vector<CMapPoint*> mapPoints;
 	vector<LPGAMEOBJECT> objects;
+	Grid* grid;
 
 	int currentMapPoint = 0;
 
