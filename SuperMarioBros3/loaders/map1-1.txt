@@ -1,0 +1,77 @@
+#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y	min_cam_x	min_cam_y	bg_r	bg_g	bg_b
+[SETTINGS]
+256	256	0	100	2480	0	0	500	156	252	240
+
+# list of object assets to load in this scene
+[ASSETS]
+loaders\mario.txt
+loaders\coin.txt
+loaders\mushroom.txt
+loaders\green-mushroom.txt
+loaders\question-block.txt
+loaders\point.txt
+loaders\cloud.txt
+loaders\brick.txt
+loaders\platform.txt
+
+#HUD
+loaders\item-box.txt
+loaders\font.txt
+loaders\game-board.txt
+
+#ENEMIES
+loaders\goomba.txt
+loaders\red-goomba.txt
+loaders\koopa.txt
+loaders\red-koopa.txt
+
+#
+[OBJECTS]
+# type	x	y	extra_settings per object type
+# See OBJECT_TYPE constants in AssetIDs.h
+
+# MARIO
+101	50	300
+
+#COIN
+201	1072	320
+201	1104	288
+201	1136	256
+201	1168	224
+201	1200	192
+201	1328	80
+201	1344	80
+201	1360	80
+201	1472	112
+201	1488	112
+201	1536	128
+201	1552	128
+201	1568	128
+201	1584	128
+201	1616	112
+201	1632	112
+201	1648	112
+201	1664	112
+201	1696	144
+201	1728	112
+201	1760	128
+201	1808	96
+201	1840	128
+
+#INVISIBLE_PLATFORM
+#PLATFORM
+501	0	416	16	15	624
+501	640	400	16	15	464
+501	1152	416	16	15	352
+501	1664	416	16	15	576
+501	2256	416	16	15	224
+
+#WALL
+501	-16	0	16	800	1
+501	624	400	16	16	1
+
+#Portal 
+502	300	160	216	180	1
+
+[MAPFILE]
+mapfiles\map1-1.txt

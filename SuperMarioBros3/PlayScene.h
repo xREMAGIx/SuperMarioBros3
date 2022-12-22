@@ -21,6 +21,7 @@
 #include "GameMap.h"
 
 #include "MapPoint.h"
+#include "InvisiblePlatform.h"
 //#include "Koopas.h"
 
 

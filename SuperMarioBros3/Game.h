@@ -123,8 +123,8 @@ public:
 			cam_x = max_cam_x - screen_width;
 		}
 
-		if (cam_y > max_cam_y) {
-			cam_y = max_cam_y;
+		if (cam_y > max_cam_y - screen_height) {
+			cam_y = max_cam_y - screen_height;
 		}
 		
 		if (cam_x < min_cam_x)

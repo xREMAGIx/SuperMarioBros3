@@ -84,9 +84,6 @@
     <ClCompile Include="PlayScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Portal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SampleKeyEventHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -162,6 +159,12 @@
     <ClCompile Include="Grid.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="InvisiblePlatform.cpp">
+      <Filter>Source Files\Invisibles</Filter>
+    </ClCompile>
+    <ClCompile Include="Portal.cpp">
+      <Filter>Source Files\Invisibles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -198,9 +201,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="PlayScene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Portal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SampleKeyEventHandler.h">
@@ -242,9 +242,6 @@
     <ClInclude Include="GreenMushroom.h">
       <Filter>Header Files\Miscs</Filter>
     </ClInclude>
-    <ClInclude Include="QuestionBlock.h">
-      <Filter>Header Files\Miscs</Filter>
-    </ClInclude>
     <ClInclude Include="Point.h">
       <Filter>Header Files\Hud</Filter>
     </ClInclude>
@@ -283,6 +280,15 @@
     </ClInclude>
     <ClInclude Include="Grid.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="InvisiblePlatform.h">
+      <Filter>Header Files\Invisibles</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionBlock.h">
+      <Filter>Header Files\Miscs</Filter>
+    </ClInclude>
+    <ClInclude Include="Portal.h">
+      <Filter>Header Files\Invisibles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
