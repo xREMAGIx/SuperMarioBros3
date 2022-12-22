@@ -122,8 +122,8 @@ void CGameMap::LoadMap(LPCWSTR filepath)
 				CSprites::GetInstance()->Add(index++,
 					leftPoint * (cellW + spacing),
 					topPoint * (cellH + spacing),
-					(leftPoint + 1) * (cellW + spacing) - 1,
-					(topPoint + 1) * (cellH + spacing) - 1,
+					(leftPoint + 1) * (cellW + spacing) - 1 + spacing,
+					(topPoint + 1) * (cellH + spacing) - 1 + spacing,
 					tex);
 			}
 		}

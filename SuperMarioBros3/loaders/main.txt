@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	3
 width	256
 height	256
 
@@ -9,7 +9,8 @@ height	256
 0	loaders\load.txt
 1	loaders\intro.txt
 2	loaders\world1.txt
-3	loaders\map1-1-hidden.txt
+3	loaders\map1-1.txt
+4	loaders\map1-1-hidden.txt
 5	loaders\scene0005.txt
 
 # id	file 

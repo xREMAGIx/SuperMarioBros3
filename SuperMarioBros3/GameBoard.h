@@ -28,9 +28,9 @@
 #define BOARD_LIVES_Y 4
 #define BOARD_WORLD_ID_X 40
 #define BOARD_WORLD_ID_Y 7
-#define BOARD_ARROWS_X 72
+#define BOARD_ARROWS_X 56
 #define BOARD_ARROWS_Y -4
-#define BOARD_P_X 56
+#define BOARD_P_X 108
 #define BOARD_P_Y -4
 #define BOARD_MONEY_X 136
 #define BOARD_MONEY_Y -4

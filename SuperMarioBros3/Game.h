@@ -12,6 +12,7 @@ using namespace std;
 #include "Texture.h"
 #include "KeyEventHandler.h"
 #include "Scene.h"
+#include "debug.h"
 
 #define MAX_FRAME_RATE 100
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -118,20 +119,24 @@ public:
 	void SetCamPos(float x, float y) {
 		cam_x = x * 1.0f;
 		cam_y = y * 1.0f;
+
+		if (cam_x < min_cam_x)
+			cam_x = min_cam_x;
+
+		if (cam_y > min_cam_y)
+			cam_y = min_cam_y;
 		
 		if (cam_x > max_cam_x - screen_width ) {
 			cam_x = max_cam_x - screen_width;
 		}
 
-		if (cam_y > max_cam_y - screen_height) {
+		if (cam_y < max_cam_y - screen_height) {
 			cam_y = max_cam_y - screen_height;
 		}
-		
-		if (cam_x < min_cam_x)
-			cam_x = min_cam_x;
 
-		if (cam_y < min_cam_y)
-			cam_y = min_cam_y;
+		//DebugOut(L"[INFO] cam_x %f\n", cam_x);
+		//DebugOut(L"[INFO] cam_y %f\n", cam_y);
+
 	}
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
 
