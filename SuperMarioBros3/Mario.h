@@ -77,6 +77,11 @@ class CMario : public CGameObject
 	BOOLEAN isTailAttacking;
 	BOOLEAN isTailJumping;
 
+	DWORD updateDt;
+
+	float current_vy = vy;
+	float current_vx = vx;
+
 	float maxVx;
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
@@ -88,6 +93,7 @@ class CMario : public CGameObject
 	ULONGLONG tail_attack_start;
 	ULONGLONG tail_jump_start;
 
+	void OnCollisionWithTopPlatform(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);

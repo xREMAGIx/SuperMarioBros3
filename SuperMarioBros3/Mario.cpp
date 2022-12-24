@@ -10,6 +10,7 @@
 #include "QuestionBlock.h"
 #include "Coin.h"
 #include "Portal.h"
+#include "TopPlatform.h"
 
 #include "Collision.h"
 #include "PlayScene.h"
@@ -19,9 +20,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+
 	if (abs(vx) > abs(maxVx)) {
 		vx = maxVx;
 	}
+
+	current_vy = vy;
+	current_vx = vx;
 
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
@@ -45,7 +50,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	isOnPlatform = false;
-
+	updateDt = dt;
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
@@ -57,17 +62,22 @@ void CMario::OnNoCollision(DWORD dt)
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (e->ny != 0 && e->obj->IsBlocking())
-	{
-		vy = 0;
-		if (e->ny < 0) isOnPlatform = true;
-	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
-	{
-		vx = 0;
+	if (dynamic_cast<CTopPlatform*>(e->obj))
+		OnCollisionWithTopPlatform(e);
+	else {
+		if (e->ny != 0 && e->obj->IsBlocking())
+		{
+			vy = 0;
+			if (e->ny < 0) isOnPlatform = true;
+		}
+		else
+			if (e->nx != 0 && e->obj->IsBlocking())
+			{
+				vx = 0;
+			}
 	}
 
+	
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CRedGoomba*>(e->obj))
@@ -84,6 +94,28 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+}
+
+void CMario::OnCollisionWithTopPlatform(LPCOLLISIONEVENT e)
+{
+	CTopPlatform* platform = dynamic_cast<CTopPlatform*>(e->obj);
+	if (e->ny > 0)
+	{
+		this->vy = current_vy;
+		y += vy * updateDt;
+		platform->SetIsObjectOnTop(false);
+	}
+
+	if (e->nx != 0) {
+		this->vx = current_vx;
+		x += vx * updateDt;
+		platform->SetIsObjectOnTop(false);
+	}
+
+	if (e->ny < 0) {
+		vy = 0;
+		isOnPlatform = true;
+	}
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)

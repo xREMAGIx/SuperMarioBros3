@@ -204,15 +204,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	// INVISIBLE
 	case OBJECT_TYPE_INVISIBLE_PLATFORM:
 	{
-
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
 
-		obj = new CInvisiblePlatform(
-			x, y,
-			cell_width, cell_height, length
-		);
+		if (tokens.size() > 6 && atoi(tokens[6].c_str()) == 1) {
+			obj = new CTopPlatform(
+				x, y,
+				cell_width, cell_height, length
+			);
+		}
+		else {
+			obj = new CInvisiblePlatform(
+				x, y,
+				cell_width, cell_height, length
+			);
+		}
 
 		break;
 	}
