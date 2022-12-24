@@ -10,6 +10,8 @@
 #include "MarioWorld.h"
 
 #include "TreeWorld.h"
+#include "Cloud.h"
+#include "Block.h"
 
 #include "Goomba.h"
 #include "RedGoomba.h"

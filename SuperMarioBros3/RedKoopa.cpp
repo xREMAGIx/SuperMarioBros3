@@ -1,28 +1,33 @@
 #include "RedKoopa.h"
+#include "Goomba.h"
+#include "RedGoomba.h"
+#include "debug.h"
 
 CRedKoopa::CRedKoopa(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = RED_KOOPA_GRAVITY;
+	nx = -1;
 	die_start = -1;
+	respawn_start = -1;
 	SetState(RED_KOOPA_STATE_WALKING);
 }
 
 void CRedKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (state == RED_KOOPA_STATE_DIE)
-	{
-		left = x - RED_KOOPA_BBOX_WIDTH / 2;
-		top = y - RED_KOOPA_BBOX_HEIGHT_DIE / 2;
-		right = left + RED_KOOPA_BBOX_WIDTH;
-		bottom = top + RED_KOOPA_BBOX_HEIGHT_DIE;
-	}
-	else
+	if (state == RED_KOOPA_STATE_WALKING)
 	{
 		left = x - RED_KOOPA_BBOX_WIDTH / 2;
 		top = y - RED_KOOPA_BBOX_HEIGHT / 2;
 		right = left + RED_KOOPA_BBOX_WIDTH;
 		bottom = top + RED_KOOPA_BBOX_HEIGHT;
+	}
+	else
+	{
+		left = x - RED_KOOPA_BBOX_WIDTH / 2;
+		top = y - RED_KOOPA_BBOX_SHELL_HEIGHT / 2;
+		right = left + RED_KOOPA_BBOX_WIDTH;
+		bottom = top + RED_KOOPA_BBOX_SHELL_HEIGHT;
 	}
 }
 
@@ -34,27 +39,87 @@ void CRedKoopa::OnNoCollision(DWORD dt)
 
 void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CRedKoopa*>(e->obj)) return;
-
-	if (e->ny != 0)
-	{
-		vy = 0;
+	if (state == RED_KOOPA_STATE_SHELL_SCROLL || state == RED_KOOPA_STATE_SHELL_HOLD) {
+		if (dynamic_cast<CGoomba*>(e->obj)) {
+			OnCollisionWithGoomba(e);
+		}
+		else if (dynamic_cast<CRedGoomba*>(e->obj)) {
+			OnCollisionWithRedGoomba(e);
+		}
+		else {
+			if (!e->obj->IsBlocking()) return;
+			if (e->ny != 0)
+			{
+				vy = 0;
+			}
+			else if (e->nx != 0)
+			{
+				vx = -vx;
+				nx = -nx;
+			}
+		}
 	}
-	else if (e->nx != 0)
-	{
-		vx = -vx;
+	else {
+		if (!e->obj->IsBlocking()) return;
+		if (e->ny != 0)
+		{
+			vy = 0;
+		}
+		else if (e->nx != 0)
+		{
+			vx = -vx;
+			nx = -nx;
+		}
 	}
 }
+
+void CRedKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
+{
+	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+
+	if (state == RED_KOOPA_STATE_SHELL_SCROLL || state == RED_KOOPA_STATE_SHELL_HOLD)
+	{
+		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		{
+			goomba->SetState(GOOMBA_STATE_DIE);
+		}
+	}
+}
+
+void CRedKoopa::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
+{
+	CRedGoomba* goomba = dynamic_cast<CRedGoomba*>(e->obj);
+
+	if (state == RED_KOOPA_STATE_SHELL_SCROLL || state == RED_KOOPA_STATE_SHELL_HOLD)
+	{
+		if (goomba->GetState() != RED_GOOMBA_STATE_DIE)
+		{
+			goomba->SetState(RED_GOOMBA_STATE_DIE);
+		}
+	}
+}
+
 
 void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if ((state == RED_KOOPA_STATE_DIE) && (GetTickCount64() - die_start > RED_KOOPA_DIE_TIMEOUT))
+	if ((state == RED_KOOPA_STATE_DIE))
 	{
 		isDeleted = true;
+		return;
+	}
+
+	if ((state == RED_KOOPA_STATE_SHELL) && (GetTickCount64() - respawn_start > RED_KOOPA_RESPAWN_START_TIME))
+	{
+		SetState(RED_KOOPA_STATE_RESPAWN);
+		return;
+	}
+
+	if ((state == RED_KOOPA_STATE_RESPAWN) && (GetTickCount64() - respawn_end > RED_KOOPA_RESPAWN_TIME))
+	{
+		SetState(RED_KOOPA_STATE_WALKING);
 		return;
 	}
 
@@ -65,14 +130,35 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CRedKoopa::Render()
 {
-	int aniId = ID_ANI_RED_KOOPA_WALKING_LEFT;
-	if (state == RED_KOOPA_STATE_DIE)
-	{
-		aniId = ID_ANI_RED_KOOPA_WALKING_LEFT;
-	}
+	int aniId;
 
+	switch (state)
+	{
+	case RED_KOOPA_STATE_RESPAWN:
+	{
+		aniId = ID_ANI_RED_KOOPA_RESPAWN;
+		break;
+	}
+	case RED_KOOPA_STATE_SHELL:
+	case RED_KOOPA_STATE_SHELL_HOLD:
+	{
+		aniId = ID_ANI_RED_KOOPA_SHELL;
+		break;
+	}
+	case RED_KOOPA_STATE_SHELL_SCROLL:
+	{
+		aniId = ID_ANI_RED_KOOPA_SHELL_ROLL;
+		break;
+	}
+	default:
+		if (vx > 0)
+			aniId = ID_ANI_RED_KOOPA_WALKING_RIGHT;
+		else
+			aniId = ID_ANI_RED_KOOPA_WALKING_LEFT;
+		break;
+	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CRedKoopa::SetState(int state)
@@ -82,14 +168,26 @@ void CRedKoopa::SetState(int state)
 	{
 	case RED_KOOPA_STATE_DIE:
 		die_start = GetTickCount64();
-		y += (RED_KOOPA_BBOX_HEIGHT - RED_KOOPA_BBOX_HEIGHT_DIE) / 2;
+		y += (RED_KOOPA_BBOX_HEIGHT - RED_KOOPA_BBOX_SHELL_HEIGHT) / 2;
 		vx = 0;
 		vy = 0;
 		ay = 0;
 		break;
+	case RED_KOOPA_STATE_SHELL:
+		vx = 0;
+		vy = 0;
+		respawn_start = GetTickCount64();
+		break;
+	case RED_KOOPA_STATE_RESPAWN:
+		respawn_end = GetTickCount64();
+		isRespawning = true;
+		break;
 	case RED_KOOPA_STATE_WALKING:
-		vx = -RED_KOOPA_WALKING_SPEED;
+		if (isRespawning) {
+			y += (RED_KOOPA_BBOX_SHELL_HEIGHT - RED_KOOPA_BBOX_HEIGHT) / 2;
+			isRespawning = false;
+		}
+		vx = nx * RED_KOOPA_WALKING_SPEED;
 		break;
 	}
 }
- 

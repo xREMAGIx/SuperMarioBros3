@@ -187,6 +187,9 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CQuestionBlock(x, y, item_id); break; 
 	}
 	case OBJECT_TYPE_TREE_WORLD: obj = new CTreeWorld(x, y); break;
+	case OBJECT_TYPE_CLOUD: obj = new CCloud(x, y); break;
+	case OBJECT_TYPE_BLOCK: obj = new CBlock(x, y); break;
+
 	// HUD
 	case OBJECT_TYPE_POINT: obj = new CPoint(x, y); break;
 	case OBJECT_TYPE_PLAYER_FONT: 
