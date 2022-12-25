@@ -28,6 +28,10 @@ loaders\goomba.txt
 loaders\red-goomba.txt
 loaders\koopa.txt
 loaders\red-koopa.txt
+loaders\venus-fire-trap.txt
+
+#ENEMYITEMS
+loaders\fireball.txt
 
 #
 [OBJECTS]

@@ -1,11 +1,24 @@
-#include "TopPlatform.h"
+#include "Chimney.h"
 
-#include "Sprite.h"
-#include "Sprites.h"
 
-#include "Textures.h"
 
-void CTopPlatform::RenderBoundingBox()
+CChimney::CChimney(float x, float y, int length, int height, int _id_item,  vector<LPGAMEOBJECT>* objects) :CGameObject(x, y)
+{
+	this->length = length;
+	this->height = height;
+	switch (_id_item)
+	{
+	case OBJECT_TYPE_VENUS_FIRE_TRAP:
+		object = new CVenusFireTrap(x + 8, y - VENUS_FIRE_TRAP_HEIGHT);
+		objects->push_back(object);
+		break;
+	}
+
+	//General setup
+	SetState(CHIMNEY_STATE_IDLE);
+}
+
+void CChimney::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);
 	RECT rect;
@@ -28,14 +41,14 @@ void CTopPlatform::RenderBoundingBox()
 	CGame::GetInstance()->Draw(xx - cx, y - cy, bbox, nullptr, BBOX_ALPHA, rect.right - 1, rect.bottom - 1);
 }
 
-void CTopPlatform::Render()
+void CChimney::Render()
 {
 	if (this->length <= 0) return;
 
 	RenderBoundingBox();
 }
 
-void CTopPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
+void CChimney::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	float cellWidth_div_2 = this->cellWidth / 2;
 	l = x - cellWidth_div_2;
@@ -44,25 +57,7 @@ void CTopPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + this->cellHeight;
 }
 
-
-void CTopPlatform::OnNoCollision(DWORD dt)
-{
-	isObjectOnTop = true;
-};
-
-void CTopPlatform::OnCollisionWith(LPCOLLISIONEVENT e)
-{
-	DebugOut(L"[INFO] OnCollisionWith\n");
-	if (e->nx) {
-		isObjectOnTop = false;
-	}
-
-	if (e->ny > 0) {
-		isObjectOnTop = true;
-	}
-}
-
-void CTopPlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CChimney::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

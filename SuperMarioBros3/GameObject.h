@@ -24,7 +24,8 @@ protected:
 	float vx;
 	float vy;
 
-	int nx;	 
+	int nx;
+	int ny;
 
 	int state;
 
@@ -33,8 +34,10 @@ protected:
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
+	void SetDirection(int nx, int ny) { this->nx = nx, this->ny = ny; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
+	void GetDirection(int& nx, int& ny) { nx = this->nx; ny = this->ny; }
 
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
