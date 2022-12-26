@@ -4,6 +4,7 @@
 #include "AssetIDs.h"
 #include "Point.h"
 #include "Fireball.h"
+#include "PlayScene.h"
 
 #define VENUS_FIRE_TRAP_WIDTH 16
 #define VENUS_FIRE_TRAP_HEIGHT 32
@@ -28,11 +29,11 @@
 class CVenusFireTrap : public CGameObject
 {
 protected:
-	DWORD dt_show;
-	DWORD dt_hide;
-	DWORD dt_fire;
-	DWORD dt_die;
-	CFireball* fireball;
+	ULONGLONG dt_show;
+	ULONGLONG dt_hide;
+	ULONGLONG dt_fire;
+	ULONGLONG dt_die;
+
 	CPoint* score;
 
 	float initial_y;
@@ -54,25 +55,25 @@ public:
 
 	void StartShow() {
 		dt_hide = 0;
-		dt_show = GetTickCount();
+		dt_show = GetTickCount64();
 		initial_y = y;
 	}
 	void StopShow() {
 		dt_show = 0;
-		dt_hide = GetTickCount();
+		dt_hide = GetTickCount64();
 		initial_y = y;
 	}
 	void StartWaiting() {
 		dt_show = 0;
 		dt_hide = 0;
 	}
-	void StartFire() { dt_fire = GetTickCount(); }
+	void StartFire() { dt_fire = GetTickCount64(); }
 	void StopFire() { dt_fire = 0; }
 
 	void StartDie() {
 		dt_show = 0;
 		dt_hide = 0;
-		dt_die = GetTickCount();
+		dt_die = GetTickCount64();
 	}
 
 };

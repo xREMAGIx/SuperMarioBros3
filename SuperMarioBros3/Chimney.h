@@ -20,7 +20,7 @@ protected:
 	int cellWidth = 16;
 	int cellHeight = 16;
 
-	DWORD dt_reset;
+	ULONGLONG dt_reset;
 	int scene_id = -1;
 	int direction = 0;
 	CGameObject* object;
@@ -59,6 +59,7 @@ public:
 	void Render();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();
+	void SetState(int state);
 };
 
 typedef CChimney* LPCHIMNEY;

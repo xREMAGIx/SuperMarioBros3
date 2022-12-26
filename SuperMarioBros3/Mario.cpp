@@ -92,6 +92,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGreenMushroom(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
+	else if (dynamic_cast<CFireball*>(e->obj))
+		OnCollisionWithFireBall(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -186,6 +188,22 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
+{
+	CFireball* fireball = dynamic_cast<CFireball*>(e->obj);
+
+	if (level > MARIO_LEVEL_SMALL)
+	{
+		level = MARIO_LEVEL_SMALL;
+		StartUntouchable();
+	}
+	else
+	{
+		DebugOut(L">>> Mario DIE >>> \n");
+		SetState(MARIO_STATE_DIE);
+	}
+	fireball->SetState(FIREBALL_STATE_DESTROYED);
+}
 
 void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 {

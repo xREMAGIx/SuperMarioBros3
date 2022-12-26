@@ -3,7 +3,6 @@
 CVenusFireTrap::CVenusFireTrap(float x, float y) :CGameObject(x, y)
 {
 	this->nx = -1;
-	fireball = new CFireball(x, y);
 	SetState(VENUS_FIRE_TRAP_STATE_WATING);
 	current_ani = ID_SPRITE_VERNUS_FIRE_TRAP_LOOK_DOWN_LEFT;
 	score = new CPoint(x, y);
@@ -26,6 +25,9 @@ void CVenusFireTrap::OnNoCollision(DWORD dt)
 
 void CVenusFireTrap::OnCollisionWith(LPCOLLISIONEVENT e)
 {
+	if (dynamic_cast<CChimney*>(e->obj)) {
+	
+	}
 }
 
 void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -64,8 +66,8 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	//Hidding
 	if (state == VENUS_FIRE_TRAP_STATE_HIDDEN) {
-		if (y > initial_y + VENUS_FIRE_TRAP_HEIGHT + 3) {
-			y = initial_y + VENUS_FIRE_TRAP_HEIGHT + 3;
+		if (y > initial_y + VENUS_FIRE_TRAP_HEIGHT) {
+			y = initial_y + VENUS_FIRE_TRAP_HEIGHT;
 			SetState(VENUS_FIRE_TRAP_STATE_SHOW);
 		}
 	}
@@ -78,7 +80,7 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	//Showing
 	if (state == VENUS_FIRE_TRAP_STATE_SHOWING) {
 		if (y < initial_y - VENUS_FIRE_TRAP_HEIGHT) {
-			y = initial_y - VENUS_FIRE_TRAP_HEIGHT - 3;
+			y = initial_y - VENUS_FIRE_TRAP_HEIGHT;
 			SetState(VENUS_FIRE_TRAP_STATE_WATING);
 		}
 	}
@@ -92,30 +94,10 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (dt_fire != 0 && GetTickCount64() - dt_fire > VENUS_FIRE_TRAP_TIME_SHOW)
 	{
 		SetState(VENUS_FIRE_TRAP_STATE_SHOOT);
-		fireball->SetDirection(this->nx, this->ny);
-
-		float fireball_x;
-		if (this->nx < 0) {
-			fireball_x = x - 8;
-		}
-		else {
-			fireball_x = x + VENUS_FIRE_TRAP_WIDTH + 8;
-		}
-		float fireball_y = y + 6;
-
-		fireball->SetPosition(fireball_x, fireball_y);
-		fireball->SetState(FIREBALL_STATE_THROWN);
-
-		StopFire();
-		StopShow();
-	}
-
-	if (fireball->GetState() == FIREBALL_STATE_THROWN) {
-		fireball->Update(dt, coObjects);
 	}
 
 	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects, true);
 }
 
 
@@ -201,6 +183,30 @@ void CVenusFireTrap::SetState(int state)
 		vy = 0;
 		StartWaiting();
 		StartFire();
+		break;
+	}
+	case VENUS_FIRE_TRAP_STATE_SHOOT: {
+		vector<LPGAMEOBJECT> &objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetGameObjects();
+
+		CFireball* fireball = new CFireball(x, y);
+		fireball->SetDirection(this->nx, this->ny);
+
+		float fireball_x;
+		if (this->nx < 0) {
+			fireball_x = x - 8;
+		}
+		else {
+			fireball_x = x + VENUS_FIRE_TRAP_WIDTH + 8;
+		}
+		float fireball_y = y + 6;
+
+		fireball->SetPosition(fireball_x, fireball_y);
+		fireball->SetState(FIREBALL_STATE_THROWN);
+
+		objects.push_back(fireball);
+
+		StopFire();
+		StopShow();
 		break;
 	}
 	case VENUS_FIRE_TRAP_STATE_DIE: {

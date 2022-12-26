@@ -175,8 +175,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_KOOPA: obj = new CKoopa(x, y); break;
 	case OBJECT_TYPE_RED_KOOPA: obj = new CRedKoopa(x, y); break;
 
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x,y); break;
-
 	// MISC
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_MUSHROOM: obj = new CMushroom(x, y); break;
@@ -189,7 +187,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_TREE_WORLD: obj = new CTreeWorld(x, y); break;
 	case OBJECT_TYPE_CLOUD: obj = new CCloud(x, y); break;
 	case OBJECT_TYPE_BLOCK: obj = new CBlock(x, y); break;
-
+	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+	case OBJECT_TYPE_CHIMNEY:
+	{
+		int width = atoi(tokens[3].c_str());
+		int height = atoi(tokens[4].c_str());
+		int itemId = atoi(tokens[5].c_str());
+		int screne_id = atoi(tokens[6].c_str());
+		obj = new CChimney(x, y, width, height, itemId,  &objects);
+		dynamic_cast<CChimney*>(obj)->SetSceneId(screne_id);
+		break;
+	}
 	// HUD
 	case OBJECT_TYPE_POINT: obj = new CPoint(x, y); break;
 	case OBJECT_TYPE_PLAYER_FONT: 

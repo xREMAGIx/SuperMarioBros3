@@ -12,6 +12,7 @@
 #include "TreeWorld.h"
 #include "Cloud.h"
 #include "Block.h"
+#include "Chimney.h"
 
 #include "Goomba.h"
 #include "RedGoomba.h"
@@ -70,6 +71,10 @@ public:
 	vector<CMapPoint*> GetMapPoints() { return mapPoints; }
 	int GetCurrentMapPoint() { return currentMapPoint; }
 	void SetCurrentMapPoint(int index) { this->currentMapPoint = index; }
+
+	vector<LPGAMEOBJECT>& GetGameObjects() {	
+		return this->objects;
+	}
 
 	void Clear();
 	void PurgeDeletedObjects();

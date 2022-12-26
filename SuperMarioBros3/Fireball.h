@@ -2,7 +2,6 @@
 
 #include "GameObject.h"
 #include "AssetIDs.h"
-#include "PlayScene.h"
 
 #define FIREBALL_WIDTH 11
 #define FIREBALL_HEIGHT 11
@@ -19,16 +18,16 @@
 class CFireball : public CGameObject
 {
 protected:
+	DWORD updateDt;
 
 	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 0; }
+	virtual int IsBlocking() { return 0; };
 	virtual void OnNoCollision(DWORD dt);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
 	CFireball(float x, float y);
-
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

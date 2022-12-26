@@ -1,8 +1,10 @@
 #include "Fireball.h"
+#include "PlayScene.h"
 
-CFireball::CFireball(float x, float y):CGameObject(x, y)
+CFireball::CFireball(float x, float y) :CGameObject(x, y)
 {
 	state = FIREBALL_STATE_IDLE;
+	updateDt = -1;
 }
 
 void CFireball::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -21,36 +23,42 @@ void CFireball::OnNoCollision(DWORD dt)
 
 void CFireball::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return; 
-	if (dynamic_cast<CMario*>(e->obj)) {
-		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
-		if (mario->GetUntouchable() == 0)
-		{
-
-			if (mario->GetLevel() > MARIO_LEVEL_SMALL)
-			{
-				mario->SetLevel(MARIO_LEVEL_SMALL);
-				mario->StartUntouchable();
-			}
-			else {
-				DebugOut(L"[INFO] Touch Fireball Die\n");
-				mario->SetState(MARIO_STATE_DIE);
-			}
-		}
-		SetState(FIREBALL_STATE_DESTROYED);
+	if (!dynamic_cast<CMario*>(e->obj)) {
+		x += vx * updateDt;
+		y += vy * updateDt;
 	}
 }
 
 void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
-	if (state = FIREBALL_STATE_DESTROYED)
+	updateDt = dt;
+
+	if (state == FIREBALL_STATE_THROWN)
+	{
+		CGame* game = CGame::GetInstance();
+		float camX, camY;
+		game->GetCamPos(camX, camY);
+
+		int offset = 32;
+
+		float l = camX - offset,
+			t = camY - offset,
+			r = camX + game->GetScreenWidth() + offset,
+			b = camY + game->GetScreenHeight() + offset;
+
+		if (x < l || x > r || y > b || y < t) {
+			state = FIREBALL_STATE_DESTROYED;
+		};
+	}
+
+	if (state == FIREBALL_STATE_DESTROYED)
 	{
 		isDeleted = true;
 		return;
 	}
 
 	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects, true);
 }
 
 
@@ -60,18 +68,21 @@ void CFireball::Render()
 	{
 		int aniId = ID_ANI_FIREBALL_THROWN;
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-		RenderBoundingBox();
 	}	
+	RenderBoundingBox();
 }
 
 void CFireball::SetState(int state)
 {
 	switch (state)
 	{
-		if (state == FIREBALL_STATE_THROWN) {
+		case FIREBALL_STATE_THROWN: {
 			vx = nx * FIREBALL_SPEED;
 			vy = ny * FIREBALL_SPEED;
+			break;
 		}
+		default:
+			break;
 	}
 	CGameObject::SetState(state);
 }

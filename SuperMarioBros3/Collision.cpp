@@ -218,7 +218,7 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 *  Simple/Sample collision framework 
 *  NOTE: Student might need to improve this based on game logic 
 */
-void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects, BOOLEAN skipBlockCollide)
 {
 	vector<LPCOLLISIONEVENT> coEvents;
 	LPCOLLISIONEVENT colX = NULL; 
@@ -230,6 +230,11 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	{
 		Scan(objSrc, dt, coObjects, coEvents);
 	}
+	
+	if (skipBlockCollide) {
+		coEvents.erase(remove_if(coEvents.begin(), coEvents.end(), [](LPCOLLISIONEVENT i) { return i->obj->IsBlocking() == 1; }), coEvents.end());
+	}
+	
 
 	// No collision detected
 	if (coEvents.size() == 0)
