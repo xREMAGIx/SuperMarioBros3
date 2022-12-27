@@ -4,6 +4,12 @@
 #include "Animation.h"
 #include "Animations.h"
 #include "AssetIDs.h"
+#include "PlayScene.h"
+
+#include "Coin.h"
+#include "Mushroom.h"
+#include "GreenMushroom.h"
+#include "SuperLeaf.h"
 
 #define	QUESTION_BLOCK_WIDTH 16
 #define QUESTION_BLOCK_BBOX_WIDTH 16

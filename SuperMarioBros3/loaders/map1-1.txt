@@ -17,6 +17,7 @@ loaders\cloud.txt
 loaders\block.txt
 loaders\brick.txt
 loaders\platform.txt
+loaders\super-leaf.txt
 
 #HUD
 loaders\item-box.txt
@@ -116,7 +117,7 @@ loaders\fireball.txt
 #501	624	400	16	16	1
 
 #QUESTION_BLOCK
-205	176	352	201
+205	176	352	211
 205	192	352	201
 205	224	304	201
 205	240	304	201

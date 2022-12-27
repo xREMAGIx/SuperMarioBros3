@@ -6,17 +6,8 @@
 #include "Utils.h"
 #include "Textures.h"
 #include "Sprites.h"
-#include "Portal.h"
-#include "Coin.h"
-#include "Mushroom.h"
-#include "GreenMushroom.h"
-#include "QuestionBlock.h"
 
 //HUD
-#include "Point.h"
-#include "PlayerFont.h"
-#include "ThirdFont.h"
-
 #include "Platform.h"
 
 #include "SampleKeyEventHandler.h"
@@ -198,6 +189,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		dynamic_cast<CChimney*>(obj)->SetSceneId(screne_id);
 		break;
 	}
+	case OBJECT_TYPE_SUPER_LEAF: obj = new CSuperLeaf(x, y); break;
+
 	// HUD
 	case OBJECT_TYPE_POINT: obj = new CPoint(x, y); break;
 	case OBJECT_TYPE_PLAYER_FONT: 
@@ -209,6 +202,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_THIRD_FONT: obj = new CThirdFont(x, y); break;
+
 	// INVISIBLE
 	case OBJECT_TYPE_INVISIBLE_PLATFORM:
 	{

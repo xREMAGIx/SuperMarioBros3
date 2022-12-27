@@ -1,7 +1,4 @@
 #include "QuestionBlock.h"
-#include "Coin.h"
-#include "Mushroom.h"
-#include "GreenMushroom.h"
 
 CQuestionBlock::CQuestionBlock(float x, float y, int item_id) :CGameObject(x, y)
 {
@@ -12,6 +9,9 @@ CQuestionBlock::CQuestionBlock(float x, float y, int item_id) :CGameObject(x, y)
 		break;
 	case OBJECT_TYPE_GREEN_MUSHROOM:
 		item = new CGreenMushroom(x, y);
+		break;
+	case OBJECT_TYPE_SUPER_LEAF:
+		item = new CSuperLeaf(x, y);
 		break;
 	default:
 		item = new CCoin(x, y);
@@ -27,9 +27,6 @@ void CQuestionBlock::Render()
 	if (state == QUESTION_BLOCK_STATE_OPENED)
 	{
 		aniId = ID_ANI_QUESTION_BLOCK_OPENED;
-		if (!item->IsDeleted()) {
-			item->Render();
-		}
 	}
 
 	CAnimations* animations = CAnimations::GetInstance();
@@ -57,20 +54,22 @@ void CQuestionBlock::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (state == QUESTION_BLOCK_STATE_OPENED) {
-		item->Update(dt, coObjects);
-	}
-	if (!item->IsDeleted()) {
-		CGameObject::Update(dt, coObjects);
-	}
+	CGameObject::Update(dt, coObjects);
 }
 
 void CQuestionBlock::SetState(int state)
 {
 	if (state == QUESTION_BLOCK_STATE_OPENED) {
+		vector<LPGAMEOBJECT>& objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetGameObjects();
+
 		if (dynamic_cast<CCoin*>(item)) {
 			item->SetState(COIN_STATE_JUMP);
 		}
+		else if (dynamic_cast<CSuperLeaf*>(item)) {
+			item->SetState(SUPER_LEAF_STATE_FLY_UP);
+		}
+
+		objects.push_back(item);
 	}
 	CGameObject::SetState(state);
 }

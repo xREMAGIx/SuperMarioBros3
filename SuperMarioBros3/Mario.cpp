@@ -11,6 +11,7 @@
 #include "Coin.h"
 #include "Portal.h"
 #include "TopPlatform.h"
+#include "SuperLeaf.h"
 
 #include "Collision.h"
 #include "PlayScene.h"
@@ -94,6 +95,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<CFireball*>(e->obj))
 		OnCollisionWithFireBall(e);
+	else if (dynamic_cast<CSuperLeaf*>(e->obj))
+		OnCollisionWithSuperLeaf(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -273,6 +276,14 @@ void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithSuperLeaf(LPCOLLISIONEVENT e)
+{
+	e->obj->SetState(SUPER_LEAF_STATE_EARNED);
+	if (level == MARIO_LEVEL_SMALL) {
+		y -= (MARIO_RACCOON_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
+	}
+	level = MARIO_LEVEL_RACCOON;
+}
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {

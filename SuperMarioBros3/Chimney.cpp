@@ -1,7 +1,5 @@
 #include "Chimney.h"
 
-
-
 CChimney::CChimney(float x, float y, int length, int height, int _id_item,  vector<LPGAMEOBJECT>* objects) :CGameObject(x, y)
 {
 	this->length = length;

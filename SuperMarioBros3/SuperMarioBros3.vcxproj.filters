@@ -189,6 +189,9 @@
     <ClCompile Include="Fireball.cpp">
       <Filter>Source Files\EnemyItems</Filter>
     </ClCompile>
+    <ClCompile Include="SuperLeaf.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="Fireball.h">
       <Filter>Header Files\EnemyItems</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperLeaf.h">
+      <Filter>Header Files\Miscs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
