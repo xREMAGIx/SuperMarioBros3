@@ -1,6 +1,7 @@
 #include "RedKoopa.h"
 #include "Goomba.h"
 #include "RedGoomba.h"
+#include "QuestionBlock.h"
 #include "debug.h"
 
 CRedKoopa::CRedKoopa(float x, float y) :CGameObject(x, y)
@@ -46,30 +47,20 @@ void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		else if (dynamic_cast<CRedGoomba*>(e->obj)) {
 			OnCollisionWithRedGoomba(e);
 		}
-		else {
-			if (!e->obj->IsBlocking()) return;
-			if (e->ny != 0)
-			{
-				vy = 0;
-			}
-			else if (e->nx != 0)
-			{
-				vx = -vx;
-				nx = -nx;
-			}
+		else if (dynamic_cast<CQuestionBlock*>(e->obj)) {
+			OnCollisionWithQuestionBlock(e);
 		}
 	}
-	else {
-		if (!e->obj->IsBlocking()) return;
-		if (e->ny != 0)
-		{
-			vy = 0;
-		}
-		else if (e->nx != 0)
-		{
-			vx = -vx;
-			nx = -nx;
-		}
+
+	if (!e->obj->IsBlocking()) return;
+	if (e->ny != 0)
+	{
+		vy = 0;
+	}
+	else if (e->nx != 0)
+	{
+		vx = -vx;
+		nx = -nx;
 	}
 }
 
@@ -99,6 +90,15 @@ void CRedKoopa::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	}
 }
 
+void CRedKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
+{
+	CQuestionBlock* questionBlock = dynamic_cast<CQuestionBlock*>(e->obj);
+
+	if (questionBlock->GetState() != QUESTION_BLOCK_STATE_OPENED)
+	{
+		questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);
+	}
+}
 
 void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {

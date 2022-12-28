@@ -26,7 +26,7 @@ class CRedKoopa : public CGameObject
 protected:
 	float ax;
 	float ay;
-	BOOLEAN isRespawning;
+	bool isRespawning;
 
 	ULONGLONG die_start;
 	ULONGLONG respawn_start;
@@ -43,6 +43,7 @@ protected:
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
+	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
 
 public:
 	CRedKoopa(float x, float y);

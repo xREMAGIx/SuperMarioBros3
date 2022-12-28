@@ -71,6 +71,9 @@ void CQuestionBlock::SetState(int state)
 		else if (dynamic_cast<CMushroom*>(item)) {
 			item->SetState(MUSHSHROOM_STATE_SHOWING);
 		}
+		else if (dynamic_cast<CGreenMushroom*>(item)) {
+			item->SetState(GREEN_MUSHSHROOM_STATE_SHOWING);
+		}
 
 		objects.push_back(item);
 	}

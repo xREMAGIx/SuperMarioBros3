@@ -26,7 +26,7 @@ class CKoopa : public CGameObject
 protected:
 	float ax;
 	float ay;
-	BOOLEAN isRespawning;
+	bool isRespawning;
 
 	ULONGLONG die_start;
 	ULONGLONG respawn_start;

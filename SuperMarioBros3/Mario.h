@@ -70,10 +70,10 @@
 
 class CMario : public CGameObject
 {
-	BOOLEAN isSitting;
-	BOOLEAN isOnPlatform;
-	BOOLEAN isTailAttacking;
-	BOOLEAN isTailJumping;
+	bool isSitting;
+	bool isOnPlatform;
+	bool isTailAttacking;
+	bool isTailJumping;
 
 	DWORD updateDt;
 
@@ -90,16 +90,16 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG tail_attack_start;
 	ULONGLONG tail_jump_start;
-	ULONGLONG jump_high_start;
 
-	void OnCollisionWithTopPlatform(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopa(LPCOLLISIONEVENT e);
+	void OnCollisionWithRedKoopa(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
+	void OnCollisionWithVenusFireTrap(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
 	void OnCollisionWithSuperLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);

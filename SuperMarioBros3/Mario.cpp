@@ -12,6 +12,7 @@
 #include "Portal.h"
 #include "TopPlatform.h"
 #include "SuperLeaf.h"
+#include "VenusFireTrap.h"
 
 #include "Collision.h"
 #include "PlayScene.h"
@@ -80,6 +81,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithRedGoomba(e);
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
+	else if (dynamic_cast<CRedKoopa*>(e->obj))
+		OnCollisionWithRedKoopa(e);
 	else if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CMushroom*>(e->obj))
@@ -88,36 +91,14 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGreenMushroom(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
+	else if (dynamic_cast<CVenusFireTrap*>(e->obj))
+		OnCollisionWithVenusFireTrap(e);
 	else if (dynamic_cast<CFireball*>(e->obj))
 		OnCollisionWithFireBall(e);
 	else if (dynamic_cast<CSuperLeaf*>(e->obj))
 		OnCollisionWithSuperLeaf(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
-}
-
-void CMario::OnCollisionWithTopPlatform(LPCOLLISIONEVENT e)
-{
-	/*
-	CTopPlatform* platform = dynamic_cast<CTopPlatform*>(e->obj);
-	if (e->ny > 0)
-	{
-		this->vy = current_vy;
-		y += vy * updateDt;
-		platform->SetIsObjectOnTop(false);
-	}
-
-	if (e->nx != 0) {
-		this->vx = current_vx;
-		x += vx * updateDt;
-		platform->SetIsObjectOnTop(false);
-	}
-
-	if (e->ny < 0) {
-		vy = 0;
-		isOnPlatform = true;
-	}
-	*/
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -188,6 +169,28 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithVenusFireTrap(LPCOLLISIONEVENT e)
+{
+	CVenusFireTrap* venusFireTrap = dynamic_cast<CVenusFireTrap*>(e->obj);
+
+	if (untouchable == 0)
+	{
+		if (venusFireTrap->GetState() != VENUS_FIRE_TRAP_STATE_DIE)
+		{
+			if (level > MARIO_LEVEL_SMALL)
+			{
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else
+			{
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
+	}
+}
+
 void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 {
 	CFireball* fireball = dynamic_cast<CFireball*>(e->obj);
@@ -203,6 +206,58 @@ void CMario::OnCollisionWithFireBall(LPCOLLISIONEVENT e)
 		SetState(MARIO_STATE_DIE);
 	}
 	fireball->SetState(FIREBALL_STATE_DESTROYED);
+}
+
+void CMario::OnCollisionWithRedKoopa(LPCOLLISIONEVENT e)
+{
+	CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(e->obj);
+
+	// jump on top
+	if (e->ny < 0 && !this->isOnPlatform)
+	{
+		if (koopa->GetState() != RED_KOOPA_STATE_SHELL)
+		{
+			koopa->SetState(RED_KOOPA_STATE_SHELL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else {
+			if (nx > 0) {
+				koopa->SetSpeed(RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+			}
+			else {
+				koopa->SetSpeed(-RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+			}
+			koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+		}
+	}
+	else // hit by
+	{
+		if (untouchable == 0)
+		{
+			if (koopa->GetState() == RED_KOOPA_STATE_SHELL) {
+				if (nx > 0) {
+					koopa->SetSpeed(RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				else {
+					koopa->SetSpeed(-RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+			}
+			else if (koopa->GetState() != RED_KOOPA_STATE_DIE)
+			{
+				if (level > MARIO_LEVEL_SMALL)
+				{
+					level -= 1;
+					StartUntouchable();
+				}
+				else
+				{
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
 }
 
 void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
