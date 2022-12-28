@@ -90,6 +90,7 @@ class CMario : public CGameObject
 	ULONGLONG untouchable_start;
 	ULONGLONG tail_attack_start;
 	ULONGLONG tail_jump_start;
+	ULONGLONG jump_high_start;
 
 	void OnCollisionWithTopPlatform(LPCOLLISIONEVENT e);
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);

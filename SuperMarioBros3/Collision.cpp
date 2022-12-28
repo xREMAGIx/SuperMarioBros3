@@ -189,11 +189,19 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 	int min_ix = -1;
 	int min_iy = -1;
 
+
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
 		LPCOLLISIONEVENT c = coEvents[i];
 		if (c->isDeleted) continue;
 		if (c->obj->IsDeleted()) continue; 
+
+		if (c->obj->IsTopPlatform()) {
+			filterX = 0;
+			if (c->ny > 0) {
+				filterY = 0;
+			}
+		}
 
 		// ignore collision event with object having IsBlocking = 0 (like coin, mushroom, etc)
 		if (filterBlock == 1 && !c->obj->IsBlocking()) 

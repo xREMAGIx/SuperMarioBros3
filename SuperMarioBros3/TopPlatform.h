@@ -23,10 +23,7 @@ public:
 	}
 
 	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { 
-		if (!isObjectOnTop) {
-			return 0;
-		}
+	virtual int IsTopPlatform() {
 		return 1;
 	}
 	

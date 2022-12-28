@@ -20,7 +20,7 @@ struct CCollisionEvent
 	float t, nx, ny;
 
 	float dx, dy;				// *RELATIVE* movement distance between this object and obj
-	bool isDeleted;		
+	bool isDeleted;
 
 	CCollisionEvent(float t, float nx, float ny, float dx = 0, float dy = 0, 
 		LPGAMEOBJECT obj = NULL, LPGAMEOBJECT src_obj = NULL)
@@ -81,7 +81,12 @@ public:
 		int filterX,
 		int filterY);
 
-	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects, BOOLEAN skipBlockCollide = false);
+	void Process(
+		LPGAMEOBJECT objSrc,
+		DWORD dt,
+		vector<LPGAMEOBJECT>* coObjects, 
+		BOOLEAN skipBlockCollide = false
+	);
 
 	static CCollision* GetInstance();
 };

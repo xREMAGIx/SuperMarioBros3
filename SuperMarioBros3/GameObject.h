@@ -30,6 +30,7 @@ protected:
 	int state;
 
 	bool isDeleted; 
+	bool isTopPlatform;
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
@@ -67,6 +68,9 @@ public:
 	
 	// Is this object blocking other object? If YES, collision framework will automatically push the other object
 	virtual int IsBlocking() { return 1; }
+	
+	// Is this object blocking other object with only top collide? If YES, collision framework will automatically push the other object on Y & ny > 0
+	virtual int IsTopPlatform() { return 0; }
 
 	~CGameObject();
 

@@ -47,19 +47,10 @@ void CTopPlatform::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CTopPlatform::OnNoCollision(DWORD dt)
 {
-	isObjectOnTop = true;
 };
 
 void CTopPlatform::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	DebugOut(L"[INFO] OnCollisionWith\n");
-	if (e->nx) {
-		isObjectOnTop = false;
-	}
-
-	if (e->ny > 0) {
-		isObjectOnTop = true;
-	}
 }
 
 void CTopPlatform::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
