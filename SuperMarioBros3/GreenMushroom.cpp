@@ -3,9 +3,9 @@
 
 CGreenMushroom::CGreenMushroom(float x, float y) :CGameObject(x, y)
 {
-	this->ax = 0;
-	this->ay = GREEN_MUSHROOM_GRAVITY;
-	this->vx = -GREEN_MUSHROOM_WALKING_SPEED;
+	vx = 0;
+	vy = 0;
+	dt_start_show = -1;
 	point = new CPoint(x, y - 16);
 	point->SetType(POINT_TYPE_UP);
 }
@@ -67,22 +67,51 @@ void CGreenMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	if (state == GREEN_MUSHSHROOM_STATE_SHOWING) {
+
+		if (GetTickCount64() - dt_start_show > GREEN_MUSHSHROOM_SHOW_TIME) {
+			SetState(GREEN_MUSHSHROOM_STATE_RUNNING);
+			return;
+		}
+		CCollision::GetInstance()->Process(this, dt, coObjects, true);
+	}
+
+	if (state == GREEN_MUSHSHROOM_STATE_RUNNING) {
+		vy += ay * dt;
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+	}
 }
 
 void CGreenMushroom::SetState(int state)
 {
-	if (state == GREEN_MUSHSHROOM_STATE_EARNED) {
-		point->SetPosition(x, y - 16);
-		point->SetState(POINT_STATE_SHOW);
-
-		LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
-		if (dynamic_cast<CPlayScene*>(scene))
-		{
-			CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
-			playScene->GetGameBoard()->AddLives();
-			playScene->GetGameBoard()->AddPoint(GREEN_MUSHSHROOM_POINT);
+	switch (state)
+	{
+		case GREEN_MUSHSHROOM_STATE_SHOWING: {
+			StartShow();
+			vy = -MUSHROOM_SHOW_SPEED;
+			break;
 		}
+		case GREEN_MUSHSHROOM_STATE_RUNNING: {
+			ay = GREEN_MUSHROOM_GRAVITY;
+			vy = 0;
+			vx = -GREEN_MUSHROOM_WALKING_SPEED;
+			break;
+		}
+		case GREEN_MUSHSHROOM_STATE_EARNED: {
+			point->SetPosition(x, y - 16);
+			point->SetState(POINT_STATE_SHOW);
+
+			LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+			if (dynamic_cast<CPlayScene*>(scene))
+			{
+				CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
+				playScene->GetGameBoard()->AddPoint(GREEN_MUSHSHROOM_POINT);
+			}
+			break;
+		}
+		default:
+			break;
 	}
 
 	CGameObject::SetState(state);

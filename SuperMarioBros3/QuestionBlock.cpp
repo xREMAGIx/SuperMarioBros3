@@ -5,7 +5,7 @@ CQuestionBlock::CQuestionBlock(float x, float y, int item_id) :CGameObject(x, y)
 	switch (item_id)
 	{
 	case OBJECT_TYPE_MUSHROOM:
-		item = new CMushroom(x, y);
+		item = new CMushroom(x, y - 2);
 		break;
 	case OBJECT_TYPE_GREEN_MUSHROOM:
 		item = new CGreenMushroom(x, y);
@@ -67,6 +67,9 @@ void CQuestionBlock::SetState(int state)
 		}
 		else if (dynamic_cast<CSuperLeaf*>(item)) {
 			item->SetState(SUPER_LEAF_STATE_FLY_UP);
+		}
+		else if (dynamic_cast<CMushroom*>(item)) {
+			item->SetState(MUSHSHROOM_STATE_SHOWING);
 		}
 
 		objects.push_back(item);

@@ -69,7 +69,6 @@ void CPoint::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CPoint::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-
 	if ((state == POINT_STATE_SHOW) && (GetTickCount64() - show_start > POINT_SHOW_TIME))
 	{
 		isDeleted = true;
