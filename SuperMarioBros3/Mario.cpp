@@ -116,19 +116,26 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0)
-		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+		if (isTailAttacking && nAttacking != e->nx) {
+			if (goomba->GetState() != GOOMBA_STATE_DIE || goomba->GetState() != GOOMBA_STATE_JUMP_DIE) {
+				goomba->SetState(GOOMBA_STATE_JUMP_DIE);
+			}
+		}
+		else {
+			if (untouchable == 0)
 			{
-				if (level > MARIO_LEVEL_SMALL)
+				if (goomba->GetState() != GOOMBA_STATE_DIE)
 				{
-					level = MARIO_LEVEL_SMALL;
-					StartUntouchable();
-				}
-				else
-				{
-					DebugOut(L">>> Mario DIE >>> \n");
-					SetState(MARIO_STATE_DIE);
+					if (level > MARIO_LEVEL_SMALL)
+					{
+						level = MARIO_LEVEL_SMALL;
+						StartUntouchable();
+					}
+					else
+					{
+						DebugOut(L">>> Mario DIE >>> \n");
+						SetState(MARIO_STATE_DIE);
+					}
 				}
 			}
 		}
@@ -142,17 +149,22 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
-		if (goomba->GetState() != GOOMBA_STATE_DIE)
+		if (goomba->GetState() != RED_GOOMBA_STATE_DIE)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
+			goomba->SetState(RED_GOOMBA_STATE_DIE);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 	else // hit by Goomba
 	{
-		if (untouchable == 0)
+		if (isTailAttacking && nAttacking != e->nx) {
+			if (goomba->GetState() != RED_GOOMBA_STATE_DIE || goomba->GetState() != RED_GOOMBA_STATE_JUMP_DIE) {
+				goomba->SetState(RED_GOOMBA_STATE_JUMP_DIE);
+			}
+		}
+		else if (untouchable == 0)
 		{
-			if (goomba->GetState() != GOOMBA_STATE_DIE)
+			if (goomba->GetState() != RED_GOOMBA_STATE_DIE)
 			{
 				if (level > MARIO_LEVEL_SMALL)
 				{
@@ -175,7 +187,12 @@ void CMario::OnCollisionWithVenusFireTrap(LPCOLLISIONEVENT e)
 
 	if (untouchable == 0)
 	{
-		if (venusFireTrap->GetState() != VENUS_FIRE_TRAP_STATE_DIE)
+		if (isTailAttacking && nAttacking != e->nx) {
+			if (venusFireTrap->GetState() != VENUS_FIRE_TRAP_STATE_JUMP_DIE || venusFireTrap->GetState() != VENUS_FIRE_TRAP_STATE_DIE) {
+				venusFireTrap->SetState(VENUS_FIRE_TRAP_STATE_JUMP_DIE);
+			}
+		}
+		else if (venusFireTrap->GetState() != VENUS_FIRE_TRAP_STATE_DIE)
 		{
 			if (level > MARIO_LEVEL_SMALL)
 			{
@@ -665,6 +682,7 @@ void CMario::SetState(int state)
 	case MARIO_STATE_TAIL_ATTACK:
 		if (isSitting) break;
 		isTailAttacking = true;
+		nAttacking = nx;
 		tail_attack_start = GetTickCount64();
 		break;
 	case MARIO_STATE_TAIL_ATTACK_RELEASE:

@@ -2,6 +2,7 @@
 
 CVenusFireTrap::CVenusFireTrap(float x, float y) :CGameObject(x, y)
 {
+	ay = 0;
 	this->nx = -1;
 	SetState(VENUS_FIRE_TRAP_STATE_WATING);
 	current_ani = ID_SPRITE_VERNUS_FIRE_TRAP_LOOK_DOWN_LEFT;
@@ -36,6 +37,16 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		isDeleted = true;
 		return;
+	}
+	
+	if (state == VENUS_FIRE_TRAP_STATE_JUMP_DIE)
+	{
+		vy += ay * dt;
+
+		if (GetTickCount64() - dt_die > VENUS_FIRE_TRAP_TIME_JUMP_DIE) {
+			isDeleted = true;
+			return;
+		}
 	}
 
 	if (state == VENUS_FIRE_TRAP_STATE_WATING) {
@@ -103,11 +114,17 @@ void CVenusFireTrap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CVenusFireTrap::Render()
 {
+	bool flip = false;
+
 	switch (state)
 	{
 	case VENUS_FIRE_TRAP_STATE_DIE: {
 		current_ani = -1;
 		score->Render();
+		break;
+	}
+	case VENUS_FIRE_TRAP_STATE_JUMP_DIE: {
+		flip = true;
 		break;
 	}
 	case VENUS_FIRE_TRAP_STATE_WATING: {
@@ -157,7 +174,7 @@ void CVenusFireTrap::Render()
 	}
 
 	CSprites* sprites = CSprites::GetInstance();
-	sprites->Get(current_ani)->Draw(x, y);
+	sprites->Get(current_ani)->Draw(x, y, flip);
 	RenderBoundingBox();
 }
 
@@ -218,6 +235,12 @@ void CVenusFireTrap::SetState(int state)
 		game_board->AddPoint(100);
 		break;
 	}
+	case VENUS_FIRE_TRAP_STATE_JUMP_DIE:
+		vx = 0;
+		ay = VENUS_FIRE_TRAP_GRAVITY;
+		vy = -VENUS_FIRE_TRAP_JUMP_DIE_SPEED;
+		StartDie();
+		break;
 	default:
 		break;
 	}

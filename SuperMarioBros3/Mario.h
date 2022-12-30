@@ -86,6 +86,7 @@ class CMario : public CGameObject
 
 	int level; 
 	int untouchable; 
+	int nAttacking;
 
 	ULONGLONG untouchable_start;
 	ULONGLONG tail_attack_start;
@@ -124,6 +125,7 @@ public:
 		isOnPlatform = false;
 		isTailAttacking = false;
 		isTailJumping = false;
+		nAttacking = nx;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

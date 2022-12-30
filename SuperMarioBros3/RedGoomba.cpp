@@ -53,26 +53,43 @@ void CRedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vy += ay * dt;
 	vx += ax * dt;
 
+	bool skipBlockCollide = false;
+
 	if ((state == RED_GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > RED_GOOMBA_DIE_TIMEOUT))
 	{
 		isDeleted = true;
 		return;
 	}
 
+	if (state == RED_GOOMBA_STATE_JUMP_DIE)
+	{
+		skipBlockCollide = true;
+		if (GetTickCount64() - die_start > GOOMBA_JUMP_DIE_TIMEOUT) {
+			isDeleted = true;
+			return;
+		}
+	}
+
 	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	CCollision::GetInstance()->Process(this, dt, coObjects, skipBlockCollide);
 }
 
 
 void CRedGoomba::Render()
 {
 	int aniId = ID_ANI_RED_GOOMBA_WALKING;
+	bool flip = false;
+
 	if (state == RED_GOOMBA_STATE_DIE)
 	{
 		aniId = ID_ANI_RED_GOOMBA_DIE;
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	if (state == RED_GOOMBA_STATE_JUMP_DIE) {
+		flip = true;
+	}
+
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y, flip);
 	RenderBoundingBox();
 }
 
@@ -81,15 +98,22 @@ void CRedGoomba::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case RED_GOOMBA_STATE_DIE:
-		die_start = GetTickCount64();
-		y += (RED_GOOMBA_BBOX_HEIGHT - RED_GOOMBA_BBOX_HEIGHT_DIE) / 2;
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		break;
-	case RED_GOOMBA_STATE_WALKING:
-		vx = -RED_GOOMBA_WALKING_SPEED;
-		break;
+		case RED_GOOMBA_STATE_DIE:
+			die_start = GetTickCount64();
+			y += (RED_GOOMBA_BBOX_HEIGHT - RED_GOOMBA_BBOX_HEIGHT_DIE) / 2;
+			vx = 0;
+			vy = 0;
+			ay = 0;
+			break;
+		case RED_GOOMBA_STATE_JUMP_DIE:
+			vx = 0;
+			vy = -RED_GOOMBA_JUMP_DIE_SPEED;
+			die_start = GetTickCount64();
+			break;
+		case RED_GOOMBA_STATE_WALKING:
+			vx = -RED_GOOMBA_WALKING_SPEED;
+			break;
+		default:
+			break;
 	}
 }

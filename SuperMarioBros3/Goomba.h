@@ -5,20 +5,22 @@
 
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.05f
-
+#define GOOMBA_JUMP_DIE_SPEED	0.5f
 
 #define GOOMBA_BBOX_WIDTH 16
 #define GOOMBA_BBOX_HEIGHT 14
 #define GOOMBA_BBOX_HEIGHT_DIE 7
 
 #define GOOMBA_DIE_TIMEOUT 500
+#define GOOMBA_JUMP_DIE_TIMEOUT 1000
 
 #define GOOMBA_STATE_WALKING 100
 #define GOOMBA_STATE_DIE 200
+#define GOOMBA_STATE_JUMP_DIE 300
 
 class CGoomba : public CGameObject
 {
-protected:
+protected: 
 	float ax;				
 	float ay; 
 
