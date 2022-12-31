@@ -27,6 +27,7 @@ protected:
 	float ax;
 	float ay;
 	bool isRespawning;
+	bool isHolded;
 
 	ULONGLONG die_start;
 	ULONGLONG respawn_start;
@@ -48,6 +49,13 @@ protected:
 public:
 	CRedKoopa(float x, float y);
 	virtual void SetState(int state);
+
+	bool GetIsHolded() {
+		return this->isHolded;
+	}
+	void SetIsHolded(bool isHolded) {
+		this->isHolded = isHolded;
+	};
 
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 };

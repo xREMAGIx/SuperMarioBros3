@@ -7,15 +7,15 @@
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
-#define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_WALK_X	0.00025f
+#define MARIO_ACCEL_RUN_X	0.00035f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
-#define MARIO_JUMP_TAIL_SPEED_Y		0.9f
+#define MARIO_JUMP_TAIL_SPEED_Y		0.7f
 
 #define MARIO_GRAVITY			0.002f
-#define MARIO_TAIL_GRAVITY			0.0002f
+#define MARIO_TAIL_GRAVITY			0.0004f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -75,6 +75,9 @@ class CMario : public CGameObject
 	bool isTailAttacking;
 	bool isTailJumping;
 
+	bool canHold;
+	CGameObject* holdingObject;
+
 	DWORD updateDt;
 
 	float current_vy = vy;
@@ -103,6 +106,7 @@ class CMario : public CGameObject
 	void OnCollisionWithVenusFireTrap(LPCOLLISIONEVENT e);
 	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
 	void OnCollisionWithSuperLeaf(LPCOLLISIONEVENT e);
+	void OnCollisionWithChimney(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
@@ -112,6 +116,8 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		canHold = false;
+		holdingObject = NULL;
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
@@ -138,7 +144,7 @@ public:
 
 	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
 
-	BOOLEAN IsTailAttacking() { return isTailAttacking; }
+	bool IsTailAttacking() { return isTailAttacking; }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
@@ -147,6 +153,18 @@ public:
 		return this->level;
 	}
 	void SetLevel(int l);
+
+	bool GetCanHold() {
+		return this->canHold;
+	}
+	void SetCanHold(bool canHold) {
+		this->canHold = canHold;
+	};
+
+	CGameObject* GetHoldingObject() {
+		return this->holdingObject;
+	}
+	void SetHoldingObject(CGameObject* holdingObject);
 
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 

@@ -30,6 +30,13 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	current_vy = vy;
 	current_vx = vx;
 
+	if (holdingObject) {
+		float holdingObjectX, holdingObjectY;
+		holdingObject->GetPosition(holdingObjectX, holdingObjectY);
+		holdingObjectX = x + nx * 24;
+		holdingObject->SetPosition(holdingObjectX, holdingObjectY);
+	}
+
 	// reset untouchable timer if untouchable time has passed
 	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
 	{
@@ -50,6 +57,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		tail_jump_start = 0;
 		SetState(MARIO_STATE_RELEASE_JUMP);
 	}
+
+
 
 	isOnPlatform = false;
 	updateDt = dt;
@@ -79,6 +88,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithGoomba(e);
 	else if (dynamic_cast<CRedGoomba*>(e->obj))
 		OnCollisionWithRedGoomba(e);
+	else if (dynamic_cast<CChimney*>(e->obj))
+		OnCollisionWithChimney(e);
 	else if (dynamic_cast<CKoopa*>(e->obj))
 		OnCollisionWithKoopa(e);
 	else if (dynamic_cast<CRedKoopa*>(e->obj))
@@ -181,6 +192,22 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	}
 }
 
+void CMario::OnCollisionWithChimney(LPCOLLISIONEVENT e)
+{
+	CChimney* chimney = dynamic_cast<CChimney*>(e->obj);
+
+	if (e->ny < 0)
+	{
+		CGameObject* object = chimney->GetChimneyObject();
+		if (dynamic_cast<CVenusFireTrap*>(object))
+		{
+			if (object->GetState() == VENUS_FIRE_TRAP_STATE_SHOW) {
+				object->SetState(VENUS_FIRE_TRAP_STATE_SHOW);
+			}
+		}
+	}
+}
+
 void CMario::OnCollisionWithVenusFireTrap(LPCOLLISIONEVENT e)
 {
 	CVenusFireTrap* venusFireTrap = dynamic_cast<CVenusFireTrap*>(e->obj);
@@ -229,6 +256,8 @@ void CMario::OnCollisionWithRedKoopa(LPCOLLISIONEVENT e)
 {
 	CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(e->obj);
 
+	if (koopa->GetIsHolded()) return;
+
 	// jump on top
 	if (e->ny < 0 && !this->isOnPlatform)
 	{
@@ -252,13 +281,21 @@ void CMario::OnCollisionWithRedKoopa(LPCOLLISIONEVENT e)
 		if (untouchable == 0)
 		{
 			if (koopa->GetState() == RED_KOOPA_STATE_SHELL) {
-				if (nx > 0) {
-					koopa->SetSpeed(RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+				if (canHold) {
+					DebugOut(L">>> canHold >>> \n");
+					koopa->SetPosition(x + nx * 24, y);
+					koopa->SetIsHolded(true);
+					SetHoldingObject(koopa);
 				}
 				else {
-					koopa->SetSpeed(-RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+					if (nx > 0) {
+						koopa->SetSpeed(RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+					}
+					else {
+						koopa->SetSpeed(-RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+					}
+					koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
 				}
-				koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
 			}
 			else if (koopa->GetState() != RED_KOOPA_STATE_DIE)
 			{
@@ -757,3 +794,23 @@ void CMario::SetLevel(int l)
 	level = l;
 }
 
+void CMario::SetHoldingObject(CGameObject* holdingObject)
+{
+	DebugOut(L">>> SetHoldingObject >>> \n");
+
+	if (holdingObject == NULL) {
+		if (dynamic_cast<CRedKoopa*>(this->holdingObject)) {
+			DebugOut(L">>> CRedKoopa >>> \n");
+			CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(this->holdingObject);
+			if (nx > 0) {
+				koopa->SetSpeed(RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+			}
+			else {
+				koopa->SetSpeed(-RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+			}
+			koopa->SetIsHolded(false);
+			koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+		}
+	}
+	this->holdingObject = holdingObject;
+}

@@ -8,6 +8,7 @@ CRedKoopa::CRedKoopa(float x, float y) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = RED_KOOPA_GRAVITY;
+	isHolded = false;
 	nx = -1;
 	die_start = -1;
 	respawn_start = -1;
@@ -104,6 +105,11 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
+
+	if (isHolded) {
+		vy = 0;
+		vx = 0;
+	}
 
 	if ((state == RED_KOOPA_STATE_DIE))
 	{
