@@ -31,10 +31,26 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	current_vx = vx;
 
 	if (holdingObject) {
-		float holdingObjectX, holdingObjectY;
-		holdingObject->GetPosition(holdingObjectX, holdingObjectY);
-		holdingObjectX = x + nx * 24;
-		holdingObject->SetPosition(holdingObjectX, holdingObjectY);
+		if (dynamic_cast<CRedKoopa*>(holdingObject)) {
+			CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(holdingObject);
+
+			if (koopa->GetState() == RED_KOOPA_STATE_WALKING) {
+				SetHoldingObject(NULL);
+			}
+			else {
+				float holdingObjectX, holdingObjectY;
+				int width = MARIO_SMALL_BBOX_WIDTH;
+				if (level == MARIO_LEVEL_BIG) {
+					width = MARIO_BIG_BBOX_WIDTH;
+				}
+				else if (level == MARIO_LEVEL_RACCOON) {
+					width = MARIO_RACCOON_BBOX_WIDTH;
+				}
+				holdingObjectX = x + nx * width;
+				holdingObjectY = y + ny * 4;
+				koopa->SetPosition(holdingObjectX, holdingObjectY);
+			}
+		}
 	}
 
 	// reset untouchable timer if untouchable time has passed
@@ -423,7 +439,22 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
-	if (!isOnPlatform)
+	if (holdingObject) {
+		if (vx == 0)
+		{
+			if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_HOLD_RIGHT;
+			else aniId = ID_ANI_MARIO_SMALL_IDLE_HOLD_LEFT;
+		}
+		else if (vx > 0)
+		{
+			aniId = ID_ANI_MARIO_SMALL_WALKING_HOLD_RIGHT;
+		}
+		else // vx < 0
+		{
+			aniId = ID_ANI_MARIO_SMALL_WALKING_HOLD_LEFT;
+		}
+	}
+	else if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
@@ -485,7 +516,22 @@ int CMario::GetAniIdSmall()
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
-	if (!isOnPlatform)
+	if (holdingObject) {
+		if (vx == 0)
+		{
+			if (nx > 0) aniId = ID_ANI_MARIO_IDLE_HOLD_RIGHT;
+			else aniId = ID_ANI_MARIO_IDLE_HOLD_LEFT;
+		}
+		else if (vx > 0)
+		{
+			aniId = ID_ANI_MARIO_WALKING_HOLD_RIGHT;
+		}
+		else // vx < 0
+		{
+			aniId = ID_ANI_MARIO_WALKING_HOLD_LEFT;
+		}
+	}
+	else if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
@@ -547,7 +593,22 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRaccoon()
 {
 	int aniId = -1;
-	if (!isOnPlatform)
+	if (holdingObject) {
+		if (vx == 0)
+		{
+			if (nx > 0) aniId = ID_ANI_RACCOON_MARIO_IDLE_HOLD_RIGHT;
+			else aniId = ID_ANI_RACCOON_MARIO_IDLE_HOLD_LEFT;
+		}
+		else if (vx > 0)
+		{
+			aniId = ID_ANI_RACCOON_MARIO_WALKING_HOLD_RIGHT;
+		}
+		else // vx < 0
+		{
+			aniId = ID_ANI_RACCOON_MARIO_WALKING_HOLD_LEFT;
+		}
+	}
+	else if (!isOnPlatform)
 	{
 		if (isTailJumping) {
 			if (nx >= 0)
@@ -687,11 +748,11 @@ void CMario::SetState(int state)
 			}
 		}
 		break;
-	case MARIO_STATE_RELEASE_JUMP:
+	case MARIO_STATE_RELEASE_JUMP: 
+		if (isTailJumping) break;
 		ay = MARIO_GRAVITY;
 		if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
-
 	case MARIO_STATE_SIT:
 		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
 		{
@@ -796,20 +857,19 @@ void CMario::SetLevel(int l)
 
 void CMario::SetHoldingObject(CGameObject* holdingObject)
 {
-	DebugOut(L">>> SetHoldingObject >>> \n");
-
 	if (holdingObject == NULL) {
 		if (dynamic_cast<CRedKoopa*>(this->holdingObject)) {
-			DebugOut(L">>> CRedKoopa >>> \n");
 			CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(this->holdingObject);
-			if (nx > 0) {
-				koopa->SetSpeed(RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+			if (koopa->GetState() == RED_KOOPA_STATE_SHELL) {
+				if (nx > 0) {
+					koopa->SetSpeed(RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				else {
+					koopa->SetSpeed(-RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				koopa->SetIsHolded(false);
+				koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
 			}
-			else {
-				koopa->SetSpeed(-RED_KOOPA_SHELL_SCROLL_SPEED, 0);
-			}
-			koopa->SetIsHolded(false);
-			koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
 		}
 	}
 	this->holdingObject = holdingObject;

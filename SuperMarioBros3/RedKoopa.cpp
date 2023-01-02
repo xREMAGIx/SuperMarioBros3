@@ -125,6 +125,7 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if ((state == RED_KOOPA_STATE_RESPAWN) && (GetTickCount64() - respawn_end > RED_KOOPA_RESPAWN_TIME))
 	{
+		isHolded = false;
 		SetState(RED_KOOPA_STATE_WALKING);
 		return;
 	}
