@@ -55,11 +55,22 @@ void CFallDetector::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny < 0) {
 			SetState(FALL_DETECTOR_STATE_IDLE);
 		}
+
+		if (e->nx != 0) {
+			SetState(FALL_DETECTOR_STATE_IGNORE);
+		}
 	};
 }
 
 void CFallDetector::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	if ((GetTickCount64() - ignore_start > FALL_DETECTOR_FALL_IGNORE)) {
+		ignore_start = -1;
+	}
+	else {
+		return;
+	}
+
 	vy += ay * dt;
 
 	if (state == FALL_DETECTOR_STATE_FALL && (GetTickCount64() - fall_start > FALL_DETECTOR_FALL_TIMEOUT)) {
@@ -78,6 +89,10 @@ void CFallDetector::SetState(int state)
 	{
 	case FALL_DETECTOR_STATE_FALL: 
 		StartFall();
+		vy = 0;
+		break;
+	case FALL_DETECTOR_STATE_IGNORE:
+		StartIgnore();
 		vy = 0;
 		break;
 	default:

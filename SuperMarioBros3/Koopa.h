@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "AssetIDs.h"
+#include "FallDetector.h"
 
 #define KOOPA_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.05f
@@ -27,6 +28,9 @@ protected:
 	float ax;
 	float ay;
 	bool isRespawning;
+	bool isHolded;
+
+	CFallDetector* fallDetector;
 
 	ULONGLONG die_start;
 	ULONGLONG respawn_start;
@@ -48,6 +52,13 @@ protected:
 public:
 	CKoopa(float x, float y);
 	virtual void SetState(int state);
+
+	bool GetIsHolded() {
+		return this->isHolded;
+	}
+	void SetIsHolded(bool isHolded) {
+		this->isHolded = isHolded;
+	};
 
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 };

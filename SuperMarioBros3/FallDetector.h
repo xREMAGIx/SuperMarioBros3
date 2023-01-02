@@ -7,8 +7,10 @@
 #define FALL_DETECTOR_STATE_IDLE 1
 #define FALL_DETECTOR_STATE_DETECT 2
 #define FALL_DETECTOR_STATE_FALL	3
+#define FALL_DETECTOR_STATE_IGNORE	4
 
 #define FALL_DETECTOR_FALL_TIMEOUT 200
+#define FALL_DETECTOR_FALL_IGNORE 1000
 
 class CFallDetector : public CGameObject
 {
@@ -19,6 +21,7 @@ protected:
 	float cellHeight;
 
 	ULONGLONG fall_start;
+	ULONGLONG ignore_start;
 
 public:
 	CFallDetector(float x, float y,
@@ -28,6 +31,7 @@ public:
 		this->cellWidth = cell_width;
 		this->cellHeight = cell_height;
 		fall_start = -1;
+		ignore_start = -1;
 	}
 
 	virtual int IsCollidable() { return 1; };
@@ -44,4 +48,5 @@ public:
 	virtual void SetState(int state);
 
 	void StartFall() { fall_start = GetTickCount64(); }
+	void StartIgnore() { ignore_start = GetTickCount64(); }
 };

@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "AssetIDs.h"
+#include "FallDetector.h"
 
 #define RED_GOOMBA_GRAVITY 0.002f
 #define RED_GOOMBA_WALKING_SPEED 0.05f
@@ -25,6 +26,8 @@ protected:
 	float ay;
 
 	ULONGLONG die_start;
+
+	CFallDetector* fallDetector;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

@@ -40,8 +40,8 @@ loaders\fireball.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-#101	50	300
-101	530	356
+101	50	300
+#101	530	356
 
 # GOOMBA
 301	224	398
@@ -114,7 +114,7 @@ loaders\fireball.txt
 501	2176	272	16	16	3	1
 
 #WALL
-501	-16	0	16	800	1
+#501	-16	0	16	800	1
 #501	624	400	16	16	1
 
 #QUESTION_BLOCK

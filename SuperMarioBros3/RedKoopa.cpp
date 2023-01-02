@@ -75,7 +75,7 @@ void CRedKoopa::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
+			goomba->SetState(GOOMBA_STATE_JUMP_DIE);
 		}
 	}
 }
@@ -88,7 +88,7 @@ void CRedKoopa::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != RED_GOOMBA_STATE_DIE)
 		{
-			goomba->SetState(RED_GOOMBA_STATE_DIE);
+			goomba->SetState(RED_GOOMBA_STATE_JUMP_DIE);
 		}
 	}
 }

@@ -6,6 +6,8 @@ CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 	this->ay = GOOMBA_GRAVITY;
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
+
+	fallDetector = new CFallDetector(x, y, 8, 8);
 }
 
 void CGoomba::GetBoundingBox(float &left, float &top, float &right, float &bottom)
@@ -43,6 +45,7 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0)
 	{
+		nx = -nx;
 		vx = -vx;
 	}
 }
@@ -67,6 +70,27 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			isDeleted = true;
 			return;
 		}
+	}
+
+	if (state == GOOMBA_STATE_WALKING) {
+
+		int fallDetectorState = fallDetector->GetState();
+
+		if (fallDetectorState != FALL_DETECTOR_STATE_FALL)
+		{
+			if (fallDetectorState == FALL_DETECTOR_STATE_DETECT) {
+				vx = -vx;
+				nx = -nx;
+			}
+
+			float fallDetectorX, fallDetectorY;
+			fallDetectorX = x + nx * (GOOMBA_BBOX_WIDTH + 8);
+			fallDetectorY = y - GOOMBA_BBOX_HEIGHT / 2;
+			fallDetector->SetPosition(fallDetectorX, fallDetectorY);
+			fallDetector->SetState(FALL_DETECTOR_STATE_FALL);
+		}
+
+		fallDetector->Update(dt, coObjects);
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -104,6 +128,7 @@ void CGoomba::SetState(int state)
 			ay = 0; 
 			break;
 		case GOOMBA_STATE_WALKING: 
+			nx = -1;
 			vx = -GOOMBA_WALKING_SPEED;
 			break;
 		case GOOMBA_STATE_JUMP_DIE: 
