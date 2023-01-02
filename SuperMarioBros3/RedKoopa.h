@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "AssetIDs.h"
+#include "FallDetector.h"
 
 #define RED_KOOPA_GRAVITY 0.002f
 #define RED_KOOPA_WALKING_SPEED 0.05f
@@ -28,6 +29,8 @@ protected:
 	float ay;
 	bool isRespawning;
 	bool isHolded;
+
+	CFallDetector* fallDetector;
 
 	ULONGLONG die_start;
 	ULONGLONG respawn_start;

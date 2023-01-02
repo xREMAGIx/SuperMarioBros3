@@ -13,6 +13,8 @@ CRedKoopa::CRedKoopa(float x, float y) :CGameObject(x, y)
 	die_start = -1;
 	respawn_start = -1;
 	SetState(RED_KOOPA_STATE_WALKING);
+
+	fallDetector = new CFallDetector(x, y, 8, 8);
 }
 
 void CRedKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -128,6 +130,27 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isHolded = false;
 		SetState(RED_KOOPA_STATE_WALKING);
 		return;
+	}
+
+	if (state == RED_KOOPA_STATE_WALKING) {
+
+		int fallDetectorState = fallDetector->GetState();
+
+		if (fallDetectorState != FALL_DETECTOR_STATE_FALL)
+		{
+			if (fallDetectorState == FALL_DETECTOR_STATE_DETECT) {
+				vx = -vx;
+				nx = -nx;
+			}
+
+			float fallDetectorX, fallDetectorY;
+			fallDetectorX = x + nx * (RED_KOOPA_BBOX_WIDTH + 10);
+			fallDetectorY = y - 8;
+			fallDetector->SetPosition(fallDetectorX, fallDetectorY);
+			fallDetector->SetState(FALL_DETECTOR_STATE_FALL);
+		}
+
+		fallDetector->Update(dt, coObjects);
 	}
 
 	CGameObject::Update(dt, coObjects);
