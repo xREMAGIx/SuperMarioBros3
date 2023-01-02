@@ -29,6 +29,8 @@ protected:
 
 	int state;
 
+	int renderOrder;
+
 	bool isDeleted; 
 	bool isTopPlatform;
 
@@ -36,9 +38,11 @@ public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void SetDirection(int nx, int ny) { this->nx = nx, this->ny = ny; }
+	void SetRenderOrder(int renderOrder) { this->renderOrder = renderOrder; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 	void GetDirection(int& nx, int& ny) { nx = this->nx; ny = this->ny; }
+	void GetRenderOrder(int& renderOrder) { renderOrder = this->renderOrder; }
 
 	int GetState() { return this->state; }
 	virtual void Delete() { isDeleted = true;  }
@@ -47,7 +51,7 @@ public:
 	void RenderBoundingBox();
 
 	CGameObject();
-	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; }
+	CGameObject(float x, float y) :CGameObject() { this->x = x; this->y = y; renderOrder = 1; }
 
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom) = 0;

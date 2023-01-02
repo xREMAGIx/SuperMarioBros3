@@ -438,14 +438,56 @@ void CPlayScene::Update(DWORD dt)
 
 }
 
+bool compareRenderOrder(LPGAMEOBJECT obj1, LPGAMEOBJECT obj2)
+{
+	int renderOrder1, renderOrder2;
+	obj1->GetRenderOrder(renderOrder1);
+	obj2->GetRenderOrder(renderOrder2);
+	return (renderOrder1 < renderOrder2);
+};
+
 void CPlayScene::Render()
 {
-	if (map != NULL) {
-		map->Render();
-	}
+	if (player) {
+		float cx, cy;
+		player->GetPosition(cx, cy);
+		vector<LPGAMEOBJECT> gridObjects;
 
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+		grid->GetListObject(gridObjects, objects, cx, cy);
+
+		sort(gridObjects.begin(), gridObjects.end(), compareRenderOrder);
+
+		vector<LPGAMEOBJECT> renderAfterMapObjs;
+
+		for (size_t i = 0; i < gridObjects.size(); i++)
+		{
+			int renderOrder;
+			gridObjects[i]->GetRenderOrder(renderOrder);
+			if (renderOrder < 0) {
+				gridObjects[i]->Render();
+			}
+			else {
+				renderAfterMapObjs.push_back(gridObjects[i]);
+			}
+		}
+
+		if (map != NULL) {
+			map->Render();
+		}
+
+		for (size_t i = 0; i < renderAfterMapObjs.size(); i++)
+		{
+			renderAfterMapObjs[i]->Render();
+		}
+	}
+	else {
+		if (map != NULL) {
+			map->Render();
+		}
+
+		for (int i = 0; i < objects.size(); i++)
+			objects[i]->Render();
+	}
 
 	if (gameBoard) {
 		gameBoard->Render();
