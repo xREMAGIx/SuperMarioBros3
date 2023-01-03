@@ -84,6 +84,7 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 	game->SetMinCamScreen(min_cam_x, min_cam_y);
 	game->SetScreenSize(scene_width, sceen_height);
 	game->SetCamPos(cam_x, cam_y);
+	game->SetBackgroundColor(D3DXCOLOR(bg_r * 1.0f/255, bg_g * 1.0f/255, bg_b * 1.0f/255, 1.0f));
 }
 
 void CPlayScene::_ParseSection_ASSETS(string line)

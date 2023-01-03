@@ -30,7 +30,7 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPTEXTURE tex
 	D3DXMatrixScaling(&this->matScaling, (FLOAT)spriteWidth, (FLOAT)spriteHeight, 1.0f);
 }
 
-void CSprite::Draw(float x, float y, bool flipY)
+void CSprite::Draw(float x, float y, bool flipY, float alpha)
 {
 	CGame* g = CGame::GetInstance();
 	float cx, cy;
@@ -53,6 +53,8 @@ void CSprite::Draw(float x, float y, bool flipY)
 
 	D3DXMatrixRotationZ(&rotation, degree * D3DX_PI);
 	D3DXMatrixTranslation(&matTranslation, x - cx, g->GetBackBufferHeight() - y + cy, 0.1f);
+
+	this->sprite.ColorModulate = D3DXCOLOR(1.0f, 1.0f, 1.0f, alpha);
 
 	this->sprite.matWorld = (this->matScaling * rotation * matTranslation);
 

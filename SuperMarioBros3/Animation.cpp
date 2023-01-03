@@ -14,7 +14,7 @@ void CAnimation::Add(int spriteId, DWORD time)
 	frames.push_back(frame);
 }
 
-void CAnimation::Render(float x, float y, bool flip)
+void CAnimation::Render(float x, float y, bool flip, float alpha)
 {
 	ULONGLONG now = GetTickCount64();
 	if (currentFrame == -1)
@@ -34,6 +34,6 @@ void CAnimation::Render(float x, float y, bool flip)
 
 	}
 
-	frames[currentFrame]->GetSprite()->Draw(x, y, flip);
+	frames[currentFrame]->GetSprite()->Draw(x, y, flip, alpha);
 }
 

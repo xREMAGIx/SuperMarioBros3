@@ -47,8 +47,6 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #define MAIN_WINDOW_TITLE L"SuperMarioBros3"
 #define WINDOW_ICON_PATH L"mario.ico"
 
-#define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
-
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -78,12 +76,14 @@ void Render()
 {
 	CGame* g = CGame::GetInstance();
 
+	D3DXCOLOR backgroundColor = g->GetBackgroundColor();
+
 	ID3D10Device* pD3DDevice = g->GetDirect3DDevice();
 	IDXGISwapChain* pSwapChain = g->GetSwapChain();
 	ID3D10RenderTargetView* pRenderTargetView = g->GetRenderTargetView();
 	ID3DX10Sprite* spriteHandler = g->GetSpriteHandler();
 
-	pD3DDevice->ClearRenderTargetView(pRenderTargetView, BACKGROUND_COLOR);
+	pD3DDevice->ClearRenderTargetView(pRenderTargetView, backgroundColor);
 
 	spriteHandler->Begin(D3DX10_SPRITE_SORT_TEXTURE);
 

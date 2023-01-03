@@ -21,6 +21,7 @@ using namespace std;
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 256
 
+#define BACKGROUND_COLOR D3DXCOLOR(200.0f/255, 200.0f/255, 255.0f/255, 0.0f)
 /*
 	Our simple game framework
 */
@@ -60,6 +61,8 @@ class CGame
 	//Screen
 	int screen_width = SCREEN_WIDTH;
 	int screen_height = SCREEN_HEIGHT;
+
+	D3DXCOLOR backgroundColor = BACKGROUND_COLOR;
 
 	HINSTANCE hInstance;
 
@@ -150,6 +153,9 @@ public:
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
 	void SetScreenSize(int screenWidth, int screenHeight) { screen_width = screenWidth; screen_height = screenHeight; }
+
+	D3DXCOLOR GetBackgroundColor() { return backgroundColor; }
+	void SetBackgroundColor(D3DXCOLOR color) { backgroundColor = color; }
 
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 

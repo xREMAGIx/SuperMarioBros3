@@ -65,6 +65,7 @@
 #define MARIO_RACCOON_SITTING_BBOX_HEIGHT 18
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define MARIO_FLICKERING_TIME 100
 #define MARIO_TAIL_ATTACK_TIME 300
 #define MARIO_TAIL_JUMP_TIME 750
 
@@ -87,13 +88,16 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
-	int level; 
-	int untouchable; 
+	int level;
 	int nAttacking;
+
+	bool isUntouchable;
+	bool isFlickering;
 
 	ULONGLONG untouchable_start;
 	ULONGLONG tail_attack_start;
 	ULONGLONG tail_jump_start;
+	ULONGLONG flickering_start;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
@@ -124,7 +128,6 @@ public:
 		ay = MARIO_GRAVITY; 
 		updateDt = -1;
 		level = MARIO_LEVEL_SMALL;
-		untouchable = 0;
 		untouchable_start = -1;
 		tail_attack_start = -1;
 		tail_jump_start = -1;
@@ -132,6 +135,9 @@ public:
 		isTailAttacking = false;
 		isTailJumping = false;
 		nAttacking = nx;
+
+		isUntouchable = false;
+		isFlickering = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -142,7 +148,7 @@ public:
 		return (state != MARIO_STATE_DIE); 
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && !isUntouchable); }
 
 	bool IsTailAttacking() { return isTailAttacking; }
 
@@ -153,6 +159,7 @@ public:
 		return this->level;
 	}
 	void SetLevel(int l);
+	void DecreaseLevel();
 
 	bool GetCanHold() {
 		return this->canHold;
@@ -166,9 +173,13 @@ public:
 	}
 	void SetHoldingObject(CGameObject* holdingObject);
 
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
+	void StartUntouchable() { 
+		isUntouchable = true; 
+		untouchable_start = GetTickCount64(); 
+		flickering_start = GetTickCount64();
+	}
 
-	int GetUntouchable() { return untouchable; }
+	int GetUntouchable() { return isUntouchable; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

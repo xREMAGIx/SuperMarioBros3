@@ -1,6 +1,6 @@
 #scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y	min_cam_x	min_cam_y	bg_r	bg_g	bg_b
 [SETTINGS]
-256	256	0	0	2480	0	0	232	250	252	240
+256	256	0	0	2480	0	0	232	156	252	240
 
 # list of object assets to load in this scene
 [ASSETS]
