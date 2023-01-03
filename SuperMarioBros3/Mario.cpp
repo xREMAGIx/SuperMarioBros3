@@ -13,15 +13,37 @@
 #include "TopPlatform.h"
 #include "SuperLeaf.h"
 #include "VenusFireTrap.h"
+#include "Deadline.h"
 
 #include "Collision.h"
 #include "PlayScene.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
+	if (state == MARIO_STATE_DIE) {
+		if (GetTickCount64() - die_start > MARIO_DIE_TIME)
+		{
+			CBoard* game_board = CBoard::GetInstance();
+			game_board->RemoveLives();
+			game_board->SetState(BOARD_STATE_IDLE);
+
+			CGame* game = CGame::GetInstance();
+
+			if (game_board->GetLives() == 0) {
+				game_board->ResetLives();
+				CPlayScene* scene = (CPlayScene*)(game->GetCurrentScene());
+				scene->SetCurrentMapPoint(0);
+				game->InitiateSwitchScene(1);
+			}
+			else {
+				int previousId = game->GetPreviousSceneId();
+				game->InitiateSwitchScene(previousId);
+			}
+		}
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
-
 
 	if (abs(vx) > abs(maxVx)) {
 		vx = maxVx;
@@ -112,6 +134,19 @@ void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
+	
+	if (state == MARIO_STATE_DIE) {
+		CGame* game = CGame::GetInstance();
+		float minX, minY;
+		game->GetMinCamScreen(minX, minY);
+
+		int screen_width = game->GetScreenWidth();
+
+		if (y > minY + screen_width) {
+			vy = 0;
+			y = minY + screen_width;
+		}
+	}
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -151,6 +186,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithFireBall(e);
 	else if (dynamic_cast<CSuperLeaf*>(e->obj))
 		OnCollisionWithSuperLeaf(e);
+	else if (dynamic_cast<CDeadline*>(e->obj))
+		OnCollisionWithDeadline(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 }
@@ -410,6 +447,15 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 			questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);
 		}
 	}
+}
+
+
+void CMario::OnCollisionWithDeadline(LPCOLLISIONEVENT e)
+{
+	CDeadline* deadline = dynamic_cast<CDeadline*>(e->obj);
+
+	dieWithoutJump = true;
+	SetState(MARIO_STATE_DIE);
 }
 
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
@@ -782,9 +828,12 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_DIE:
-		vy = -MARIO_JUMP_DEFLECT_SPEED;
+		if (!dieWithoutJump) {
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
 		vx = 0;
 		ax = 0;
+		die_start = GetTickCount64();
 		break;
 	
 	}

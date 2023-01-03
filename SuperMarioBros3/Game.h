@@ -69,6 +69,7 @@ class CGame
 	ID3D10SamplerState* pPointSamplerState;
 
 	unordered_map<int, LPSCENE> scenes;
+	int previous_scene;
 	int current_scene;
 	int next_scene = -1;
 
@@ -158,6 +159,11 @@ public:
 	void SetBackgroundColor(D3DXCOLOR color) { backgroundColor = color; }
 
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+
+	int GetCurrentSceneId() { return current_scene; }
+
+	int GetPreviousSceneId() { return previous_scene; }
+	void SetPreviousSceneId(int prev) { previous_scene = prev; }
 
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();

@@ -112,7 +112,6 @@ void CGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x,y, flip);
-	RenderBoundingBox();
 }
 
 void CGoomba::SetState(int state)

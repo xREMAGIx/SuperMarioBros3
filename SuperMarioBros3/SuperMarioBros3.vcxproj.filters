@@ -195,6 +195,9 @@
     <ClCompile Include="FallDetector.cpp">
       <Filter>Source Files\Invisibles</Filter>
     </ClCompile>
+    <ClCompile Include="Deadline.cpp">
+      <Filter>Source Files\Invisibles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -342,6 +345,9 @@
       <Filter>Header Files\Miscs</Filter>
     </ClInclude>
     <ClInclude Include="FallDetector.h">
+      <Filter>Header Files\Invisibles</Filter>
+    </ClInclude>
+    <ClInclude Include="Deadline.h">
       <Filter>Header Files\Invisibles</Filter>
     </ClInclude>
   </ItemGroup>

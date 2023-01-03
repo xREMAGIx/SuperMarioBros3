@@ -68,6 +68,7 @@
 #define MARIO_FLICKERING_TIME 100
 #define MARIO_TAIL_ATTACK_TIME 300
 #define MARIO_TAIL_JUMP_TIME 750
+#define MARIO_DIE_TIME 3000
 
 class CMario : public CGameObject
 {
@@ -94,10 +95,13 @@ class CMario : public CGameObject
 	bool isUntouchable;
 	bool isFlickering;
 
+	bool dieWithoutJump;
+
 	ULONGLONG untouchable_start;
 	ULONGLONG tail_attack_start;
 	ULONGLONG tail_jump_start;
 	ULONGLONG flickering_start;
+	ULONGLONG die_start;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
@@ -111,6 +115,7 @@ class CMario : public CGameObject
 	void OnCollisionWithFireBall(LPCOLLISIONEVENT e);
 	void OnCollisionWithSuperLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithChimney(LPCOLLISIONEVENT e);
+	void OnCollisionWithDeadline(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
@@ -128,9 +133,13 @@ public:
 		ay = MARIO_GRAVITY; 
 		updateDt = -1;
 		level = MARIO_LEVEL_SMALL;
+
 		untouchable_start = -1;
 		tail_attack_start = -1;
 		tail_jump_start = -1;
+		die_start = -1;
+		flickering_start = -1;
+
 		isOnPlatform = false;
 		isTailAttacking = false;
 		isTailJumping = false;
@@ -138,6 +147,8 @@ public:
 
 		isUntouchable = false;
 		isFlickering = false;
+
+		dieWithoutJump = false;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();

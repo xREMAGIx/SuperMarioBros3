@@ -1,6 +1,6 @@
-#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y	min_cam_x	min_cam_y	bg_r	bg_g	bg_b
+#scene_width	sceen_height	cam_x	cam_y	max_cam_x	max_cam_y	min_cam_x	min_cam_y	bg_r	bg_g	bg_b previous_scene
 [SETTINGS]
-256	256	-8	-8	256	0	-8	-8	255	219	161
+256	256	-8	-8	256	0	-8	-8	255	219	161	1
 
 # list of object assets to load in this scene
 [ASSETS]

@@ -34,6 +34,7 @@
 #include "MapPoint.h"
 #include "InvisiblePlatform.h"
 #include "TopPlatform.h"
+#include "Deadline.h"
 
 //#include "Koopas.h"
 

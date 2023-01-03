@@ -65,7 +65,7 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 11) return; // skip invalid lines
+	if (tokens.size() < 12) return; // skip invalid lines
 
 	int scene_width = atoi(tokens[0].c_str());
 	int sceen_height = atoi(tokens[1].c_str());
@@ -78,6 +78,7 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 	int bg_r = atoi(tokens[8].c_str());
 	int bg_g = atoi(tokens[9].c_str());
 	int bg_b = atoi(tokens[10].c_str());
+	int previous_scene = atoi(tokens[11].c_str());
 
 	CGame* game = CGame::GetInstance();
 	game->SetMaxCamScreen(max_cam_x, max_cam_y);
@@ -85,6 +86,7 @@ void CPlayScene::_ParseSection_SETTINGS(string line)
 	game->SetScreenSize(scene_width, sceen_height);
 	game->SetCamPos(cam_x, cam_y);
 	game->SetBackgroundColor(D3DXCOLOR(bg_r * 1.0f/255, bg_g * 1.0f/255, bg_b * 1.0f/255, 1.0f));
+	game->SetPreviousSceneId(previous_scene);
 }
 
 void CPlayScene::_ParseSection_ASSETS(string line)
@@ -244,7 +246,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		break;
 	}
-
+	case OBJECT_TYPE_DEAD_LINE:
+	{
+		float cell_width = (float)atof(tokens[3].c_str());
+		float cell_height = (float)atof(tokens[4].c_str());
+		int length = atoi(tokens[5].c_str());
+		obj = new CDeadline(
+			x, y,
+			cell_width, cell_height, length
+		);
+		break;
+	}
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -410,7 +422,9 @@ void CPlayScene::Update(DWORD dt)
 		// Update camera to follow mario
 		float cx, cy;
 		player->GetPosition(cx, cy);
-		 
+		
+		CMario* mario = (CMario*)player;
+
 		vector<LPGAMEOBJECT> gridObjects;
 
 		grid->GetListObject(gridObjects, objects, cx, cy);
@@ -420,9 +434,13 @@ void CPlayScene::Update(DWORD dt)
 			coObjects.push_back(gridObjects[i]);
 		}
 
-		for (size_t i = 0; i < gridObjects.size(); i++)
-		{
-			gridObjects[i]->Update(dt, &coObjects);
+		if (mario->GetState() != MARIO_STATE_DIE) {
+			for (size_t i = 0; i < gridObjects.size(); i++)
+			{
+				gridObjects[i]->Update(dt, &coObjects);
+			}
+		} else {
+			mario->Update(dt, &coObjects);
 		}
 
 		CGame* game = CGame::GetInstance();
