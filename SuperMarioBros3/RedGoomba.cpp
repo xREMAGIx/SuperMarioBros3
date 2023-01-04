@@ -1,6 +1,6 @@
 #include "RedGoomba.h"
 
-CRedGoomba::CRedGoomba(float x, float y) :CGameObject(x, y)
+CRedGoomba::CRedGoomba(float x, float y, bool isHaveWing) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = RED_GOOMBA_GRAVITY;
@@ -8,6 +8,17 @@ CRedGoomba::CRedGoomba(float x, float y) :CGameObject(x, y)
 	SetState(RED_GOOMBA_STATE_WALKING);
 
 	fallDetector = new CFallDetector(x, y, 8, 8);
+
+	if (isHaveWing) {
+		this->isHaveWing = isHaveWing;
+		leftWing = new CWing(x, y);
+		rightWing = new CWing(x + RED_GOOMBA_BBOX_WIDTH, y);
+		rightWing->SetDirection(1, 0);
+	}
+	else {
+		leftWing = NULL;
+		rightWing = NULL;
+	}
 }
 
 void CRedGoomba::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -33,6 +44,8 @@ void CRedGoomba::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
+
+
 };
 
 void CRedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -43,6 +56,23 @@ void CRedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0)
 	{
 		vy = 0;
+
+		if (isHaveWing && e->ny < 0) {
+			if (jumpCount == 12) {
+				SetState(RED_GOOMBA_STATE_JUMP_BIG);
+				jumpCount = 0;
+				leftWing->SetState(WING_STATE_IDLE);
+				rightWing->SetState(WING_STATE_IDLE);
+			}
+			else if (jumpCount == 4 || jumpCount == 8) {
+				SetState(RED_GOOMBA_STATE_JUMP_SMALL);
+				jumpCount++;
+			}
+			else {
+				jumpCount++;
+			}
+		}
+
 	}
 	else if (e->nx != 0)
 	{
@@ -94,6 +124,12 @@ void CRedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		fallDetector->Update(dt, coObjects);
 	}
 
+	if (isHaveWing) {
+		leftWing->SetPosition(x + RED_GOOMBA_LEFT_WING_X, y + RED_GOOMBA_LEFT_WING_Y);
+		rightWing->SetPosition(x + RED_GOOMBA_RIGHT_WING_X, y + RED_GOOMBA_RIGHT_WING_Y);
+		leftWing->Update(dt, coObjects);
+		rightWing->Update(dt, coObjects);
+	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects, skipBlockCollide);
 }
@@ -111,6 +147,11 @@ void CRedGoomba::Render()
 
 	if (state == RED_GOOMBA_STATE_JUMP_DIE) {
 		flip = true;
+	}
+
+	if (isHaveWing) {
+		leftWing->Render();
+		rightWing->Render();
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y, flip);
@@ -137,6 +178,16 @@ void CRedGoomba::SetState(int state)
 		case RED_GOOMBA_STATE_WALKING:
 			nx = -1;
 			vx = -RED_GOOMBA_WALKING_SPEED;
+			break;
+		case RED_GOOMBA_STATE_JUMP_SMALL:
+			vy = -RED_GOOMBA_JUMP_SPEED;
+			leftWing->SetState(WING_STATE_FLAP);
+			rightWing->SetState(WING_STATE_FLAP);
+			break;
+		case RED_GOOMBA_STATE_JUMP_BIG:
+			vy = -RED_GOOMBA_JUMP_SPEED * 3;
+			leftWing->SetState(WING_STATE_FLAP);
+			rightWing->SetState(WING_STATE_FLAP);
 			break;
 		default:
 			break;

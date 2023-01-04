@@ -234,7 +234,12 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 	{
 		if (goomba->GetState() != RED_GOOMBA_STATE_DIE)
 		{
-			goomba->SetState(RED_GOOMBA_STATE_DIE);
+			if (goomba->GetIsHaveWing()) {
+				goomba->SetIsHaveWing(false);
+			}
+			else {
+				goomba->SetState(RED_GOOMBA_STATE_DIE);
+			}
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}

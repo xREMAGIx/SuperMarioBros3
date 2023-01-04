@@ -3,10 +3,12 @@
 #include "GameObject.h"
 #include "AssetIDs.h"
 #include "FallDetector.h"
+#include "Wing.h"
 
 #define RED_GOOMBA_GRAVITY 0.002f
 #define RED_GOOMBA_WALKING_SPEED 0.05f
 #define RED_GOOMBA_JUMP_DIE_SPEED	0.5f
+#define RED_GOOMBA_JUMP_SPEED	0.15f
 
 #define RED_GOOMBA_BBOX_WIDTH 16
 #define RED_GOOMBA_BBOX_HEIGHT 14
@@ -15,15 +17,29 @@
 #define RED_GOOMBA_DIE_TIMEOUT 500
 #define GOOMBA_JUMP_DIE_TIMEOUT 1000
 
-#define RED_GOOMBA_STATE_WALKING 100
-#define RED_GOOMBA_STATE_DIE 200
-#define RED_GOOMBA_STATE_JUMP_DIE 300
+#define RED_GOOMBA_STATE_WALKING 1
+#define RED_GOOMBA_STATE_DIE 2
+#define RED_GOOMBA_STATE_JUMP_DIE 3
+#define RED_GOOMBA_STATE_JUMP_SMALL 4
+#define RED_GOOMBA_STATE_JUMP_BIG 5
+
+#define RED_GOOMBA_LEFT_WING_X -(RED_GOOMBA_BBOX_WIDTH/2)
+#define RED_GOOMBA_LEFT_WING_Y -(RED_GOOMBA_BBOX_HEIGHT/2)
+#define RED_GOOMBA_RIGHT_WING_X (RED_GOOMBA_BBOX_WIDTH/2)
+#define RED_GOOMBA_RIGHT_WING_Y -(RED_GOOMBA_BBOX_HEIGHT/2)
 
 class CRedGoomba : public CGameObject
 {
 protected:
 	float ax;
 	float ay;
+	
+	int jumpCount;
+
+	bool isHaveWing = false;
+
+	CWing* leftWing;
+	CWing* rightWing;
 
 	ULONGLONG die_start;
 
@@ -39,6 +55,9 @@ protected:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public:
-	CRedGoomba(float x, float y);
+	CRedGoomba(float x, float y, bool isHaveWing = false);
 	virtual void SetState(int state);
+
+	bool GetIsHaveWing() { return isHaveWing; }
+	void SetIsHaveWing(bool isHaveWing) { this->isHaveWing = isHaveWing; }
 };

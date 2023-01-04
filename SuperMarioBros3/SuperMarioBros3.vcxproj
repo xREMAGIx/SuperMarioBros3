@@ -178,6 +178,7 @@
     <ClCompile Include="TreeWorld.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VenusFireTrap.cpp" />
+    <ClCompile Include="Wing.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -230,6 +231,7 @@
     <ClInclude Include="TreeWorld.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="VenusFireTrap.h" />
+    <ClInclude Include="Wing.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
