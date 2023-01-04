@@ -4,6 +4,7 @@
 #include "AssetIDs.h"
 #include "FallDetector.h"
 #include "Wing.h"
+#include "Point.h"
 
 #define RED_GOOMBA_GRAVITY 0.002f
 #define RED_GOOMBA_WALKING_SPEED 0.05f
@@ -15,7 +16,7 @@
 #define RED_GOOMBA_BBOX_HEIGHT_DIE 7
 
 #define RED_GOOMBA_DIE_TIMEOUT 500
-#define GOOMBA_JUMP_DIE_TIMEOUT 1000
+#define RED_GOOMBA_JUMP_DIE_TIMEOUT 1000
 
 #define RED_GOOMBA_STATE_WALKING 1
 #define RED_GOOMBA_STATE_DIE 2
@@ -28,6 +29,9 @@
 #define RED_GOOMBA_RIGHT_WING_X (RED_GOOMBA_BBOX_WIDTH/2)
 #define RED_GOOMBA_RIGHT_WING_Y -(RED_GOOMBA_BBOX_HEIGHT/2)
 
+#define RED_GOOMBA_POINT_DIE 100
+#define RED_GOOMBA_POINT_JUMP_DIE 200
+
 class CRedGoomba : public CGameObject
 {
 protected:
@@ -38,18 +42,18 @@ protected:
 
 	bool isHaveWing = false;
 
-	CWing* leftWing;
-	CWing* rightWing;
-
 	ULONGLONG die_start;
 
 	CFallDetector* fallDetector;
+	CPoint* score;
+	CWing* leftWing;
+	CWing* rightWing;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return (state != RED_GOOMBA_STATE_DIE || state != RED_GOOMBA_POINT_JUMP_DIE); };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);

@@ -20,7 +20,7 @@ void CMushroom::Render()
 		point->Render();
 	}
 
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CMushroom::GetBoundingBox(float& l, float& t, float& r, float& b)

@@ -1,13 +1,18 @@
 #include "RedGoomba.h"
+#include "PlayScene.h"
+
 
 CRedGoomba::CRedGoomba(float x, float y, bool isHaveWing) :CGameObject(x, y)
 {
+	nx = -1;
 	this->ax = 0;
 	this->ay = RED_GOOMBA_GRAVITY;
 	die_start = -1;
 	SetState(RED_GOOMBA_STATE_WALKING);
 
 	fallDetector = new CFallDetector(x, y, 8, 8);
+	score = new CPoint(x, y - 16);
+	score->SetType(POINT_TYPE_100);
 
 	if (isHaveWing) {
 		this->isHaveWing = isHaveWing;
@@ -44,8 +49,6 @@ void CRedGoomba::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-
-
 };
 
 void CRedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -59,6 +62,24 @@ void CRedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 
 		if (isHaveWing && e->ny < 0) {
 			if (jumpCount == 12) {
+				float marioX, marioY;
+				CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+
+				mario->GetPosition(marioX, marioY);
+				
+				if (nx > 0) {
+					if (marioX < x - RED_GOOMBA_BBOX_WIDTH / 2) {
+						vx = -vx;
+						nx = -nx;
+					}
+				}
+				else {
+					if (marioX > x + RED_GOOMBA_BBOX_WIDTH / 2) {
+						vx = -vx;
+						nx = -nx;
+					}
+				}
+				
 				SetState(RED_GOOMBA_STATE_JUMP_BIG);
 				jumpCount = 0;
 				leftWing->SetState(WING_STATE_IDLE);
@@ -87,41 +108,52 @@ void CRedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 
 	bool skipBlockCollide = false;
+	int fallDetectorState = fallDetector->GetState();
 
-	if ((state == RED_GOOMBA_STATE_DIE) && (GetTickCount64() - die_start > RED_GOOMBA_DIE_TIMEOUT))
+	switch (state)
 	{
-		isDeleted = true;
-		return;
-	}
+		case RED_GOOMBA_STATE_WALKING:
 
-	if (state == RED_GOOMBA_STATE_JUMP_DIE)
-	{
-		skipBlockCollide = true;
-		if (GetTickCount64() - die_start > GOOMBA_JUMP_DIE_TIMEOUT) {
-			isDeleted = true;
-			return;
-		}
-	}
+			if (fallDetectorState != FALL_DETECTOR_STATE_FALL)
+			{
+				if (fallDetectorState == FALL_DETECTOR_STATE_DETECT) {
+					nx = -nx;
+					vx = -vx;
+				}
 
-	if (state == RED_GOOMBA_STATE_WALKING) {
-
-		int fallDetectorState = fallDetector->GetState();
-
-		if (fallDetectorState != FALL_DETECTOR_STATE_FALL)
-		{
-			if (fallDetectorState == FALL_DETECTOR_STATE_DETECT) {
-				vx = -vx;
-				nx = -nx;
+				float fallDetectorX, fallDetectorY;
+				fallDetectorX = x + nx * (RED_GOOMBA_BBOX_WIDTH + 8);
+				fallDetectorY = y - RED_GOOMBA_BBOX_HEIGHT / 2;
+				fallDetector->SetPosition(fallDetectorX, fallDetectorY);
+				fallDetector->SetState(FALL_DETECTOR_STATE_FALL);
 			}
 
-			float fallDetectorX, fallDetectorY;
-			fallDetectorX = x + nx * (RED_GOOMBA_BBOX_WIDTH + 8);
-			fallDetectorY = y - RED_GOOMBA_BBOX_HEIGHT / 2;
-			fallDetector->SetPosition(fallDetectorX, fallDetectorY);
-			fallDetector->SetState(FALL_DETECTOR_STATE_FALL);
-		}
+			fallDetector->Update(dt, coObjects);
+			break;
+		case RED_GOOMBA_STATE_DIE:
+			score->Update(dt, coObjects);
+			if (GetTickCount64() - die_start > RED_GOOMBA_DIE_TIMEOUT) {
+				if (score->IsDeleted())
+				{
+					isDeleted = true;
+					return;
+				}
+			}
+			break;
+		case RED_GOOMBA_STATE_JUMP_DIE:
+			skipBlockCollide = true;
+			score->Update(dt, coObjects);
 
-		fallDetector->Update(dt, coObjects);
+			if (GetTickCount64() - die_start > RED_GOOMBA_JUMP_DIE_TIMEOUT) {
+				if (score->IsDeleted())
+				{
+					isDeleted = true;
+					return;
+				}
+			}
+			break;
+		default:
+			break;
 	}
 
 	if (isHaveWing) {
@@ -130,6 +162,7 @@ void CRedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		leftWing->Update(dt, coObjects);
 		rightWing->Update(dt, coObjects);
 	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects, skipBlockCollide);
 }
@@ -143,10 +176,12 @@ void CRedGoomba::Render()
 	if (state == RED_GOOMBA_STATE_DIE)
 	{
 		aniId = ID_ANI_RED_GOOMBA_DIE;
+		score->Render();
 	}
 
 	if (state == RED_GOOMBA_STATE_JUMP_DIE) {
 		flip = true;
+		score->Render();
 	}
 
 	if (isHaveWing) {
@@ -161,6 +196,8 @@ void CRedGoomba::Render()
 void CRedGoomba::SetState(int state)
 {
 	CGameObject::SetState(state);
+	LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+
 	switch (state)
 	{
 		case RED_GOOMBA_STATE_DIE:
@@ -169,15 +206,29 @@ void CRedGoomba::SetState(int state)
 			vx = 0;
 			vy = 0;
 			ay = 0;
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
+			if (dynamic_cast<CPlayScene*>(scene))
+			{
+				CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
+				playScene->GetGameBoard()->AddPoint(RED_GOOMBA_POINT_DIE);
+			}
 			break;
 		case RED_GOOMBA_STATE_JUMP_DIE:
 			vx = 0;
 			vy = -RED_GOOMBA_JUMP_DIE_SPEED;
 			die_start = GetTickCount64();
+			score->SetType(POINT_TYPE_200);
+			score->SetPosition(x, y - 18);
+			score->SetState(POINT_STATE_SHOW);
+			if (dynamic_cast<CPlayScene*>(scene))
+			{
+				CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
+				playScene->GetGameBoard()->AddPoint(RED_GOOMBA_POINT_JUMP_DIE);
+			}
 			break;
 		case RED_GOOMBA_STATE_WALKING:
-			nx = -1;
-			vx = -RED_GOOMBA_WALKING_SPEED;
+			vx = nx * RED_GOOMBA_WALKING_SPEED;
 			break;
 		case RED_GOOMBA_STATE_JUMP_SMALL:
 			vy = -RED_GOOMBA_JUMP_SPEED;

@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "AssetIDs.h"
 #include "FallDetector.h"
+#include "Point.h"
 
 #define GOOMBA_GRAVITY 0.002f
 #define GOOMBA_WALKING_SPEED 0.05f
@@ -19,21 +20,25 @@
 #define GOOMBA_STATE_DIE 200
 #define GOOMBA_STATE_JUMP_DIE 300
 
+#define GOOMBA_POINT_DIE 100
+#define GOOMBA_POINT_JUMP_DIE 200
+
 class CGoomba : public CGameObject
 {
 protected: 
 	float ax;				
 	float ay; 
 
-	CFallDetector* fallDetector;
-
 	ULONGLONG die_start;
+
+	CFallDetector* fallDetector;
+	CPoint* score;
 
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return (state != GOOMBA_STATE_DIE || state != GOOMBA_POINT_JUMP_DIE); };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 

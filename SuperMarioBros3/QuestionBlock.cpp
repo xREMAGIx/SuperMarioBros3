@@ -61,12 +61,19 @@ void CQuestionBlock::SetState(int state)
 {
 	if (state == QUESTION_BLOCK_STATE_OPENED) {
 		vector<LPGAMEOBJECT>& objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetGameObjects();
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 		if (dynamic_cast<CCoin*>(item)) {
 			item->SetState(COIN_STATE_JUMP);
 		}
 		else if (dynamic_cast<CSuperLeaf*>(item)) {
-			item->SetState(SUPER_LEAF_STATE_FLY_UP);
+			if (mario->GetLevel() != MARIO_LEVEL_BIG) {
+				item = new CMushroom(x, y - 2);
+				item->SetState(MUSHSHROOM_STATE_SHOWING);
+			}
+			else {
+				item->SetState(SUPER_LEAF_STATE_FLY_UP);
+			}
 		}
 		else if (dynamic_cast<CMushroom*>(item)) {
 			item->SetState(MUSHSHROOM_STATE_SHOWING);

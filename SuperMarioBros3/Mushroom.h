@@ -30,7 +30,7 @@ protected:
 
 	float ay;				// acceleration on y 
 
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return state != MUSHSHROOM_STATE_EARNED; };
 	virtual int IsBlocking() { return 0; }
 
 	virtual void OnNoCollision(DWORD dt);
