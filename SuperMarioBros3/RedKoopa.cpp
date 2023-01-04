@@ -52,7 +52,11 @@ void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		}
 		else if (dynamic_cast<CQuestionBlock*>(e->obj)) {
 			OnCollisionWithQuestionBlock(e);
-		}
+		} 
+		else if (dynamic_cast<CDeadline*>(e->obj)) {
+			isDeleted = true;
+			return;
+		};
 	}
 
 	if (!e->obj->IsBlocking()) return;
@@ -111,6 +115,10 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isHolded) {
 		vy = 0;
 		vx = 0;
+		ay = 0;
+	}
+	else {
+		ay = RED_KOOPA_GRAVITY;
 	}
 
 	if ((state == RED_KOOPA_STATE_DIE))
@@ -187,8 +195,15 @@ void CRedKoopa::Render()
 			aniId = ID_ANI_RED_KOOPA_WALKING_LEFT;
 		break;
 	}
+	if (isHolded) {
+		renderOrder = 0;
+	}
+	else {
+		renderOrder = 1;
+	}
+
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CRedKoopa::SetState(int state)

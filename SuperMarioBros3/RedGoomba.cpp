@@ -55,6 +55,10 @@ void CRedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CRedGoomba*>(e->obj)) return;
+	if (dynamic_cast<CDeadline*>(e->obj)) {
+		isDeleted = true;
+		return;
+	};
 
 	if (e->ny != 0)
 	{
@@ -190,7 +194,7 @@ void CRedGoomba::Render()
 	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y, flip);
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CRedGoomba::SetState(int state)

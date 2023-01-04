@@ -72,7 +72,7 @@ void CSuperLeaf::Render()
 	}
 
 	sprites->Get(spriteId)->Draw(x, y);
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CSuperLeaf::SetState(int state)

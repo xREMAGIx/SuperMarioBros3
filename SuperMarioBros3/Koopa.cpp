@@ -52,6 +52,10 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		else if (dynamic_cast<CQuestionBlock*>(e->obj)) {
 			OnCollisionWithQuestionBlock(e);
 		}
+		else if (dynamic_cast<CDeadline*>(e->obj)) {
+			isDeleted = true;
+			return;
+		};
 	}
 	if (!e->obj->IsBlocking()) return;
 	if (e->ny != 0)

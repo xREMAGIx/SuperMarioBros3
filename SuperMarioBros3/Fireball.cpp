@@ -69,7 +69,7 @@ void CFireball::Render()
 		int aniId = ID_ANI_FIREBALL_THROWN;
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 	}	
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CFireball::SetState(int state)

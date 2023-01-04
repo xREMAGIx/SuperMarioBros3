@@ -47,7 +47,7 @@ void CWing::Render()
 	if (state != WING_STATE_DESTROY)
 	{
 		CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-		RenderBoundingBox();
+		// RenderBoundingBox();
 	}
 }
 

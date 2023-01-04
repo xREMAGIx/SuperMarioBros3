@@ -68,7 +68,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				else if (level == MARIO_LEVEL_RACCOON) {
 					width = MARIO_RACCOON_BBOX_WIDTH;
 				}
-				holdingObjectX = x + nx * width;
+				holdingObjectX = x + nx * (width / 2 + 4);
 				holdingObjectY = y + ny * 4;
 				koopa->SetPosition(holdingObjectX, holdingObjectY);
 			}
@@ -483,11 +483,17 @@ int CMario::GetAniIdSmall()
 		}
 		else if (vx > 0)
 		{
-			aniId = ID_ANI_MARIO_SMALL_WALKING_HOLD_RIGHT;
+			if (ax < 0)
+				aniId = ID_ANI_MARIO_SMALL_WALKING_HOLD_LEFT;
+			else
+				aniId = ID_ANI_MARIO_SMALL_WALKING_HOLD_RIGHT;
 		}
 		else // vx < 0
 		{
-			aniId = ID_ANI_MARIO_SMALL_WALKING_HOLD_LEFT;
+			if (ax > 0)
+				aniId = ID_ANI_MARIO_SMALL_WALKING_HOLD_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_SMALL_WALKING_HOLD_LEFT;
 		}
 	}
 	else if (!isOnPlatform)
@@ -560,11 +566,17 @@ int CMario::GetAniIdBig()
 		}
 		else if (vx > 0)
 		{
-			aniId = ID_ANI_MARIO_WALKING_HOLD_RIGHT;
+			if (ax < 0)
+				aniId = ID_ANI_MARIO_WALKING_HOLD_LEFT;
+			else
+				aniId = ID_ANI_MARIO_WALKING_HOLD_RIGHT;
 		}
 		else // vx < 0
 		{
-			aniId = ID_ANI_MARIO_WALKING_HOLD_LEFT;
+			if (ax > 0)
+				aniId = ID_ANI_MARIO_WALKING_HOLD_RIGHT;
+			else
+				aniId = ID_ANI_MARIO_WALKING_HOLD_LEFT;
 		}
 	}
 	else if (!isOnPlatform)
@@ -637,11 +649,17 @@ int CMario::GetAniIdRaccoon()
 		}
 		else if (vx > 0)
 		{
-			aniId = ID_ANI_RACCOON_MARIO_WALKING_HOLD_RIGHT;
+			if (ax < 0)
+				aniId = ID_ANI_RACCOON_MARIO_WALKING_HOLD_LEFT;
+			else
+				aniId = ID_ANI_RACCOON_MARIO_WALKING_HOLD_RIGHT;
 		}
 		else // vx < 0
 		{
-			aniId = ID_ANI_RACCOON_MARIO_WALKING_HOLD_LEFT;
+			if (ax > 0)
+				aniId = ID_ANI_RACCOON_MARIO_WALKING_HOLD_RIGHT;
+			else
+				aniId = ID_ANI_RACCOON_MARIO_WALKING_HOLD_LEFT;
 		}
 	}
 	else if (!isOnPlatform)

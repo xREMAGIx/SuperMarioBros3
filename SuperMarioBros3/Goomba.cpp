@@ -42,6 +42,10 @@ void CGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return; 
 	if (dynamic_cast<CGoomba*>(e->obj)) return; 
+	if (dynamic_cast<CDeadline*>(e->obj)) {
+		isDeleted = true;
+		return;
+	};
 
 	if (e->ny != 0 )
 	{

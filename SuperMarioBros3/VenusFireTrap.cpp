@@ -175,7 +175,7 @@ void CVenusFireTrap::Render()
 
 	CSprites* sprites = CSprites::GetInstance();
 	sprites->Get(current_ani)->Draw(x, y, flip);
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CVenusFireTrap::SetState(int state)

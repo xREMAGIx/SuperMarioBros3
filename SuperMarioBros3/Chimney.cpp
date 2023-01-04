@@ -48,7 +48,7 @@ void CChimney::Render()
 {
 	if (this->length <= 0) return;
 
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CChimney::GetBoundingBox(float& l, float& t, float& r, float& b)
