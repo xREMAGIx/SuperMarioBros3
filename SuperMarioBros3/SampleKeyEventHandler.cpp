@@ -129,6 +129,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 			if (mario->GetLevel() == MARIO_LEVEL_RACCOON) {
 				mario->SetState(MARIO_STATE_TAIL_ATTACK);
 			}
+			//mario->SetAccelationPoint(1);
+			mario->StartAccelIncrease();
 			break;
 		case DIK_S:
 			mario->SetState(MARIO_STATE_JUMP);

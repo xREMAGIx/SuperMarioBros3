@@ -52,6 +52,30 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	current_vy = vy;
 	current_vx = vx;
 
+	if (state == MARIO_STATE_RUNNING_LEFT || state == MARIO_STATE_RUNNING_RIGHT) {
+		if (GetTickCount64() - accel_increase_start > MARIO_ACCEL_INCREASE_TIME) {
+			if (accelPoint < MARIO_ACCEL_POWER_X) {
+				accelPoint++;
+			}
+			StartAccelIncrease();
+		}
+	}
+	else {
+		if (accelPoint == MARIO_ACCEL_POWER_X && isTailJumping) {
+			if (GetTickCount64() - accel_increase_start > MARIO_ACCEL_INCREASE_TIME) {
+				if (accelPoint < MARIO_ACCEL_POWER_X) {
+					accelPoint++;
+				}
+				StartAccelIncrease();
+			}
+		} else if (accelPoint > 0 && GetTickCount64() - accel_increase_start > MARIO_ACCEL_INCREASE_TIME) {
+			if (accelPoint > 0) {
+				accelPoint--;
+			}
+			StartAccelIncrease();
+		}
+	}
+
 	if (holdingObject) {
 		if (dynamic_cast<CRedKoopa*>(holdingObject)) {
 			CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(holdingObject);
@@ -411,7 +435,9 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 {
-	e->obj->SetState(MUSHSHROOM_STATE_EARNED);
+	if (e->obj->GetState() != MUSHSHROOM_STATE_EARNED) {
+		e->obj->SetState(MUSHSHROOM_STATE_EARNED);
+	}
 	if (level == MARIO_LEVEL_SMALL) {
 		y -= (MARIO_BIG_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 		level = MARIO_LEVEL_BIG;
@@ -427,7 +453,9 @@ void CMario::OnCollisionWithGreenMushroom(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithSuperLeaf(LPCOLLISIONEVENT e)
 {
-	e->obj->SetState(SUPER_LEAF_STATE_EARNED);
+	if (e->obj->GetState() != SUPER_LEAF_STATE_EARNED) {
+		e->obj->SetState(SUPER_LEAF_STATE_EARNED);
+	}
 	if (level == MARIO_LEVEL_SMALL) {
 		y -= (MARIO_RACCOON_BBOX_HEIGHT - MARIO_SMALL_BBOX_HEIGHT) / 2;
 	}
@@ -531,18 +559,18 @@ int CMario::GetAniIdSmall()
 			{
 				if (ax < 0)
 					aniId = ID_ANI_MARIO_SMALL_BRACE_RIGHT;
-				else if (ax == MARIO_ACCEL_RUN_X)
+				else if (accelPoint > MARIO_ACCEL_POWER_X / 2)
 					aniId = ID_ANI_MARIO_SMALL_RUNNING_RIGHT;
-				else if (ax == MARIO_ACCEL_WALK_X)
+				else 
 					aniId = ID_ANI_MARIO_SMALL_WALKING_RIGHT;
 			}
 			else // vx < 0
 			{
 				if (ax > 0)
 					aniId = ID_ANI_MARIO_SMALL_BRACE_LEFT;
-				else if (ax == -MARIO_ACCEL_RUN_X)
+				else if (accelPoint > MARIO_ACCEL_POWER_X / 2)
 					aniId = ID_ANI_MARIO_SMALL_RUNNING_LEFT;
-				else if (ax == -MARIO_ACCEL_WALK_X)
+				else
 					aniId = ID_ANI_MARIO_SMALL_WALKING_LEFT;
 			}
 
@@ -614,18 +642,18 @@ int CMario::GetAniIdBig()
 			{
 				if (ax < 0)
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
-				else if (ax == MARIO_ACCEL_RUN_X)
+				else if (accelPoint > MARIO_ACCEL_POWER_X / 2)
 					aniId = ID_ANI_MARIO_RUNNING_RIGHT;
-				else if (ax == MARIO_ACCEL_WALK_X)
+				else
 					aniId = ID_ANI_MARIO_WALKING_RIGHT;
 			}
 			else // vx < 0
 			{
 				if (ax > 0)
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
-				else if (ax == -MARIO_ACCEL_RUN_X)
+				else if (accelPoint > MARIO_ACCEL_POWER_X / 2)
 					aniId = ID_ANI_MARIO_RUNNING_LEFT;
-				else if (ax == -MARIO_ACCEL_WALK_X)
+				else
 					aniId = ID_ANI_MARIO_WALKING_LEFT;
 			}
 
@@ -666,9 +694,19 @@ int CMario::GetAniIdRaccoon()
 	{
 		if (isTailJumping) {
 			if (nx >= 0)
-				aniId = ID_ANI_RACCOON_MARIO_JUMP_FLY_RIGHT;
+				if (accelPoint == MARIO_ACCEL_POWER_X) {
+					aniId = ID_ANI_RACCOON_MARIO_JUMP_FLY_RIGHT;
+				}
+				else {
+					aniId = ID_ANI_RACCOON_MARIO_JUMP_SLIDE_RIGHT;
+				}
 			else
-				aniId = ID_ANI_RACCOON_MARIO_JUMP_FLY_LEFT;
+				if (accelPoint == MARIO_ACCEL_POWER_X) {
+					aniId = ID_ANI_RACCOON_MARIO_JUMP_FLY_LEFT;
+				}
+				else {
+					aniId = ID_ANI_RACCOON_MARIO_JUMP_SLIDE_LEFT;
+				}
 		}
 		else if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
@@ -708,18 +746,18 @@ int CMario::GetAniIdRaccoon()
 			{
 				if (ax < 0)
 					aniId = ID_ANI_RACCOON_MARIO_BRACE_RIGHT;
-				else if (ax == MARIO_ACCEL_RUN_X)
+				else if (accelPoint > MARIO_ACCEL_POWER_X / 2)
 					aniId = ID_ANI_RACCOON_MARIO_RUNNING_RIGHT;
-				else if (ax == MARIO_ACCEL_WALK_X)
+				else 
 					aniId = ID_ANI_RACCOON_MARIO_WALKING_RIGHT;
 			}
 			else // vx < 0
 			{
 				if (ax > 0)
 					aniId = ID_ANI_RACCOON_MARIO_BRACE_LEFT;
-				else if (ax == -MARIO_ACCEL_RUN_X)
+				else if (accelPoint > MARIO_ACCEL_POWER_X / 2)
 					aniId = ID_ANI_RACCOON_MARIO_RUNNING_LEFT;
-				else if (ax == -MARIO_ACCEL_WALK_X)
+				else 
 					aniId = ID_ANI_RACCOON_MARIO_WALKING_LEFT;
 			}
 		}
@@ -765,13 +803,13 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
-		ax = MARIO_ACCEL_RUN_X;
+		ax = accelPoint * ((MARIO_ACCEL_RUN_X)/ MARIO_ACCEL_POWER_X);
 		nx = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
-		ax = -MARIO_ACCEL_RUN_X;
+		ax = -accelPoint * (MARIO_ACCEL_RUN_X/MARIO_ACCEL_POWER_X);
 		nx = -1;
 		break;
 	case MARIO_STATE_WALKING_RIGHT:
@@ -797,7 +835,8 @@ void CMario::SetState(int state)
 			
 		} else if (level == MARIO_LEVEL_RACCOON) {
 			if (!isTailJumping) {
-				if (abs(this->vx) == MARIO_RUNNING_SPEED) {
+				if (accelPoint == MARIO_ACCEL_POWER_X) {
+					ay = 0.0f;
 					vy = -MARIO_JUMP_TAIL_SPEED_Y;
 				}
 				else {
@@ -820,7 +859,7 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
 			vx = 0; vy = 0.0f;
-			y +=MARIO_SIT_HEIGHT_ADJUST;
+			y += AdjustHeight();
 		}
 		break;
 
@@ -829,7 +868,7 @@ void CMario::SetState(int state)
 		{
 			isSitting = false;
 			state = MARIO_STATE_IDLE;
-			y -= MARIO_SIT_HEIGHT_ADJUST;
+			y -= AdjustHeight();
 		}
 		break;
 
@@ -937,6 +976,25 @@ void CMario::DecreaseLevel()
 	default:
 		break;
 	}
+}
+
+int CMario::AdjustHeight()
+{
+	int adjustHeight = MARIO_SMALL_BBOX_HEIGHT;
+	switch (level)
+	{
+	case MARIO_LEVEL_RACCOON:
+		adjustHeight = (MARIO_RACCOON_BBOX_HEIGHT - MARIO_RACCOON_SITTING_BBOX_HEIGHT) / 2;
+		break;
+	case MARIO_LEVEL_BIG:
+		adjustHeight = (MARIO_BIG_BBOX_HEIGHT - MARIO_BIG_SITTING_BBOX_HEIGHT) / 2;
+		break;
+	case MARIO_LEVEL_SMALL:
+		break;
+	default:
+		break;
+	}
+	return adjustHeight;
 }
 
 void CMario::SetHoldingObject(CGameObject* holdingObject)

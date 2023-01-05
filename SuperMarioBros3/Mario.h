@@ -8,11 +8,14 @@
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.00025f
-#define MARIO_ACCEL_RUN_X	0.00035f
+#define MARIO_ACCEL_RUN_X	0.0035f
 
-#define MARIO_JUMP_SPEED_Y		0.5f
-#define MARIO_JUMP_RUN_SPEED_Y	0.6f
-#define MARIO_JUMP_TAIL_SPEED_Y		0.7f
+#define MARIO_ACCEL_POWER_X	7
+#define MARIO_ACCEL_DECREASE_X	1
+
+#define MARIO_JUMP_SPEED_Y		0.6f
+#define MARIO_JUMP_RUN_SPEED_Y	0.7f
+#define MARIO_JUMP_TAIL_SPEED_Y		0.125f
 
 #define MARIO_GRAVITY			0.002f
 #define MARIO_TAIL_GRAVITY			0.0002f
@@ -55,7 +58,7 @@
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 18
 
-#define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
+#define MARIO_SIT_HEIGHT_ADJUST ()
 
 #define MARIO_SMALL_BBOX_WIDTH  16
 #define MARIO_SMALL_BBOX_HEIGHT 16
@@ -64,13 +67,14 @@
 #define MARIO_RACCOON_BBOX_HEIGHT	28
 
 #define MARIO_RACCOON_SITTING_BBOX_WIDTH  18
-#define MARIO_RACCOON_SITTING_BBOX_HEIGHT 22
+#define MARIO_RACCOON_SITTING_BBOX_HEIGHT 18
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_FLICKERING_TIME 100
 #define MARIO_TAIL_ATTACK_TIME 300
 #define MARIO_TAIL_JUMP_TIME 750
 #define MARIO_DIE_TIME 3000
+#define MARIO_ACCEL_INCREASE_TIME 500
 
 class CMario : public CGameObject
 {
@@ -93,6 +97,7 @@ class CMario : public CGameObject
 
 	int level;
 	int nAttacking;
+	int accelPoint;
 
 	bool isUntouchable;
 	bool isFlickering;
@@ -104,6 +109,7 @@ class CMario : public CGameObject
 	ULONGLONG tail_jump_start;
 	ULONGLONG flickering_start;
 	ULONGLONG die_start;
+	ULONGLONG accel_increase_start;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
@@ -141,11 +147,13 @@ public:
 		tail_jump_start = -1;
 		die_start = -1;
 		flickering_start = -1;
+		accel_increase_start = -1;
 
 		isOnPlatform = false;
 		isTailAttacking = false;
 		isTailJumping = false;
 		nAttacking = nx;
+		accelPoint = 0;
 
 		isUntouchable = false;
 		isFlickering = false;
@@ -172,7 +180,9 @@ public:
 		return this->level;
 	}
 	void SetLevel(int l);
+
 	void DecreaseLevel();
+	int AdjustHeight();
 
 	bool GetCanHold() {
 		return this->canHold;
@@ -195,4 +205,13 @@ public:
 	int GetUntouchable() { return isUntouchable; }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	void GetAccelation(float& ax, float& ay) { ax = this->ax; ay = this->ay; }
+
+	void GetAccelationPoint(int& point) { point = this->accelPoint; }
+	void SetAccelationPoint(int point) { this->accelPoint = point; }
+
+	void StartAccelIncrease() {
+		accel_increase_start = GetTickCount64();
+	}
 };

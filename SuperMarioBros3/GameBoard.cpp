@@ -45,34 +45,30 @@ void CBoard::Render()
 	if (dynamic_cast<CPlayScene*>(scene))
 	{
 		CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
-		LPGAMEOBJECT mario = playScene->GetPlayer();
+		CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 		if (mario != NULL) {
 			float marioVx, marioVy;
+			float marioAx, marioAy;
+			int accelPoint;
 
 			mario->GetSpeed(marioVx, marioVy);
+			mario->GetAccelation(marioAx, marioAy);
+			mario->GetAccelationPoint(accelPoint);
 
-			if ((mario->GetState() == MARIO_STATE_RUNNING_RIGHT || mario->GetState() == MARIO_STATE_RUNNING_LEFT)) {
-				for (int i = 0; i < 6; i++)	//arrow
-				{
-					if (marioVx > MARIO_WALKING_SPEED * 2 * i / 6 || marioVx < -MARIO_WALKING_SPEED * 2 * i / 6) {
-						code->DrawCharacter(ID_SPRITE_FONT_ARROW_WHITE, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
-					}
-					else {
-						code->DrawCharacter(ID_SPRITE_FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
-					}
-				}
-				if (marioVx >= MARIO_WALKING_SPEED * 2 || marioVx <= -MARIO_WALKING_SPEED * 2) {
-					code->DrawCharacter(ID_SPRITE_FONT_P_WHITE, x + BOARD_P_X, y + BOARD_P_Y); //p
+			for (int i = 0; i < 6; i++)	//arrow
+			{
+				if (i < accelPoint) {
+					code->DrawCharacter(ID_SPRITE_FONT_ARROW_WHITE, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
 				}
 				else {
-					code->DrawCharacter(ID_SPRITE_FONT_P_BLACK, x + BOARD_P_X, y + BOARD_P_Y); //p
-				}
-			}
-			else {
-				for (int i = 0; i < 6; i++) {	//arrow
 					code->DrawCharacter(ID_SPRITE_FONT_ARROW_BLACK, x + i * 8 + BOARD_ARROWS_X, y + BOARD_ARROWS_Y);
 				}
+			}
+			if (accelPoint == MARIO_ACCEL_POWER_X) {
+				code->DrawCharacter(ID_SPRITE_FONT_P_WHITE, x + BOARD_P_X, y + BOARD_P_Y); //p
+			}
+			else {
 				code->DrawCharacter(ID_SPRITE_FONT_P_BLACK, x + BOARD_P_X, y + BOARD_P_Y); //p
 			}
 		}
