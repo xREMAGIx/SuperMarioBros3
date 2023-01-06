@@ -32,7 +32,7 @@ void CDeadline::Render()
 {
 	if (this->length <= 0) return;
 
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CDeadline::GetBoundingBox(float& l, float& t, float& r, float& b)

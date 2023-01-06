@@ -76,7 +76,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		}
 	}
 
-	if (holdingObject) {
+	if (holdingObject != NULL) {
 		if (dynamic_cast<CRedKoopa*>(holdingObject)) {
 			CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(holdingObject);
 
@@ -146,8 +146,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		tail_jump_start = 0;
 		SetState(MARIO_STATE_RELEASE_JUMP);
 	}
-
-
 
 	isOnPlatform = false;
 	updateDt = dt;
@@ -237,6 +235,22 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 				goomba->SetState(GOOMBA_STATE_JUMP_DIE);
 			}
 		}
+		else if (holdingObject) {
+			if (nx > 0 && e->nx < 0 || nx < 0 && e->nx > 0) {
+				goomba->SetState(GOOMBA_STATE_JUMP_DIE);
+				if (dynamic_cast<CRedKoopa*>(this->holdingObject)) {
+					CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(this->holdingObject);
+					koopa->SetIsHolded(false);
+					koopa->SetState(RED_KOOPA_STATE_JUMP_DIE);
+				}
+				else if (dynamic_cast<CKoopa*>(this->holdingObject)) {
+					CKoopa* koopa = dynamic_cast<CKoopa*>(this->holdingObject);
+					koopa->SetIsHolded(false);
+					koopa->SetState(KOOPA_STATE_JUMP_DIE);
+				}
+				SetHoldingObject(NULL);
+			}
+		}
 		else {
 			if (!isUntouchable)
 			{
@@ -272,6 +286,22 @@ void CMario::OnCollisionWithRedGoomba(LPCOLLISIONEVENT e)
 		if (isTailAttacking && nAttacking != e->nx) {
 			if (goomba->GetState() != RED_GOOMBA_STATE_DIE || goomba->GetState() != RED_GOOMBA_STATE_JUMP_DIE) {
 				goomba->SetState(RED_GOOMBA_STATE_JUMP_DIE);
+			}
+		}
+		else if (holdingObject) {
+			if (nx > 0 && e->nx < 0 || nx < 0 && e->nx > 0) {
+				goomba->SetState(RED_GOOMBA_STATE_JUMP_DIE);
+				if (dynamic_cast<CRedKoopa*>(this->holdingObject)) {
+					CRedKoopa* koopa = dynamic_cast<CRedKoopa*>(this->holdingObject);
+					koopa->SetIsHolded(false);
+					koopa->SetState(RED_KOOPA_STATE_JUMP_DIE);
+				}
+				else if (dynamic_cast<CKoopa*>(this->holdingObject)) {
+					CKoopa* koopa = dynamic_cast<CKoopa*>(this->holdingObject);
+					koopa->SetIsHolded(false);
+					koopa->SetState(KOOPA_STATE_JUMP_DIE);
+				}
+				SetHoldingObject(NULL);
 			}
 		}
 		else if (!isUntouchable)
@@ -355,7 +385,23 @@ void CMario::OnCollisionWithRedKoopa(LPCOLLISIONEVENT e)
 	}
 	else // hit by
 	{
-		if (!isUntouchable)
+		if (holdingObject) {
+			if (nx > 0 && e->nx < 0 || nx < 0 && e->nx > 0) {
+				koopa->SetState(RED_KOOPA_STATE_JUMP_DIE);
+				if (dynamic_cast<CRedKoopa*>(this->holdingObject)) {
+					CRedKoopa* koopaOther = dynamic_cast<CRedKoopa*>(this->holdingObject);
+					koopaOther->SetIsHolded(false);
+					koopaOther->SetState(RED_KOOPA_STATE_JUMP_DIE);
+				}
+				else if (dynamic_cast<CKoopa*>(this->holdingObject)) {
+					CKoopa* koopaOther = dynamic_cast<CKoopa*>(this->holdingObject);
+					koopaOther->SetIsHolded(false);
+					koopaOther->SetState(KOOPA_STATE_JUMP_DIE);
+				}
+				SetHoldingObject(NULL);
+			}
+		}
+		else if (!isUntouchable)
 		{
 			if (koopa->GetState() == RED_KOOPA_STATE_SHELL) {
 				if (canHold) {
@@ -407,7 +453,23 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	}
 	else // hit by
 	{
-		if (!isUntouchable)
+		if (holdingObject) {
+			if (nx > 0 && e->nx < 0 || nx < 0 && e->nx > 0) {
+				koopa->SetState(KOOPA_STATE_JUMP_DIE);
+				if (dynamic_cast<CRedKoopa*>(this->holdingObject)) {
+					CRedKoopa* koopaOther = dynamic_cast<CRedKoopa*>(this->holdingObject);
+					koopaOther->SetIsHolded(false);
+					koopaOther->SetState(RED_KOOPA_STATE_JUMP_DIE);
+				}
+				else if (dynamic_cast<CKoopa*>(this->holdingObject)) {
+					CKoopa* koopaOther = dynamic_cast<CKoopa*>(this->holdingObject);
+					koopaOther->SetIsHolded(false);
+					koopaOther->SetState(KOOPA_STATE_JUMP_DIE);
+				}
+				SetHoldingObject(NULL);
+			}
+		}
+		else if (!isUntouchable)
 		{
 			if (koopa->GetState() == KOOPA_STATE_SHELL) {
 				if (canHold) {
@@ -790,7 +852,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y, false, alpha);
 
-	// RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -803,12 +865,18 @@ void CMario::SetState(int state)
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
+		if (accelPoint == 0) {
+			accelPoint = 1;
+		}
 		ax = accelPoint * ((MARIO_ACCEL_RUN_X)/ MARIO_ACCEL_POWER_X);
 		nx = 1;
 		break;
 	case MARIO_STATE_RUNNING_LEFT:
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
+		if (accelPoint == 0) {
+			accelPoint = 1;
+		}
 		ax = -accelPoint * (MARIO_ACCEL_RUN_X/MARIO_ACCEL_POWER_X);
 		nx = -1;
 		break;
@@ -833,7 +901,7 @@ void CMario::SetState(int state)
 			else
 				vy = -MARIO_JUMP_SPEED_Y;
 			
-		} else if (level == MARIO_LEVEL_RACCOON) {
+		} else if (level == MARIO_LEVEL_RACCOON && !holdingObject) {
 			if (!isTailJumping) {
 				if (accelPoint == MARIO_ACCEL_POWER_X) {
 					ay = 0.0f;
@@ -914,6 +982,25 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
 		}
+		else if (holdingObject) {
+			float objL, objT, objR, objB;
+			holdingObject->GetBoundingBox(objL, objT, objR, objB);
+			float w = objR - objL;
+			float h = objB - objT;
+
+			if (nx < 0) {
+				left = x - MARIO_BIG_BBOX_WIDTH / 2 - w;
+				top = y - MARIO_BIG_BBOX_HEIGHT / 2;
+				right = left + MARIO_BIG_BBOX_WIDTH + w;
+				bottom = top + MARIO_BIG_BBOX_HEIGHT;
+			}
+			else {
+				left = x - MARIO_BIG_BBOX_WIDTH / 2;
+				top = y - MARIO_BIG_BBOX_HEIGHT / 2;
+				right = left + MARIO_BIG_BBOX_WIDTH + w;
+				bottom = top + MARIO_BIG_BBOX_HEIGHT;
+			}
+		}
 		else 
 		{
 			left = x - MARIO_BIG_BBOX_WIDTH/2;
@@ -931,6 +1018,25 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			right = left + MARIO_RACCOON_SITTING_BBOX_WIDTH;
 			bottom = top + MARIO_RACCOON_SITTING_BBOX_HEIGHT;
 		}
+		else if (holdingObject) {
+			float objL, objT, objR, objB;
+			holdingObject->GetBoundingBox(objL, objT, objR, objB);
+			float w = objR - objL;
+			float h = objB - objT;
+
+			if (nx < 0) {
+				left = x - MARIO_RACCOON_BBOX_WIDTH / 2 - w;
+				top = y - MARIO_RACCOON_BBOX_HEIGHT / 2;
+				right = left + MARIO_RACCOON_BBOX_WIDTH + w;
+				bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
+			}
+			else {
+				left = x - MARIO_RACCOON_BBOX_WIDTH / 2;
+				top = y - MARIO_RACCOON_BBOX_HEIGHT / 2;
+				right = left + MARIO_RACCOON_BBOX_WIDTH + w;
+				bottom = top + MARIO_RACCOON_BBOX_HEIGHT;
+			}
+		}
 		else
 		{
 			left = x - MARIO_RACCOON_BBOX_WIDTH / 2;
@@ -941,6 +1047,25 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 	}
 	else
 	{
+		if (holdingObject) {
+			float objL, objT, objR, objB;
+			holdingObject->GetBoundingBox(objL, objT, objR, objB);
+			float w = objR - objL;
+			float h = objB - objT;
+
+			if (nx < 0) {
+				left = x - MARIO_SMALL_BBOX_WIDTH / 2 - w;
+				top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
+				right = left + MARIO_SMALL_BBOX_WIDTH + w;
+				bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+			}
+			else {
+				left = x - MARIO_SMALL_BBOX_WIDTH / 2;
+				top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
+				right = left + MARIO_SMALL_BBOX_WIDTH + w;
+				bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+			}
+		}
 		left = x - MARIO_SMALL_BBOX_WIDTH/2;
 		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
@@ -1012,7 +1137,18 @@ void CMario::SetHoldingObject(CGameObject* holdingObject)
 				koopa->SetIsHolded(false);
 				koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
 			}
-		} else if (dynamic_cast<CKoopa*>(this->holdingObject)) {
+			else if (koopa->GetState() == RED_KOOPA_STATE_RESPAWN) {
+				if (nx > 0) {
+					koopa->SetSpeed(RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				else {
+					koopa->SetSpeed(-RED_KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				koopa->SetIsHolded(false);
+				koopa->SetState(RED_KOOPA_STATE_SHELL_SCROLL);
+			}
+		}
+		else if (dynamic_cast<CKoopa*>(this->holdingObject)) {
 			CKoopa* koopa = dynamic_cast<CKoopa*>(this->holdingObject);
 			if (koopa->GetState() == KOOPA_STATE_SHELL) {
 				if (nx > 0) {
@@ -1023,8 +1159,18 @@ void CMario::SetHoldingObject(CGameObject* holdingObject)
 				}
 				koopa->SetIsHolded(false);
 				koopa->SetState(KOOPA_STATE_SHELL_SCROLL);
+			} else if (koopa->GetState() == KOOPA_STATE_RESPAWN) {
+				if (nx > 0) {
+					koopa->SetSpeed(KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				else {
+					koopa->SetSpeed(-KOOPA_SHELL_SCROLL_SPEED, 0);
+				}
+				koopa->SetIsHolded(false);
+				koopa->SetState(KOOPA_STATE_SHELL_SCROLL);
 			}
 		}
-	}
+	};
+
 	this->holdingObject = holdingObject;
 }

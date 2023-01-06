@@ -115,6 +115,13 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vx = 0;
 	}
 
+	if (state == KOOPA_STATE_JUMP_DIE) {
+		if (GetTickCount64() - die_start > KOOPA_JUMP_DIE_TIMEOUT) {
+			isDeleted = true;
+			return;
+		}
+	}
+
 	if ((state == KOOPA_STATE_DIE))
 	{
 		isDeleted = true;
@@ -162,7 +169,8 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CKoopa::Render()
 {
-	int aniId;
+	int aniId = -1;
+	bool flip = false;
 
 	switch (state)
 	{
@@ -182,6 +190,12 @@ void CKoopa::Render()
 		aniId = ID_ANI_KOOPA_SHELL_ROLL;
 		break;
 	}
+	case KOOPA_STATE_JUMP_DIE:
+	{
+		flip = true;
+		aniId = ID_ANI_KOOPA_SHELL;
+		break;
+	}
 	default:
 		if (vx > 0)
 			aniId = ID_ANI_KOOPA_WALKING_RIGHT;
@@ -190,7 +204,7 @@ void CKoopa::Render()
 		break;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CKoopa::SetState(int state)

@@ -121,7 +121,14 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		ay = RED_KOOPA_GRAVITY;
 	}
 
-	if ((state == RED_KOOPA_STATE_DIE))
+	if (state == RED_KOOPA_STATE_JUMP_DIE) {
+		if (GetTickCount64() - die_start > RED_KOOPA_JUMP_DIE_TIMEOUT) {
+			isDeleted = true;
+			return;
+		}
+	}
+
+	if (state == RED_KOOPA_STATE_DIE)
 	{
 		isDeleted = true;
 		return;
@@ -168,7 +175,8 @@ void CRedKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CRedKoopa::Render()
 {
-	int aniId;
+	int aniId = -1;
+	bool flip = false;
 
 	switch (state)
 	{
@@ -188,6 +196,12 @@ void CRedKoopa::Render()
 		aniId = ID_ANI_RED_KOOPA_SHELL_ROLL;
 		break;
 	}
+	case RED_KOOPA_STATE_JUMP_DIE:
+	{
+		flip = true;
+		aniId = ID_ANI_RED_KOOPA_SHELL;
+		break;
+	}
 	default:
 		if (vx > 0)
 			aniId = ID_ANI_RED_KOOPA_WALKING_RIGHT;
@@ -202,15 +216,27 @@ void CRedKoopa::Render()
 		renderOrder = 1;
 	}
 
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y, flip);
 	// RenderBoundingBox();
 }
 
 void CRedKoopa::SetState(int state)
 {
 	CGameObject::SetState(state);
+	LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+
 	switch (state)
 	{
+	case RED_KOOPA_STATE_JUMP_DIE:
+		vx = 0;
+		vy = -RED_KOOPA_JUMP_DIE_SPEED;
+		die_start = GetTickCount64();
+		if (dynamic_cast<CPlayScene*>(scene))
+		{
+			CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
+			playScene->GetGameBoard()->AddPoint(RED_KOOPA_POINT_JUMP_DIE);
+		}
+		break;
 	case RED_KOOPA_STATE_DIE:
 		die_start = GetTickCount64();
 		y += (RED_KOOPA_BBOX_HEIGHT - RED_KOOPA_BBOX_SHELL_HEIGHT) / 2;

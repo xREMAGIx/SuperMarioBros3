@@ -7,6 +7,7 @@
 #define KOOPA_GRAVITY 0.002f
 #define KOOPA_WALKING_SPEED 0.05f
 #define KOOPA_SHELL_SCROLL_SPEED 0.08f
+#define KOOPA_JUMP_DIE_SPEED	0.5f
 
 #define KOOPA_BBOX_WIDTH 16
 #define KOOPA_BBOX_HEIGHT 28
@@ -18,9 +19,13 @@
 #define KOOPA_STATE_SHELL_SCROLL 4
 #define KOOPA_STATE_SHELL_HOLD 5
 #define KOOPA_STATE_DIE 6
+#define KOOPA_STATE_JUMP_DIE 7
 
 #define KOOPA_RESPAWN_START_TIME 5000
 #define KOOPA_RESPAWN_TIME 3000
+#define KOOPA_JUMP_DIE_TIMEOUT 1000
+
+#define KOOPA_POINT_JUMP_DIE 200
 
 class CKoopa : public CGameObject
 {
@@ -39,7 +44,7 @@ protected:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Render();
 
-	virtual int IsCollidable() { return 1; };
+	virtual int IsCollidable() { return ((state != KOOPA_STATE_DIE) && (state != KOOPA_STATE_JUMP_DIE)); };
 	virtual int IsBlocking() { return 0; }
 	virtual void OnNoCollision(DWORD dt);
 
