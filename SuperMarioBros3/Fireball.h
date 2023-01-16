@@ -15,6 +15,8 @@
 #define FIREBALL_STATE_THROWN 2
 #define FIREBALL_STATE_DESTROYED 3
 
+#define FIREBALL_OFFSET_CAM 32
+
 class CFireball : public CGameObject
 {
 protected:

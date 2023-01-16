@@ -67,7 +67,7 @@ void CCoin::SetState(int state)
 		vy = -COIN_JUMP_SPEED;
 		break;
 	case COIN_STATE_JUMP_POINT: 
-		point->SetPosition(this->x, this->y - 16);
+		point->SetPosition(this->x, this->y - COIN_POINT_OFFSET_Y);
 		point->SetState(POINT_STATE_SHOW);
 		if (dynamic_cast<CPlayScene*>(scene))
 		{

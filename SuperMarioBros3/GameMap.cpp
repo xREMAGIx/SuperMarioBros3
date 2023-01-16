@@ -29,8 +29,8 @@ RECT CGameMap::GetSourceRect(int _index)
 {
 	//DebugOut(L"[INFO] ID: %d \n", _index);
 	RECT srect;
-	srect.left = (_index % 73) * 16 + 1;
-	srect.top = (_index / 73) * 16 + 1;
+	srect.left = (_index % MAXIMUM_CELL_ROW) * 16 + 1;
+	srect.top = (_index / MAXIMUM_CELL_ROW) * 16 + 1;
 	srect.right = srect.left + 16;
 	srect.bottom = srect.top + 16 + 1;
 	return srect;

@@ -13,7 +13,7 @@ CKoopa::CKoopa(float x, float y) :CGameObject(x, y)
 	respawn_start = -1;
 	SetState(KOOPA_STATE_WALKING);
 
-	fallDetector = new CFallDetector(x, y, 8, 8);
+	fallDetector = new CFallDetector(x, y);
 }
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -153,8 +153,8 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 
 			float fallDetectorX, fallDetectorY;
-			fallDetectorX = x + nx * (KOOPA_BBOX_WIDTH + 10);
-			fallDetectorY = y - 8;
+			fallDetectorX = x + nx * (KOOPA_BBOX_WIDTH + KOOPA_FALL_DETECTOR_OFFSET_X);
+			fallDetectorY = y - KOOPA_FALL_DETECTOR_OFFSET_Y;
 			fallDetector->SetPosition(fallDetectorX, fallDetectorY);
 			fallDetector->SetState(FALL_DETECTOR_STATE_FALL);
 		}

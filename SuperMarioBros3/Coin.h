@@ -23,6 +23,8 @@
 
 #define COIN_POINT 1000
 
+#define COIN_POINT_OFFSET_Y	16
+
 class CCoin : public CGameObject {
 protected: 
 	CPoint* point;

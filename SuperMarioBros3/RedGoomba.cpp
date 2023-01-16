@@ -10,8 +10,8 @@ CRedGoomba::CRedGoomba(float x, float y, bool isHaveWing) :CGameObject(x, y)
 	die_start = -1;
 	SetState(RED_GOOMBA_STATE_WALKING);
 
-	fallDetector = new CFallDetector(x, y, 8, 8);
-	score = new CPoint(x, y - 16);
+	fallDetector = new CFallDetector(x, y);
+	score = new CPoint(x, y - RED_GOOMBA_POINT_OFFSET_Y);
 	score->SetType(POINT_TYPE_100);
 
 	if (isHaveWing) {
@@ -65,7 +65,7 @@ void CRedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 		vy = 0;
 
 		if (isHaveWing && e->ny < 0) {
-			if (jumpCount == 12) {
+			if (jumpCount == RED_GOOMBA_MAXIMUM_JUMP_COUNT) {
 				float marioX, marioY;
 				CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
@@ -89,7 +89,7 @@ void CRedGoomba::OnCollisionWith(LPCOLLISIONEVENT e)
 				leftWing->SetState(WING_STATE_IDLE);
 				rightWing->SetState(WING_STATE_IDLE);
 			}
-			else if (jumpCount == 4 || jumpCount == 8) {
+			else if (jumpCount == RED_GOOMBA_FIRST_MID_JUMP_COUNT || jumpCount == RED_GOOMBA_SECOND_MID_JUMP_COUNT) {
 				SetState(RED_GOOMBA_STATE_JUMP_SMALL);
 				jumpCount++;
 			}
@@ -126,7 +126,7 @@ void CRedGoomba::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 
 				float fallDetectorX, fallDetectorY;
-				fallDetectorX = x + nx * (RED_GOOMBA_BBOX_WIDTH + 8);
+				fallDetectorX = x + nx * (RED_GOOMBA_BBOX_WIDTH + FALL_DETECTOR_CELL_WIDTH);
 				fallDetectorY = y - RED_GOOMBA_BBOX_HEIGHT / 2;
 				fallDetector->SetPosition(fallDetectorX, fallDetectorY);
 				fallDetector->SetState(FALL_DETECTOR_STATE_FALL);
@@ -210,7 +210,7 @@ void CRedGoomba::SetState(int state)
 			vx = 0;
 			vy = 0;
 			ay = 0;
-			score->SetPosition(x, y - 18);
+			score->SetPosition(x, y - RED_GOOMBA_POINT_OFFSET_Y);
 			score->SetState(POINT_STATE_SHOW);
 			if (dynamic_cast<CPlayScene*>(scene))
 			{
@@ -223,7 +223,7 @@ void CRedGoomba::SetState(int state)
 			vy = -RED_GOOMBA_JUMP_DIE_SPEED;
 			die_start = GetTickCount64();
 			score->SetType(POINT_TYPE_200);
-			score->SetPosition(x, y - 18);
+			score->SetPosition(x, y - RED_GOOMBA_POINT_OFFSET_Y);
 			score->SetState(POINT_STATE_SHOW);
 			if (dynamic_cast<CPlayScene*>(scene))
 			{

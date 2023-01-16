@@ -6,6 +6,16 @@
 
 #include "Textures.h"
 
+CFallDetector::CFallDetector(float x, float y,
+	float cell_width, float cell_height): CGameObject(x, y)
+{
+	ay = FALL_DETECTOR_GRAVITY;
+	this->cellWidth = cell_width;
+	this->cellHeight = cell_height;
+	fall_start = -1;
+	ignore_start = -1;
+}
+
 void CFallDetector::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);

@@ -32,8 +32,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			if (game_board->GetLives() == 0) {
 				game_board->ResetLives();
 				CPlayScene* scene = (CPlayScene*)(game->GetCurrentScene());
-				scene->SetCurrentMapPoint(0);
-				game->InitiateSwitchScene(1);
+				scene->SetCurrentMapPoint(MARIO_DIE_BACK_MAP_POINT);
+				game->InitiateSwitchScene(MARIO_DIE_BACK_SCENE);
 			}
 			else {
 				int previousId = game->GetPreviousSceneId();

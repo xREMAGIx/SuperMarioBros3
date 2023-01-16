@@ -9,7 +9,7 @@ CChimney::CChimney(float x, float y, int length, int height, int _id_item,  vect
 	switch (_id_item)
 	{
 	case OBJECT_TYPE_VENUS_FIRE_TRAP:
-		object = new CVenusFireTrap(x + 8, y - VENUS_FIRE_TRAP_HEIGHT / 2 - 6);
+		object = new CVenusFireTrap(x + CHIMNEY_VENUS_FIRE_TRAP_OFFSET_X, y - VENUS_FIRE_TRAP_HEIGHT / 2 - CHIMNEY_VENUS_FIRE_TRAP_OFFSET_Y);
 		object->SetRenderOrder(-1);
 		objects->push_back(object);
 		break;

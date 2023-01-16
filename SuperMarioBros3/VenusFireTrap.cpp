@@ -210,12 +210,12 @@ void CVenusFireTrap::SetState(int state)
 
 		float fireball_x;
 		if (this->nx < 0) {
-			fireball_x = x - 8;
+			fireball_x = x - VENUS_FIRE_TRAP_FIRE_BALL_OFFSET_X;
 		}
 		else {
-			fireball_x = x + VENUS_FIRE_TRAP_WIDTH + 8;
+			fireball_x = x + VENUS_FIRE_TRAP_WIDTH + VENUS_FIRE_TRAP_FIRE_BALL_OFFSET_X;
 		}
-		float fireball_y = y + 6;
+		float fireball_y = y + VENUS_FIRE_TRAP_FIRE_BALL_OFFSET_Y;
 
 		fireball->SetPosition(fireball_x, fireball_y);
 		fireball->SetState(FIREBALL_STATE_THROWN);
@@ -229,10 +229,10 @@ void CVenusFireTrap::SetState(int state)
 	case VENUS_FIRE_TRAP_STATE_DIE: {
 		StartDie();
 		vy = 0;
-		score->SetPosition(x, y - 32);
+		score->SetPosition(x, y - VENUS_FIRE_TRAP_POINT_OFFSET_Y);
 		score->SetState(POINT_STATE_SHOW);
 		CBoard* game_board = CBoard::GetInstance();
-		game_board->AddPoint(100);
+		game_board->AddPoint(VENUS_FIRE_TRAP_POINT_DIE);
 		break;
 	}
 	case VENUS_FIRE_TRAP_STATE_JUMP_DIE:

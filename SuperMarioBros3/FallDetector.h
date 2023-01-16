@@ -12,6 +12,9 @@
 #define FALL_DETECTOR_FALL_TIMEOUT 200
 #define FALL_DETECTOR_FALL_IGNORE 1000
 
+#define FALL_DETECTOR_CELL_WIDTH	8
+#define	FALL_DETECTOR_CELL_HEIGHT	8
+
 class CFallDetector : public CGameObject
 {
 protected:
@@ -25,14 +28,7 @@ protected:
 
 public:
 	CFallDetector(float x, float y,
-		float cell_width, float cell_height) :CGameObject(x, y)
-	{
-		ay = FALL_DETECTOR_GRAVITY;
-		this->cellWidth = cell_width;
-		this->cellHeight = cell_height;
-		fall_start = -1;
-		ignore_start = -1;
-	}
+		float cell_width = FALL_DETECTOR_CELL_WIDTH, float cell_height = FALL_DETECTOR_CELL_HEIGHT);
 
 	virtual int IsCollidable() { return 1; };
 	virtual int IsBlocking() { return 0; };

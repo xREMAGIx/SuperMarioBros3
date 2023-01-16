@@ -21,6 +21,8 @@ using namespace std;
 #define TILE_SIZE 16
 #define BRICK_SIZE 16
 
+#define  MAXIMUM_CELL_ROW	73
+
 class CGameMap
 {
 protected:

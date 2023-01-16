@@ -8,9 +8,9 @@ CGoomba::CGoomba(float x, float y):CGameObject(x, y)
 	die_start = -1;
 	SetState(GOOMBA_STATE_WALKING);
 
-	fallDetector = new CFallDetector(x, y, 8, 8);
+	fallDetector = new CFallDetector(x, y);
 
-	score = new CPoint(x, y - 16);
+	score = new CPoint(x, y - GOOMBA_POINT_OFFSET_Y);
 	score->SetType(POINT_TYPE_100);
 }
 
@@ -103,7 +103,7 @@ void CGoomba::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 			}
 
 			float fallDetectorX, fallDetectorY;
-			fallDetectorX = x + nx * (GOOMBA_BBOX_WIDTH + 8);
+			fallDetectorX = x + nx * (GOOMBA_BBOX_WIDTH + FALL_DETECTOR_CELL_WIDTH);
 			fallDetectorY = y - GOOMBA_BBOX_HEIGHT / 2;
 			fallDetector->SetPosition(fallDetectorX, fallDetectorY);
 			fallDetector->SetState(FALL_DETECTOR_STATE_FALL);
@@ -149,7 +149,7 @@ void CGoomba::SetState(int state)
 			vx = 0;
 			vy = 0;
 			ay = 0; 
-			score->SetPosition(x, y - 18);
+			score->SetPosition(x, y - GOOMBA_POINT_OFFSET_Y);
 			score->SetState(POINT_STATE_SHOW);
 			if (dynamic_cast<CPlayScene*>(scene))
 			{
@@ -166,7 +166,7 @@ void CGoomba::SetState(int state)
 			vy = -GOOMBA_JUMP_DIE_SPEED;
 			die_start = GetTickCount64();
 			score->SetType(POINT_TYPE_200);
-			score->SetPosition(x, y - 18);
+			score->SetPosition(x, y - GOOMBA_POINT_OFFSET_Y);
 			score->SetState(POINT_STATE_SHOW);
 			if (dynamic_cast<CPlayScene*>(scene))
 			{

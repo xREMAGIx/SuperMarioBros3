@@ -39,7 +39,7 @@ void CFireball::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		float camX, camY;
 		game->GetCamPos(camX, camY);
 
-		int offset = 32;
+		int offset = FIREBALL_OFFSET_CAM;
 
 		float l = camX - offset,
 			t = camY - offset,

@@ -23,6 +23,8 @@
 #define GOOMBA_POINT_DIE 100
 #define GOOMBA_POINT_JUMP_DIE 200
 
+#define	GOOMBA_POINT_OFFSET_Y	16
+
 class CGoomba : public CGameObject
 {
 protected: 

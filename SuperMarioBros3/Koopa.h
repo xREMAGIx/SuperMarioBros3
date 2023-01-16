@@ -27,6 +27,9 @@
 
 #define KOOPA_POINT_JUMP_DIE 200
 
+#define KOOPA_FALL_DETECTOR_OFFSET_X 10
+#define KOOPA_FALL_DETECTOR_OFFSET_Y	8
+
 class CKoopa : public CGameObject
 {
 protected:

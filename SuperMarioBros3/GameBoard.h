@@ -37,6 +37,17 @@
 #define BOARD_ITEM_BOX_X 172
 #define BOARD_ITEM_BOX_Y 0
 
+#define BOARD_TIME_COUNTDOWN_SECOND	1000
+
+#define BOARD_WORLD_ID_CHAR	1
+#define BOARD_LIVES_CHAR	1
+#define BOARD_TIME_CHAR	3
+#define BOARD_SCORE_CHAR	7
+#define BOARD_MONEY_CHAR	2
+
+#define BOARD_NUMBER_OF_ARROWS	6
+#define BOARD_NUMBER_OF_ITEM_BOXES	3
+
 class CBoard : public CGameObject
 {
 	static CBoard* __instance;

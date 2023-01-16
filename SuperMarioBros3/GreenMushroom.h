@@ -22,6 +22,8 @@
 
 #define GREEN_MUSHSHROOM_POINT 1000
 
+#define GREEN_MUSHSHROOM_POINT_OFFSET_Y	16
+
 class CGreenMushroom : public CGameObject {
 protected:
 	CPoint* point;

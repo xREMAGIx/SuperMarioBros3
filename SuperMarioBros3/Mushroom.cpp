@@ -6,7 +6,7 @@ CMushroom::CMushroom(float x, float y) :CGameObject(x, y)
 	vx = 0;
 	vy = 0;
 	dt_start_show = -1;
-	point = new CPoint(x, y - 16);
+	point = new CPoint(x, y - MUSHSHROOM_POINT_OFFSET_Y);
 	point->SetType(POINT_TYPE_1000);
 }
 
@@ -98,7 +98,7 @@ void CMushroom::SetState(int state)
 			break;
 		}
 		case MUSHSHROOM_STATE_EARNED: {
-			point->SetPosition(x, y - 16);
+			point->SetPosition(x, y - MUSHSHROOM_POINT_OFFSET_Y);
 			point->SetState(POINT_STATE_SHOW);
 
 			LPSCENE scene = CGame::GetInstance()->GetCurrentScene();

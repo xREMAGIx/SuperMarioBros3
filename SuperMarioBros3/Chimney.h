@@ -11,14 +11,20 @@
 
 #define TIME_CHIMNEY_RESET 500
 
+#define CHIMNEY_CELL_WIDTH	16
+#define CHIMNEY_CELL_HEIGHT	16
+
+#define CHIMNEY_VENUS_FIRE_TRAP_OFFSET_X	8
+#define CHIMNEY_VENUS_FIRE_TRAP_OFFSET_Y	6
+
 class CChimney : public CGameObject
 {
 protected:
 	int length;				// Unit: cell 
 	int height;				// Unit: cell
 
-	int cellWidth = 16;
-	int cellHeight = 16;
+	int cellWidth = CHIMNEY_CELL_WIDTH;
+	int cellHeight = CHIMNEY_CELL_HEIGHT;
 
 	ULONGLONG dt_reset;
 	int scene_id = -1;
