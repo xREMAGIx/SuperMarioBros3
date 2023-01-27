@@ -5,7 +5,7 @@ CQuestionBlock::CQuestionBlock(float x, float y, int item_id) :CGameObject(x, y)
 	switch (item_id)
 	{
 	case OBJECT_TYPE_MUSHROOM:
-		item = new CMushroom(x, y - 2);
+		item = new CMushroom(x, y);
 		break;
 	case OBJECT_TYPE_GREEN_MUSHROOM:
 		item = new CGreenMushroom(x, y);

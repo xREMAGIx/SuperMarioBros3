@@ -181,7 +181,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_TREE_WORLD: obj = new CTreeWorld(x, y); break;
 	case OBJECT_TYPE_CLOUD: obj = new CCloud(x, y); break;
 	case OBJECT_TYPE_BLOCK: obj = new CBlock(x, y); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+	case OBJECT_TYPE_BRICK: {
+		int item_id = 1;
+
+		if (tokens.size() > 3 && atoi(tokens[3].c_str())) {
+			item_id = atoi(tokens[3].c_str());
+		}
+		obj = new CBrick(x, y, item_id);
+		break;
+	}
 	case OBJECT_TYPE_CHIMNEY:
 	{
 		int width = atoi(tokens[3].c_str());

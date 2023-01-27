@@ -9,7 +9,7 @@ void CBrickBreakCube::Render()
 	}
 	CAnimations* animations = CAnimations::GetInstance();
 	animations->Get(ani_id)->Render(x, y);
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CBrickBreakCube::GetBoundingBox(float& l, float& t, float& r, float& b)

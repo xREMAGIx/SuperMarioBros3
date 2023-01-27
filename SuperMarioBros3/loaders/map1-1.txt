@@ -18,6 +18,7 @@ loaders\block.txt
 loaders\brick.txt
 loaders\platform.txt
 loaders\super-leaf.txt
+loaders\p-switch.txt
 
 #HUD
 loaders\item-box.txt
@@ -188,7 +189,7 @@ loaders\brick-break-cube.txt
 209	2016	368
 209	2016	384
 209	2016	400
-209	2032	368
+209	2032	368	212
 209	2032	384
 209	2032	400
 209	2048	400

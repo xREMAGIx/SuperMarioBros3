@@ -41,10 +41,11 @@ void CBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 void CBrick::Render()
 {
-	CAnimations* animations = CAnimations::GetInstance();
 	switch (state)
 	{
 	case BRICK_STATE_TURNED: {
+		CSprites* sprites = CSprites::GetInstance();
+		sprites->Get(ID_SPRITE_BRICK_TURN_COIN)->Draw(x, y);
 		break;
 	}
 	case BRICK_STATE_BREAK: {
@@ -55,6 +56,7 @@ void CBrick::Render()
 		break;
 	}
 	default:
+		CAnimations* animations = CAnimations::GetInstance();
 		animations->Get(ID_ANI_BRICK)->Render(x, y);
 		break;
 	}
@@ -63,6 +65,8 @@ void CBrick::Render()
 void CBrick::SetState(int state)
 {
 	CGameObject::SetState(state);
+	LPSCENE scene = CGame::GetInstance()->GetCurrentScene();
+	CPlayScene* playScene = dynamic_cast<CPlayScene*>(scene);
 
 	switch (state)
 	{
@@ -70,6 +74,12 @@ void CBrick::SetState(int state)
 
 		break;
 	}
+	case BRICK_STATE_EARNED:
+		if (dynamic_cast<CPlayScene*>(scene))
+		{
+			playScene->GetGameBoard()->AddPoint(COIN_POINT);
+		}
+		break;
 	case BRICK_STATE_BREAK: {
 		StartBreak();
 
@@ -84,6 +94,15 @@ void CBrick::SetState(int state)
 
 		bottomRightCube->SetDirection(1, 0);
 		bottomRightCube->SetState(BRICK_BREAK_CUBE_LOW_FLY_STATE);
+
+		vector<LPGAMEOBJECT>& objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetGameObjects();
+
+		if (item != NULL && dynamic_cast<CPSwitch*>(item)) {
+			item->SetRenderOrder(0);
+			objects.push_back(item);
+
+		}
+
 		break;
 	}
 	default:

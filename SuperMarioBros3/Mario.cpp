@@ -217,6 +217,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CBrick*>(e->obj))
 		OnCollisionWithBrick(e);
+	else if (dynamic_cast<CPSwitch*>(e->obj))
+		OnCollisionWithPSwitch(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -566,17 +568,24 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
-	/*
-	CBrick* brick = (CBrick*)e->obj;
+	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 
-	if (isTailAttacking && e->ny == 0) {
-		if (brick->GetState() == BRICK_STATE_IDLE) {
-			brick->SetState(BRICK_STATE_BREAK);
-		}
+	if (brick->GetState() == BRICK_STATE_TURNED) {
+		brick->SetState(BRICK_STATE_EARNED);
+		brick->Delete();
 	}
-	*/
 }
 
+void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
+{
+	CPSwitch* pSwitch = dynamic_cast<CPSwitch*>(e->obj);
+	if (e->ny < 0)
+	{
+		if (pSwitch->GetState() == P_SWITCH_STATE_IDLE) {
+			pSwitch->SetState(P_SWITCH_STATE_PUSHED);
+		}
+	}
+}
 //
 // Get animation ID for small Mario
 //

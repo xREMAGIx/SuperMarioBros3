@@ -219,6 +219,9 @@
     <ClCompile Include="MarioTail.cpp">
       <Filter>Source Files\CharacterItems</Filter>
     </ClCompile>
+    <ClCompile Include="PSwitch.cpp">
+      <Filter>Source Files\Miscs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -379,6 +382,9 @@
     </ClInclude>
     <ClInclude Include="MarioTail.h">
       <Filter>Header Files\CharacterItems</Filter>
+    </ClInclude>
+    <ClInclude Include="PSwitch.h">
+      <Filter>Header Files\Miscs</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

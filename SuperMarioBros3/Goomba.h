@@ -42,8 +42,8 @@ protected:
 
 	virtual int IsCollidable() { return ((state != GOOMBA_STATE_DIE) && (state != GOOMBA_POINT_JUMP_DIE)); };
 	virtual int IsBlocking() { return 0; }
-	virtual void OnNoCollision(DWORD dt);
 
+	virtual void OnNoCollision(DWORD dt);
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 
 public: 	
