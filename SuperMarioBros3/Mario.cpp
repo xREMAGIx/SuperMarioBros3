@@ -134,9 +134,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	}
 
 	// reset tail attack
-	if (isTailAttacking && (GetTickCount64() - tail_attack_start > MARIO_TAIL_ATTACK_TIME))
+	if (isTailAttacking)
 	{
-		SetState(MARIO_STATE_TAIL_ATTACK_RELEASE);
+		tail->Update(dt, coObjects);
+		if (GetTickCount64() - tail_attack_start > MARIO_TAIL_ATTACK_TIME) {
+			SetState(MARIO_STATE_TAIL_ATTACK_RELEASE);
+		}
 	}
 
 	//reset tail jump
@@ -212,6 +215,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithDeadline(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
+	else if (dynamic_cast<CBrick*>(e->obj))
+		OnCollisionWithBrick(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -559,6 +564,19 @@ void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
 }
 
+void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	/*
+	CBrick* brick = (CBrick*)e->obj;
+
+	if (isTailAttacking && e->ny == 0) {
+		if (brick->GetState() == BRICK_STATE_IDLE) {
+			brick->SetState(BRICK_STATE_BREAK);
+		}
+	}
+	*/
+}
+
 //
 // Get animation ID for small Mario
 //
@@ -851,8 +869,8 @@ void CMario::Render()
 	}
 
 	animations->Get(aniId)->Render(x, y, false, alpha);
-
-	//RenderBoundingBox();
+	tail->Render();
+	RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -950,11 +968,17 @@ void CMario::SetState(int state)
 		isTailAttacking = true;
 		nAttacking = nx;
 		tail_attack_start = GetTickCount64();
+
+		tail->SetPosition(x + nx * MARIO_TAIL_OFFSET_X, y + MARIO_TAIL_OFFSET_Y);
+		tail->SetDirection(nx, 0);
+		tail->SetState(MARIO_TAIL_STATE_ATTACK);
 		break;
 	case MARIO_STATE_TAIL_ATTACK_RELEASE:
 		if (isTailAttacking) {
 			isTailAttacking = false;
 			tail_attack_start = 0;
+			vx = 0;
+			tail->SetState(MARIO_TAIL_STATE_IDLE);
 		}
 		break;
 	case MARIO_STATE_DIE:

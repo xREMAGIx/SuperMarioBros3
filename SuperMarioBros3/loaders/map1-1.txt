@@ -35,14 +35,17 @@ loaders\venus-fire-trap.txt
 loaders\fireball.txt
 loaders\wing.txt
 
+#EFFECTS
+loaders\brick-break-cube.txt
+
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-101	50	300
-#101	530	356
+#101	50	300
+101	1952	300
 
 # GOOMBA
 301	224	398

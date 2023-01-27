@@ -4,6 +4,8 @@
 #include "Animation.h"
 #include "Animations.h"
 
+#include "MarioTail.h"
+
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
@@ -42,13 +44,6 @@
 #define MARIO_DIE_BACK_SCENE	1
 #define MARIO_DIE_BACK_MAP_POINT	0
 
-#pragma region ANIMATION_ID
-
-// SMALL MARIO
-
-
-#pragma endregion
-
 #define GROUND_Y 160.0f
 
 #define	MARIO_LEVEL_SMALL	1
@@ -72,6 +67,9 @@
 #define MARIO_RACCOON_SITTING_BBOX_WIDTH  18
 #define MARIO_RACCOON_SITTING_BBOX_HEIGHT 18
 
+#define MARIO_TAIL_OFFSET_X	2
+#define MARIO_TAIL_OFFSET_Y	8
+
 #define MARIO_UNTOUCHABLE_TIME 2500
 #define MARIO_FLICKERING_TIME 100
 #define MARIO_TAIL_ATTACK_TIME 300
@@ -88,6 +86,8 @@ class CMario : public CGameObject
 
 	bool canHold;
 	CGameObject* holdingObject;
+
+	CMarioTail* tail;
 
 	DWORD updateDt;
 
@@ -128,6 +128,7 @@ class CMario : public CGameObject
 	void OnCollisionWithChimney(LPCOLLISIONEVENT e);
 	void OnCollisionWithDeadline(LPCOLLISIONEVENT e);
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
+	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -136,6 +137,8 @@ class CMario : public CGameObject
 public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
+		tail = new CMarioTail(x, y);
+
 		canHold = false;
 		holdingObject = NULL;
 		isSitting = false;

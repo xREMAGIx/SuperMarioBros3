@@ -55,6 +55,18 @@
     <Filter Include="Source Files\EnemyItems">
       <UniqueIdentifier>{8e8142a0-ffdc-4e62-b2e6-2cac1c612d55}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effects">
+      <UniqueIdentifier>{d4a99a48-d486-409b-bd08-45a55a33d2fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Effects">
+      <UniqueIdentifier>{2500b583-786b-4d5b-9fde-f9faa6879f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CharacterItems">
+      <UniqueIdentifier>{7e940e81-4035-4d1d-aa41-f94d1deb1163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CharacterItems">
+      <UniqueIdentifier>{5fa0df16-fd18-4b5b-acaf-1b33fba194d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -200,6 +212,12 @@
     </ClCompile>
     <ClCompile Include="Wing.cpp">
       <Filter>Source Files\EnemyItems</Filter>
+    </ClCompile>
+    <ClCompile Include="BrickBreakCube.cpp">
+      <Filter>Source Files\Effects</Filter>
+    </ClCompile>
+    <ClCompile Include="MarioTail.cpp">
+      <Filter>Source Files\CharacterItems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -355,6 +373,12 @@
     </ClInclude>
     <ClInclude Include="Wing.h">
       <Filter>Header Files\EnemyItems</Filter>
+    </ClInclude>
+    <ClInclude Include="BrickBreakCube.h">
+      <Filter>Header Files\Effects</Filter>
+    </ClInclude>
+    <ClInclude Include="MarioTail.h">
+      <Filter>Header Files\CharacterItems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

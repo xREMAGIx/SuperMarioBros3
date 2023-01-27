@@ -47,6 +47,9 @@
 #define OBJECT_TYPE_MAP_POINT 503
 #define OBJECT_TYPE_DEAD_LINE 504
 
+//EFFECTS
+#define OBJECT_TYPE_BRICK_BREAK	701
+
 //ID: 0
 #pragma region MARIO 
 
@@ -311,5 +314,15 @@
 #define ID_ANI_WING_RIGHT	6020200
 #define ID_ANI_WING_FLAP_LEFT	6020300
 #define ID_ANI_WING_FLAP_RIGHT	6020400
+
+#pragma endregion 
+
+
+//ID: 7
+#pragma region EFFECTS
+
+//BRICK BREAK CUBE
+#define ID_ANI_BRICK_BREAK_CUBE_LEFT 7010100
+#define ID_ANI_BRICK_BREAK_CUBE_RIGHT 7010200
 
 #pragma endregion 
