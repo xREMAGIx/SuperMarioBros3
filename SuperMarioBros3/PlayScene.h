@@ -52,6 +52,9 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 	Grid* grid;
 
+	float portalNextPosX = -1;
+	float portalNextPosY = -1;
+
 	int currentMapPoint = 0;
 
 	void _ParseSection_SPRITES(string line);
@@ -67,7 +70,7 @@ protected:
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
 
-	virtual void Load();
+	virtual void Load(float initX = -1, float initY = -1);
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
@@ -80,6 +83,12 @@ public:
 	vector<CMapPoint*> GetMapPoints() { return mapPoints; }
 	int GetCurrentMapPoint() { return currentMapPoint; }
 	void SetCurrentMapPoint(int index) { this->currentMapPoint = index; }
+
+	void GetPortalNextPos(float& x, float& y) { x = portalNextPosX; y = portalNextPosY; }
+	void SetPortalNextPos(float x, float y) { 
+		this->portalNextPosX = x;
+		this->portalNextPosY = y;
+	}
 
 	vector<LPGAMEOBJECT>& GetGameObjects() {	
 		return this->objects;

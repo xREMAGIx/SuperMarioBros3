@@ -145,6 +145,16 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
+
+		if (portalNextPosX > 0 && portalNextPosY > 0) {
+
+			x = portalNextPosX;
+			y = portalNextPosY;
+
+			portalNextPosX = -1;
+			portalNextPosY = -1;
+		}
+
 		obj = new CMario(x,y); 
 		player = (CMario*)obj;  
 
@@ -270,7 +280,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float r = (float)atof(tokens[3].c_str());
 		float b = (float)atof(tokens[4].c_str());
 		int scene_id = atoi(tokens[5].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
+		float next_pos_x = (float)atoi(tokens[6].c_str());
+		float next_pos_y = (float)atoi(tokens[7].c_str());
+		int direction = atoi(tokens[8].c_str());
+		obj = new CPortal(x, y, r, b, scene_id, next_pos_x, next_pos_y, direction);
 		break;
 	}
 	case OBJECT_TYPE_MAP_POINT:
@@ -352,9 +365,12 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
-void CPlayScene::Load()
+void CPlayScene::Load(float initX, float initY)
 {
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
+
+	portalNextPosX = initX;
+	portalNextPosY = initY;
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -554,6 +570,9 @@ void CPlayScene::Unload()
 	for (UINT i = 0; i < mapPoints.size(); i++)
 		delete mapPoints[i];
 	mapPoints.clear();
+
+	DebugOut(L"[INFO] portalNextPosX %f!\n", portalNextPosX);
+	DebugOut(L"[INFO] portalNextPosY %f!\n", portalNextPosY);
 
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }

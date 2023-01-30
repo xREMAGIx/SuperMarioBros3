@@ -44,13 +44,20 @@ loaders\game-board.txt
 501	320	80	16	15	16
 501	336	64	16	15	48
 501	160	-16	16	15	192
+501	160	0	16	15	12
 
 #WALL
 501	112	80	16	160	1
 501	384	24	16	64	1
 
+#CHIMNEY
+#id	x	y	width	height	obj_id	obj_ani	direction	scene_id
+210	128	0	2	2	0	-1
+210	352	0	2	2	0	-1
+
 #Portal 
-502	300	160	216	180	1
+#id	x	y	width	height	scene_id	next_pos_x	next_pos_y	direction
+502	360	16	32	16	3	2320	272	2
 
 [MAPFILE]
 mapfiles\map1-1-hidden.txt

@@ -73,6 +73,9 @@ class CGame
 	int current_scene;
 	int next_scene = -1;
 
+	float next_pos_x = -1.0f;
+	float next_pos_y = -1.0f;
+
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
 
@@ -168,6 +171,7 @@ public:
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);
+	void PortalScene(int scene_id, float x, float y);
 
 	void _ParseSection_TEXTURES(string line);
 

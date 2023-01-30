@@ -46,7 +46,7 @@ loaders\brick-break-cube.txt
 
 # MARIO
 #101	50	300
-101	1952	300
+101	2256	90
 
 # GOOMBA
 301	224	398
@@ -207,7 +207,8 @@ loaders\brick-break-cube.txt
 210	2320	384	2	2	0	-1
 
 #Portal 
-502	300	160	216	180	1
+#id	x	y	width	height	scene_id	next_pos_x	next_pos_y	direction
+502	2264	112	32	16	4	140	30	1
 
 [MAPFILE]
 mapfiles\map1-1.txt

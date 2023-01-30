@@ -21,6 +21,20 @@
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	if (state == MARIO_STATE_DIE) {
+		vy += ay * dt;
+		y += vy * dt;
+
+		CGame* game = CGame::GetInstance();
+		float minX, minY;
+		game->GetMinCamScreen(minX, minY);
+
+		int screen_width = game->GetScreenWidth();
+
+		if (y > minY + screen_width) {
+			vy = 0;
+			y = minY + screen_width;
+		}
+
 		if (GetTickCount64() - die_start > MARIO_DIE_TIME)
 		{
 			CBoard* game_board = CBoard::GetInstance();
@@ -40,6 +54,22 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				game->InitiateSwitchScene(previousId);
 			}
 		}
+		return;
+	}
+
+	if (state == MARIO_STATE_PORTAL && collidedPortal->GetSceneId() != -1) {
+		if (GetTickCount64() - portal_start > MARIO_PORTAL_TIME) {
+			CGame* game = CGame::GetInstance();
+			CPlayScene* scene = (CPlayScene*)(game->GetCurrentScene());
+
+			float posX, posY;
+			collidedPortal->GetNextPos(posX, posY);
+
+			game->PortalScene(collidedPortal->GetSceneId(), posX, posY);
+		}
+		
+		RunPortalMovement(dt);
+		return;
 	}
 
 	vy += ay * dt;
@@ -108,7 +138,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 				if (level == MARIO_LEVEL_BIG) {
 					width = MARIO_BIG_BBOX_WIDTH;
 				}
-				else if (level == MARIO_LEVEL_RACCOON) {
+				else if (level == MARIO_LEVEL_RACCOON) { 
 					width = MARIO_RACCOON_BBOX_WIDTH;
 				}
 				holdingObjectX = x + nx * width;
@@ -150,6 +180,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		SetState(MARIO_STATE_RELEASE_JUMP);
 	}
 
+	//collidedPortal = NULL;
+	renderOrder = 1;
+
 	isOnPlatform = false;
 	updateDt = dt;
 	CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -159,19 +192,6 @@ void CMario::OnNoCollision(DWORD dt)
 {
 	x += vx * dt;
 	y += vy * dt;
-	
-	if (state == MARIO_STATE_DIE) {
-		CGame* game = CGame::GetInstance();
-		float minX, minY;
-		game->GetMinCamScreen(minX, minY);
-
-		int screen_width = game->GetScreenWidth();
-
-		if (y > minY + screen_width) {
-			vy = 0;
-			y = minY + screen_width;
-		}
-	}
 }
 
 void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
@@ -563,7 +583,7 @@ void CMario::OnCollisionWithDeadline(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPortal(LPCOLLISIONEVENT e)
 {
 	CPortal* p = (CPortal*)e->obj;
-	CGame::GetInstance()->InitiateSwitchScene(p->GetSceneId());
+	SetCollidedPortal(p);
 }
 
 void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
@@ -586,13 +606,50 @@ void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
 		}
 	}
 }
+
+void CMario::RunPortalMovement(DWORD dt)
+{
+	x += vx * dt;
+	y += vy * dt;
+
+	int height;
+	switch (level)
+	{
+	case MARIO_LEVEL_RACCOON:
+		height = MARIO_RACCOON_BBOX_HEIGHT;
+		break;
+	case MARIO_LEVEL_BIG:
+		height = MARIO_BIG_BBOX_HEIGHT;
+		break;
+	default:
+		height = MARIO_SMALL_BBOX_HEIGHT;
+		break;
+	}
+
+	if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_DOWN) {
+		if (y > initial_y + height) {
+			y = initial_y + height;
+		}
+	}
+	else if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_UP) {
+		if (y < initial_y - height) {
+			y = initial_y - height;
+		}
+	}
+
+	
+}
+
 //
 // Get animation ID for small Mario
 //
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
-	if (holdingObject) {
+	if (state == MARIO_STATE_PORTAL) {
+		aniId = ID_ANI_MARIO_SMALL_PORTAL;
+	}
+	else if (holdingObject) {
 		if (vx == 0)
 		{
 			if (nx > 0) aniId = ID_ANI_MARIO_SMALL_IDLE_HOLD_RIGHT;
@@ -675,7 +732,10 @@ int CMario::GetAniIdSmall()
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
-	if (holdingObject) {
+	if (state == MARIO_STATE_PORTAL) {
+		aniId = ID_ANI_MARIO_PORTAL;
+	}
+	else if (holdingObject) {
 		if (vx == 0)
 		{
 			if (nx > 0) aniId = ID_ANI_MARIO_IDLE_HOLD_RIGHT;
@@ -758,7 +818,10 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRaccoon()
 {
 	int aniId = -1;
-	if (holdingObject) {
+	if (state == MARIO_STATE_PORTAL) {
+		aniId = ID_ANI_RACCOON_MARIO_PORTAL;
+	}
+	else if (holdingObject) {
 		if (vx == 0)
 		{
 			if (nx > 0) aniId = ID_ANI_RACCOON_MARIO_IDLE_HOLD_RIGHT;
@@ -879,7 +942,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y, false, alpha);
 	tail->Render();
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CMario::SetState(int state)
@@ -887,8 +950,23 @@ void CMario::SetState(int state)
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return; 
 
+	if (this->state == MARIO_STATE_PORTAL) return;
+
 	switch (state)
 	{
+	case MARIO_STATE_PORTAL:
+		vx = 0;
+		ax = 0;
+		initial_y = y;
+		renderOrder = -1;
+		if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_DOWN) {
+			vy = MARIO_PORTAL_SPEED;
+		}
+		else if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_UP) {
+			vy = -MARIO_PORTAL_SPEED;
+		}
+		StartPortal();
+		break;
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;

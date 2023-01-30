@@ -21,7 +21,7 @@ public:
 	}
 
 	LPKEYEVENTHANDLER GetKeyEventHandler() { return key_handler; }
-	virtual void Load() = 0;
+	virtual void Load(float initX = -1, float initY = -1) = 0;
 	virtual void Unload() = 0;
 	virtual void Update(DWORD dt) = 0;
 	virtual void Render() = 0; 

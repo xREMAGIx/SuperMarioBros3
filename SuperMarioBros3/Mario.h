@@ -5,6 +5,7 @@
 #include "Animations.h"
 
 #include "MarioTail.h"
+#include "Portal.h"
 
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
@@ -24,22 +25,21 @@
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
+#define MARIO_PORTAL_SPEED	0.04f
+
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
 #define MARIO_STATE_WALKING_RIGHT	1
 #define MARIO_STATE_WALKING_LEFT	2
-
 #define MARIO_STATE_JUMP			3
 #define MARIO_STATE_RELEASE_JUMP    4
-
 #define MARIO_STATE_RUNNING_RIGHT	5
 #define MARIO_STATE_RUNNING_LEFT	6
-
 #define MARIO_STATE_SIT				7
 #define MARIO_STATE_SIT_RELEASE		8
-
 #define	MARIO_STATE_TAIL_ATTACK	9
 #define MARIO_STATE_TAIL_ATTACK_RELEASE		10
+#define MARIO_STATE_PORTAL	11
 
 #define MARIO_DIE_BACK_SCENE	1
 #define MARIO_DIE_BACK_MAP_POINT	0
@@ -76,6 +76,7 @@
 #define MARIO_TAIL_JUMP_TIME 750
 #define MARIO_DIE_TIME 3000
 #define MARIO_ACCEL_INCREASE_TIME 500
+#define MARIO_PORTAL_TIME	2000
 
 class CMario : public CGameObject
 {
@@ -105,6 +106,9 @@ class CMario : public CGameObject
 	bool isUntouchable;
 	bool isFlickering;
 
+	CPortal* collidedPortal;
+	float initial_y;
+
 	bool dieWithoutJump;
 
 	ULONGLONG untouchable_start;
@@ -113,6 +117,7 @@ class CMario : public CGameObject
 	ULONGLONG flickering_start;
 	ULONGLONG die_start;
 	ULONGLONG accel_increase_start;
+	ULONGLONG portal_start;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
@@ -131,6 +136,7 @@ class CMario : public CGameObject
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
 
+	void RunPortalMovement(DWORD dt);
 	int GetAniIdBig();
 	int GetAniIdSmall();
 	int GetAniIdRaccoon();
@@ -155,12 +161,16 @@ public:
 		die_start = -1;
 		flickering_start = -1;
 		accel_increase_start = -1;
+		portal_start = -1;
 
 		isOnPlatform = false;
 		isTailAttacking = false;
 		isTailJumping = false;
 		nAttacking = nx;
 		accelPoint = 0;
+
+		initial_y = y;
+		collidedPortal = NULL;
 
 		isUntouchable = false;
 		isFlickering = false;
@@ -173,10 +183,10 @@ public:
 
 	int IsCollidable()
 	{ 
-		return (state != MARIO_STATE_DIE); 
+		return (state != MARIO_STATE_DIE && state != MARIO_STATE_PORTAL); 
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && !isUntouchable); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && !isUntouchable && state != MARIO_STATE_PORTAL); }
 
 	bool IsTailAttacking() { return isTailAttacking; }
 
@@ -220,5 +230,17 @@ public:
 
 	void StartAccelIncrease() {
 		accel_increase_start = GetTickCount64();
+	}
+
+	CPortal* GetCollidedPortal() {
+		return this->collidedPortal;
+	};
+
+	void SetCollidedPortal(CPortal* portal) {
+		this->collidedPortal = portal;
+	};
+
+	void StartPortal() {
+		portal_start = GetTickCount64();
 	}
 };

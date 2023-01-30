@@ -522,7 +522,7 @@ void CGame::SwitchScene()
 	current_scene = next_scene;
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
-	s->Load();
+	s->Load(next_pos_x, next_pos_y);
 }
 
 void CGame::InitiateSwitchScene(int scene_id)
@@ -530,6 +530,12 @@ void CGame::InitiateSwitchScene(int scene_id)
 	next_scene = scene_id;
 }
 
+void CGame::PortalScene(int scene_id, float x, float y)
+{
+	next_scene = scene_id;
+	next_pos_x = x;
+	next_pos_y = y;
+}
 
 void CGame::_ParseSection_TEXTURES(string line)
 {

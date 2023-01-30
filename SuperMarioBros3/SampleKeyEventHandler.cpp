@@ -120,10 +120,21 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		}
 	}
 	else {
+		CPortal* p = mario->GetCollidedPortal();
 		switch (KeyCode)
 		{
 		case DIK_DOWN:
-			mario->SetState(MARIO_STATE_SIT);
+			if (p != NULL && p->GetPortalDirection() == PORTAL_DIRECTION_DOWN) {
+				mario->SetState(MARIO_STATE_PORTAL);
+			}
+			else {
+				mario->SetState(MARIO_STATE_SIT);
+			}
+			break;
+		case DIK_UP:
+			if (p != NULL && p->GetPortalDirection() == PORTAL_DIRECTION_UP) {
+				mario->SetState(MARIO_STATE_PORTAL);
+			}
 			break;
 		case DIK_A:
 			if (mario->GetLevel() == MARIO_LEVEL_RACCOON) {
@@ -162,6 +173,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 	if (!mario) return;
+	if (mario->GetState() == MARIO_STATE_PORTAL) return;
 
 	switch (KeyCode)
 	{
@@ -184,6 +196,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 	if (!mario) return;
+	if (mario->GetState() == MARIO_STATE_PORTAL) return;
 
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
