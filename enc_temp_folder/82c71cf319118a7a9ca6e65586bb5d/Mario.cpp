@@ -941,6 +941,7 @@ void CMario::Render()
 	}
 
 	animations->Get(aniId)->Render(x, y, false, alpha);
+	tail->Render();
 	// RenderBoundingBox();
 }
 
