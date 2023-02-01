@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Textures.h"
 
-CPortal::CPortal(float x, float y, float width, float height, int scene_id, float next_pos_x, float next_pos_y, int direction)
+CPortal::CPortal(float x, float y, float width, float height, int scene_id, float next_pos_x, float next_pos_y, int direction, int next_portal_direction)
 {
 	this->scene_id = scene_id;
 	this->width = width;
@@ -10,6 +10,7 @@ CPortal::CPortal(float x, float y, float width, float height, int scene_id, floa
 	this->next_pos_x = next_pos_x;
 	this->next_pos_y = next_pos_y;
 	this->portal_direction = direction;
+	this->next_portal_direction = next_portal_direction;
 }
 
 void CPortal::RenderBoundingBox()

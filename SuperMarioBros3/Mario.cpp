@@ -64,8 +64,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 
 			float posX, posY;
 			collidedPortal->GetNextPos(posX, posY);
+			int next_direction = collidedPortal->GetNextPortalDirection();
 
-			game->PortalScene(collidedPortal->GetSceneId(), posX, posY);
+			scene->SetPortalNextPos(posX, posY, next_direction);
+			scene->SetCurrentMarioLevel(level);
+			game->InitiateSwitchScene(collidedPortal->GetSceneId());
 		}
 		
 		RunPortalMovement(dt);
@@ -180,7 +183,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		SetState(MARIO_STATE_RELEASE_JUMP);
 	}
 
-	//collidedPortal = NULL;
+	collidedPortal = NULL;
 	renderOrder = 1;
 
 	isOnPlatform = false;

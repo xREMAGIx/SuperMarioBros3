@@ -512,8 +512,17 @@ void CGame::SwitchScene()
 {
 	if (next_scene < 0 || next_scene == current_scene) return; 
 
-	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
+	float portalNextPosX = -1;
+	float portalNextPosY = -1;
+	int portalNextDirection = -1;
+	int currentMarioLevel = MARIO_LEVEL_SMALL;
 
+	DebugOut(L"[INFO] Switching to scene %d\n", next_scene);
+	if (dynamic_cast<CPlayScene*>(scenes[current_scene])) {
+		CPlayScene* currScene = (CPlayScene*)scenes[current_scene];
+		currScene->GetPortalNextPos(portalNextPosX, portalNextPosY, portalNextDirection);
+		currScene->GetCurrentMarioLevel(currentMarioLevel);
+	}
 	scenes[current_scene]->Unload();
 
 	CSprites::GetInstance()->Clear();
@@ -522,19 +531,18 @@ void CGame::SwitchScene()
 	current_scene = next_scene;
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
-	s->Load(next_pos_x, next_pos_y);
+	s->LoadPrevData(
+		portalNextPosX,
+		portalNextPosY,
+		portalNextDirection,
+		currentMarioLevel
+	);
+	s->Load();
 }
 
 void CGame::InitiateSwitchScene(int scene_id)
 {
 	next_scene = scene_id;
-}
-
-void CGame::PortalScene(int scene_id, float x, float y)
-{
-	next_scene = scene_id;
-	next_pos_x = x;
-	next_pos_y = y;
 }
 
 void CGame::_ParseSection_TEXTURES(string line)

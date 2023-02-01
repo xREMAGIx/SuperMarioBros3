@@ -208,8 +208,8 @@ loaders\brick-break-cube.txt
 210	2320	384	2	2	0	-1
 
 #Portal 
-#id	x	y	width	height	scene_id	next_pos_x	next_pos_y	direction
-502	2264	112	32	16	4	140	30	1
+#id	x	y	width	height	scene_id	next_pos_x	next_pos_y	direction	next_direction
+502	2264	112	32	16	4	140	30	1	1
 
 [MAPFILE]
 mapfiles\map1-1.txt

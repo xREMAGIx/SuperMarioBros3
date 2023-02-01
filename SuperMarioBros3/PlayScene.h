@@ -54,8 +54,10 @@ protected:
 
 	float portalNextPosX = -1;
 	float portalNextPosY = -1;
+	int portalNextDirection = -1;
 
 	int currentMapPoint = 0;
+	int currentMarioLevel = MARIO_LEVEL_SMALL;
 
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
@@ -70,7 +72,13 @@ protected:
 public: 
 	CPlayScene(int id, LPCWSTR filePath);
 
-	virtual void Load(float initX = -1, float initY = -1);
+	virtual void LoadPrevData(
+		float portalNextPosX,
+		float portalNextPosY,
+		int portalNextDirection,
+		int currentMarioLevel
+	);
+	virtual void Load();
 	virtual void Update(DWORD dt);
 	virtual void Render();
 	virtual void Unload();
@@ -84,10 +92,20 @@ public:
 	int GetCurrentMapPoint() { return currentMapPoint; }
 	void SetCurrentMapPoint(int index) { this->currentMapPoint = index; }
 
-	void GetPortalNextPos(float& x, float& y) { x = portalNextPosX; y = portalNextPosY; }
-	void SetPortalNextPos(float x, float y) { 
+	void GetPortalNextPos(float& x, float& y, int& direction) {
+		x = portalNextPosX; 
+		y = portalNextPosY; 
+		direction = portalNextDirection;
+	}
+	void SetPortalNextPos(float x, float y, int direction) { 
 		this->portalNextPosX = x;
 		this->portalNextPosY = y;
+		this->portalNextDirection = direction;
+	}
+
+	void GetCurrentMarioLevel(int& level) { level = currentMarioLevel; }
+	void SetCurrentMarioLevel(int level) {
+		this->currentMarioLevel = level;
 	}
 
 	vector<LPGAMEOBJECT>& GetGameObjects() {	
@@ -96,6 +114,7 @@ public:
 
 	void Clear();
 	void PurgeDeletedObjects();
+	void ResetPrevData();
 
 	static bool IsGameObjectDeleted(const LPGAMEOBJECT& o);
 };

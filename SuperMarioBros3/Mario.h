@@ -40,6 +40,7 @@
 #define	MARIO_STATE_TAIL_ATTACK	9
 #define MARIO_STATE_TAIL_ATTACK_RELEASE		10
 #define MARIO_STATE_PORTAL	11
+#define MARIO_STATE_PORTAL_OUT	12
 
 #define MARIO_DIE_BACK_SCENE	1
 #define MARIO_DIE_BACK_MAP_POINT	0
@@ -77,6 +78,7 @@
 #define MARIO_DIE_TIME 3000
 #define MARIO_ACCEL_INCREASE_TIME 500
 #define MARIO_PORTAL_TIME	2000
+#define MARIO_PORTAL_OUT_TIME	2000
 
 class CMario : public CGameObject
 {
@@ -108,6 +110,7 @@ class CMario : public CGameObject
 
 	CPortal* collidedPortal;
 	float initial_y;
+	int portalOutDirection;
 
 	bool dieWithoutJump;
 
@@ -142,7 +145,7 @@ class CMario : public CGameObject
 	int GetAniIdRaccoon();
 
 public:
-	CMario(float x, float y) : CGameObject(x, y)
+	CMario(float x, float y, int initLevel = MARIO_LEVEL_SMALL, int outDirection = PORTAL_DIRECTION_UP) : CGameObject(x, y)
 	{
 		tail = new CMarioTail(x, y);
 
@@ -153,7 +156,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 		updateDt = -1;
-		level = MARIO_LEVEL_SMALL;
+		level = initLevel;
 
 		untouchable_start = -1;
 		tail_attack_start = -1;
@@ -171,6 +174,7 @@ public:
 
 		initial_y = y;
 		collidedPortal = NULL;
+		portalOutDirection = outDirection;
 
 		isUntouchable = false;
 		isFlickering = false;
@@ -243,4 +247,5 @@ public:
 	void StartPortal() {
 		portal_start = GetTickCount64();
 	}
+
 };

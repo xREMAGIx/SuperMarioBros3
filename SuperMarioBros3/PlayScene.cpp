@@ -136,10 +136,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float y = (float)atof(tokens[2].c_str());
 
 	CGameObject *obj = NULL;
+	int state = -1;
+	int portalOutDirection = PORTAL_DIRECTION_UP;
 
 	switch (object_type)
 	{
 	case OBJECT_TYPE_MARIO:
+
 		if (player!=NULL) 
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
@@ -147,21 +150,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 
 		if (portalNextPosX > 0 && portalNextPosY > 0) {
-
 			x = portalNextPosX;
 			y = portalNextPosY;
-
-			portalNextPosX = -1;
-			portalNextPosY = -1;
+			state = MARIO_STATE_PORTAL_OUT;
+			portalOutDirection = portalNextDirection;
 		}
 
-		obj = new CMario(x,y); 
-		player = (CMario*)obj;  
+		obj = new CMario(x,y, currentMarioLevel, portalOutDirection);
+		if (state != 1) {
+			obj->SetState(state);
+		}
+		player = (CMario*)obj;
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	case OBJECT_TYPE_MARIO_WORLD:
-		if (player != NULL)
+		if (marioWorld != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO WORLD was created before!\n");
 			return;
@@ -283,7 +287,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float next_pos_x = (float)atoi(tokens[6].c_str());
 		float next_pos_y = (float)atoi(tokens[7].c_str());
 		int direction = atoi(tokens[8].c_str());
-		obj = new CPortal(x, y, r, b, scene_id, next_pos_x, next_pos_y, direction);
+		int next_direction = atoi(tokens[9].c_str());
+		obj = new CPortal(x, y, r, b, scene_id, next_pos_x, next_pos_y, direction, next_direction);
 		break;
 	}
 	case OBJECT_TYPE_MAP_POINT:
@@ -365,12 +370,31 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
-void CPlayScene::Load(float initX, float initY)
+void CPlayScene::LoadPrevData(
+	float portalNextPosX,
+	float portalNextPosY,
+	int portalNextDirection,
+	int currentMarioLevel
+)
+{
+	this->portalNextPosX = portalNextPosX;
+	this->portalNextPosY = portalNextPosY;
+	this->portalNextDirection = portalNextDirection;
+	this->currentMarioLevel = currentMarioLevel;
+}
+
+void CPlayScene::ResetPrevData()
+{
+	portalNextPosX = -1;
+	portalNextPosY = -1;
+	portalNextDirection = -1;
+	currentMarioLevel = MARIO_LEVEL_SMALL;
+}
+
+
+void CPlayScene::Load()
 {
 	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
-
-	portalNextPosX = initX;
-	portalNextPosY = initY;
 
 	ifstream f;
 	f.open(sceneFilePath);
@@ -414,6 +438,7 @@ void CPlayScene::Load(float initX, float initY)
 		gameBoard->SetState(BOARD_STATE_START);
 	}
 
+	ResetPrevData();
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
@@ -571,9 +596,7 @@ void CPlayScene::Unload()
 		delete mapPoints[i];
 	mapPoints.clear();
 
-	DebugOut(L"[INFO] portalNextPosX %f!\n", portalNextPosX);
-	DebugOut(L"[INFO] portalNextPosY %f!\n", portalNextPosY);
-
+	ResetPrevData();
 	DebugOut(L"[INFO] Scene %d unloaded! \n", id);
 }
 
