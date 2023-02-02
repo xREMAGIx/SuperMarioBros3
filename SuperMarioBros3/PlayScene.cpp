@@ -157,7 +157,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 
 		obj = new CMario(x,y, currentMarioLevel, portalOutDirection);
-		if (state != 1) {
+		if (state != -1) {
 			obj->SetState(state);
 		}
 		player = (CMario*)obj;

@@ -26,6 +26,7 @@
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
 #define MARIO_PORTAL_SPEED	0.04f
+#define MARIO_PORTAL_OFFSET	4
 
 #define MARIO_STATE_DIE				-10
 #define MARIO_STATE_IDLE			0
@@ -62,7 +63,7 @@
 #define MARIO_SMALL_BBOX_WIDTH  16
 #define MARIO_SMALL_BBOX_HEIGHT 16
 
-#define MARIO_RACCOON_BBOX_WIDTH	18
+#define MARIO_RACCOON_BBOX_WIDTH	16
 #define MARIO_RACCOON_BBOX_HEIGHT	28
 
 #define MARIO_RACCOON_SITTING_BBOX_WIDTH  18
@@ -78,7 +79,7 @@
 #define MARIO_DIE_TIME 3000
 #define MARIO_ACCEL_INCREASE_TIME 500
 #define MARIO_PORTAL_TIME	2000
-#define MARIO_PORTAL_OUT_TIME	2000
+#define MARIO_PORTAL_OUT_TIME	550
 
 class CMario : public CGameObject
 {
@@ -121,6 +122,7 @@ class CMario : public CGameObject
 	ULONGLONG die_start;
 	ULONGLONG accel_increase_start;
 	ULONGLONG portal_start;
+	ULONGLONG portal_out_start;
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithRedGoomba(LPCOLLISIONEVENT e);
@@ -175,6 +177,7 @@ public:
 		initial_y = y;
 		collidedPortal = NULL;
 		portalOutDirection = outDirection;
+		portal_out_start = -1;
 
 		isUntouchable = false;
 		isFlickering = false;
@@ -248,4 +251,7 @@ public:
 		portal_start = GetTickCount64();
 	}
 
+	void StartPortalOut() {
+		portal_out_start = GetTickCount64();
+	}
 };

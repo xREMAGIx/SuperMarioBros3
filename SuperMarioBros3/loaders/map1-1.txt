@@ -126,7 +126,7 @@ loaders\brick-break-cube.txt
 504	1088	440	16	16	4
 504	1504	440	16	16	2
 504	1616	440	16	16	3
-501	2240	440	16	16	1
+504	2240	440	16	16	1
 
 #QUESTION_BLOCK
 205	176	352	201
@@ -209,7 +209,7 @@ loaders\brick-break-cube.txt
 
 #Portal 
 #id	x	y	width	height	scene_id	next_pos_x	next_pos_y	direction	next_direction
-502	2264	112	32	16	4	140	30	1	1
+502	2264	112	32	16	4	136	16	1	1
 
 [MAPFILE]
 mapfiles\map1-1.txt

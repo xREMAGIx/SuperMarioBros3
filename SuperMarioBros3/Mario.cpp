@@ -75,6 +75,17 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		return;
 	}
 
+	if (state == MARIO_STATE_PORTAL_OUT) {
+		if (GetTickCount64() - portal_out_start > MARIO_PORTAL_OUT_TIME) {
+			ay = MARIO_GRAVITY;
+			vy = 0;
+			state = MARIO_STATE_IDLE;
+		}
+
+		RunPortalMovement(dt);
+		return;
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -629,18 +640,30 @@ void CMario::RunPortalMovement(DWORD dt)
 		break;
 	}
 
-	if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_DOWN) {
-		if (y > initial_y + height) {
-			y = initial_y + height;
+	if (collidedPortal != NULL) {
+		if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_DOWN) {
+			if (y > initial_y + height) {
+				y = initial_y + height + MARIO_PORTAL_OFFSET;
+			}
+		}
+		else if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_UP) {
+			if (y < initial_y - height) {
+				y = initial_y - height - MARIO_PORTAL_OFFSET;
+			}
 		}
 	}
-	else if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_UP) {
-		if (y < initial_y - height) {
-			y = initial_y - height;
+	else {
+		if (portalOutDirection == PORTAL_DIRECTION_DOWN) {
+			if (y > initial_y + height) {
+				y = initial_y + height;
+			}
+		}
+		else if (portalOutDirection == PORTAL_DIRECTION_UP) {
+			if (y < initial_y - height) {
+				y = initial_y - height;
+			}
 		}
 	}
-
-	
 }
 
 //
@@ -649,7 +672,7 @@ void CMario::RunPortalMovement(DWORD dt)
 int CMario::GetAniIdSmall()
 {
 	int aniId = -1;
-	if (state == MARIO_STATE_PORTAL) {
+	if (state == MARIO_STATE_PORTAL || state == MARIO_STATE_PORTAL_OUT) {
 		aniId = ID_ANI_MARIO_SMALL_PORTAL;
 	}
 	else if (holdingObject) {
@@ -735,7 +758,7 @@ int CMario::GetAniIdSmall()
 int CMario::GetAniIdBig()
 {
 	int aniId = -1;
-	if (state == MARIO_STATE_PORTAL) {
+	if (state == MARIO_STATE_PORTAL || state == MARIO_STATE_PORTAL_OUT) {
 		aniId = ID_ANI_MARIO_PORTAL;
 	}
 	else if (holdingObject) {
@@ -821,7 +844,7 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdRaccoon()
 {
 	int aniId = -1;
-	if (state == MARIO_STATE_PORTAL) {
+	if (state == MARIO_STATE_PORTAL || state == MARIO_STATE_PORTAL_OUT) {
 		aniId = ID_ANI_RACCOON_MARIO_PORTAL;
 	}
 	else if (holdingObject) {
@@ -952,15 +975,31 @@ void CMario::SetState(int state)
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return; 
 
-	if (this->state == MARIO_STATE_PORTAL) return;
+	if (this->state == MARIO_STATE_PORTAL || this->state == MARIO_STATE_PORTAL_OUT) return;
 
 	switch (state)
 	{
+	case MARIO_STATE_PORTAL_OUT:
+		vx = 0;
+		ax = 0;
+		initial_y = y;
+		renderOrder = -1;
+		if (portalOutDirection == PORTAL_DIRECTION_DOWN) {
+			vy = MARIO_PORTAL_SPEED;
+		}
+		else if (portalOutDirection == PORTAL_DIRECTION_UP) {
+			vy = -MARIO_PORTAL_SPEED;
+		}
+		StartPortalOut();
+		break;
 	case MARIO_STATE_PORTAL:
 		vx = 0;
 		ax = 0;
 		initial_y = y;
 		renderOrder = -1;
+		float portalX, portalY;
+		collidedPortal->GetPosition(portalX, portalY);
+		x = portalX;
 		if (collidedPortal->GetPortalDirection() == PORTAL_DIRECTION_DOWN) {
 			vy = MARIO_PORTAL_SPEED;
 		}
