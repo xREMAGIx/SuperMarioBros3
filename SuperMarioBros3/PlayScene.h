@@ -30,6 +30,7 @@
 #include "Point.h"
 #include "PlayerFont.h"
 #include "ThirdFont.h"
+#include "Goal.h"
 
 #include "MapPoint.h"
 #include "InvisiblePlatform.h"
@@ -51,6 +52,7 @@ protected:
 	vector<CMapPoint*> mapPoints;
 	vector<LPGAMEOBJECT> objects;
 	Grid* grid;
+	CGoal* goal;
 
 	float portalNextPosX = -1;
 	float portalNextPosY = -1;

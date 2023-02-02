@@ -28,7 +28,33 @@ void CFont::DrawCharacter(int id, float x, float y)
 	sprites->Get(id)->Draw(x, y);
 }
 
+void CFont::DrawTextString(string str, float x, float y)
+{
+	CSprites* sprites = CSprites::GetInstance();
+
+	for (int i = 0; i < str.size(); i++)
+	{
+		int id = ConvertText(str[i]);
+
+		if (id != -1) {
+			sprites->Get(ID_SPRITE_FONT_BASE + id)->Draw(x, y);
+		}
+		x += FONT_TEXT_SPACING;
+
+	}
+}
+
 int CFont::convert(char c)
 {
 	return c - '0';
+}
+
+int CFont::ConvertText(char c)
+{
+	int asciiChar = int(c);
+	if (asciiChar == SPACE_ASCII_CHAR)
+	{ 
+		return -1;
+	}	
+	return asciiChar;
 }

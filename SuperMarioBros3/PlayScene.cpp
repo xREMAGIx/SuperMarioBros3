@@ -23,6 +23,7 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	map = NULL;
 	choosePlayer = NULL;
 	key_handler = new CSampleKeyHandler(this);
+	goal = new CGoal(2264, 90);
 }
 
 
@@ -516,6 +517,8 @@ bool compareRenderOrder(LPGAMEOBJECT obj1, LPGAMEOBJECT obj2)
 
 void CPlayScene::Render()
 {
+	goal->Render();
+
 	if (player) {
 		float cx, cy;
 		player->GetPosition(cx, cy);

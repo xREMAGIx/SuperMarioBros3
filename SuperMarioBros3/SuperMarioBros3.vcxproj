@@ -149,8 +149,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameBoard.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="GreenMushroom.cpp" />
+    <ClCompile Include="GreenVenusFireTrap.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="InvisiblePlatform.cpp" />
     <ClCompile Include="ItemBox.cpp" />
@@ -203,8 +205,10 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameBoard.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Goal.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="GreenMushroom.h" />
+    <ClInclude Include="GreenVenusFireTrap.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="InvisiblePlatform.h" />
     <ClInclude Include="ItemBox.h" />
