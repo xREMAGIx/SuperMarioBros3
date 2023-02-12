@@ -30,6 +30,7 @@ void CFont::DrawCharacter(int id, float x, float y)
 
 void CFont::DrawTextString(string str, float x, float y)
 {
+	float initX = x - (str.size() / 2) * FONT_TEXT_SPACING;
 	CSprites* sprites = CSprites::GetInstance();
 
 	for (int i = 0; i < str.size(); i++)
@@ -37,9 +38,9 @@ void CFont::DrawTextString(string str, float x, float y)
 		int id = ConvertText(str[i]);
 
 		if (id != -1) {
-			sprites->Get(ID_SPRITE_FONT_BASE + id)->Draw(x, y);
+			sprites->Get(ID_SPRITE_FONT_BASE + id)->Draw(initX, y);
 		}
-		x += FONT_TEXT_SPACING;
+		initX += FONT_TEXT_SPACING;
 
 	}
 }

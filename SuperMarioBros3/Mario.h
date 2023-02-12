@@ -140,6 +140,7 @@ class CMario : public CGameObject
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithBrick(LPCOLLISIONEVENT e);
 	void OnCollisionWithPSwitch(LPCOLLISIONEVENT e);
+	void OnCollisionWithGoal(LPCOLLISIONEVENT e);
 
 	void RunPortalMovement(DWORD dt);
 	int GetAniIdBig();

@@ -39,6 +39,9 @@ loaders\wing.txt
 #EFFECTS
 loaders\brick-break-cube.txt
 
+#GOAL
+loaders\goal.txt
+
 #
 [OBJECTS]
 # type	x	y	extra_settings per object type
@@ -206,6 +209,9 @@ loaders\brick-break-cube.txt
 210	2256	112	2	12	0	4
 210	2256	384	2	2	0	-1
 210	2320	384	2	2	0	-1
+
+#GOAL
+801	2680	344
 
 #Portal 
 #id	x	y	width	height	scene_id	next_pos_x	next_pos_y	direction	next_direction

@@ -253,6 +253,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithBrick(e);
 	else if (dynamic_cast<CPSwitch*>(e->obj))
 		OnCollisionWithPSwitch(e);
+	else if (dynamic_cast<CGoal*>(e->obj))
+		OnCollisionWithGoal(e);
 }
 
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
@@ -617,6 +619,17 @@ void CMario::OnCollisionWithPSwitch(LPCOLLISIONEVENT e)
 	{
 		if (pSwitch->GetState() == P_SWITCH_STATE_IDLE) {
 			pSwitch->SetState(P_SWITCH_STATE_PUSHED);
+		}
+	}
+}
+
+void CMario::OnCollisionWithGoal(LPCOLLISIONEVENT e)
+{
+	CGoal* goal = dynamic_cast<CGoal*>(e->obj);
+	if (e->ny > 0)
+	{
+		if (goal->GetState() == GOAL_STATE_IDLE) {
+			goal->SetState(GOAL_STATE_CLEAR);
 		}
 	}
 }

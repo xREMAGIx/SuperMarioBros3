@@ -23,7 +23,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath):
 	map = NULL;
 	choosePlayer = NULL;
 	key_handler = new CSampleKeyHandler(this);
-	goal = new CGoal(2264, 90);
 }
 
 
@@ -228,6 +227,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_THIRD_FONT: obj = new CThirdFont(x, y); break;
+	case OBJECT_TYPE_GOAL: {
+		obj = new CGoal(x, y); 
+		goal = (CGoal*)obj;
+		break;
+	}
 
 	// INVISIBLE
 	case OBJECT_TYPE_INVISIBLE_PLATFORM:
@@ -517,8 +521,6 @@ bool compareRenderOrder(LPGAMEOBJECT obj1, LPGAMEOBJECT obj2)
 
 void CPlayScene::Render()
 {
-	goal->Render();
-
 	if (player) {
 		float cx, cy;
 		player->GetPosition(cx, cy);
@@ -558,6 +560,10 @@ void CPlayScene::Render()
 
 		for (int i = 0; i < objects.size(); i++)
 			objects[i]->Render();
+	}
+
+	if (goal) {
+		goal->Render();
 	}
 
 	if (gameBoard) {
