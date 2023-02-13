@@ -5,6 +5,7 @@
 #include "Animations.h"
 #include "AssetIDs.h"
 #include "Font.h"
+#include "GameBoard.h"
 
 #define GOAL_STATE_IDLE	1
 #define GOAL_STATE_CLEAR 2
@@ -25,6 +26,9 @@
 #define GOAL_ITEM_FLY_SPEED	0.1f
 
 #define GOAL_ITEM_SHUFFLE_TIME	500
+#define GOAL_TEXT_FIRST_LINE_TIME	1000
+#define GOAL_TEXT_SECOND_LINE_TIME	1000
+#define GOAL_FINISH_TIME	3000
 
 class CGoal : public CGameObject {
 	CFont* clearText;
@@ -35,10 +39,15 @@ class CGoal : public CGameObject {
 	int itemBox;
 	float itemEarnedX = -1;
 	float itemEarnedY = -1;
-
 	float itemEarnedVy = -1;
 
+	bool isShowFirstText = false;
+	bool isShowSecondText = false;
+
 	ULONGLONG itemSwitchStart;
+	ULONGLONG textFirstLineStart;
+	ULONGLONG textSecondLineStart;
+	ULONGLONG finishStart;
 
 	virtual int IsCollidable() {
 		if (state == GOAL_STATE_IDLE) {
@@ -64,6 +73,20 @@ public:
 
 	void StartSwitchItem() {
 		itemSwitchStart = GetTickCount64();
+	}
+
+	void StartTextFirstLine() {
+		textFirstLineStart = GetTickCount64();
+	}
+
+	void StartTextSecondLine() {
+		isShowFirstText = true;
+		textSecondLineStart = GetTickCount64();
+	}
+
+	void StartFinish() {
+		isShowSecondText = true;
+		finishStart = GetTickCount64();
 	}
 
 	void SwitchItem();

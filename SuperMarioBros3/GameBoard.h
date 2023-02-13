@@ -6,8 +6,6 @@
 #include "Mario.h"
 #include "debug.h"
 
-//NOTE BOARD START POINT	12	246	(REMEMER MINUS 1)
-
 #define BOARD_MARGIN_BOTTOM 16
 #define BOARD_MARGIN_LEFT 2
 #define BOARD_HEIGHT 36
@@ -90,6 +88,15 @@ public:
 	void RemoveLives() { lives--; }
 	void AddMoney() { money++; }
 	void AddPoint(int point) { score += point; }
+	vector<CItemBox*> GetItemBoxes() {
+		return itemBoxes;
+	}
+	CItemBox* GetItemBox(int index) {
+		return itemBoxes.at(index);
+	}
+	void SetItemBox(int index, int itemType) { 
+		itemBoxes.at(index)->SetState(itemType);
+	}
 };
 
 typedef CBoard* LPGAMEBOARD;

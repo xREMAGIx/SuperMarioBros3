@@ -26,6 +26,10 @@ void CBoard::Update(DWORD dt)
 	{
 		time--;
 		_count = GetTickCount64();
+		if (time == 0) {
+			CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+			mario->SetState(MARIO_STATE_DIE);
+		}
 	}
 }
 

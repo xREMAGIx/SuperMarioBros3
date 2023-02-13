@@ -6,6 +6,9 @@ CGoal::CGoal(float x, float y) :CGameObject(x, y)
 	itemBox = ITEM_BOX_MUSHROOM;
 	state = GOAL_STATE_IDLE;
 	clearText = new CFont();
+	textFirstLineStart = -1;
+	textSecondLineStart = -1;
+	finishStart = -1;
 }
 
 void CGoal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -20,6 +23,28 @@ void CGoal::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (state == GOAL_STATE_CLEAR) {
 		itemEarnedY += itemEarnedVy * dt;
+		if (isShowSecondText) {
+			if (GetTickCount64() - finishStart > GOAL_FINISH_TIME) {
+				CGame* game = CGame::GetInstance();
+				int previousId = game->GetPreviousSceneId();
+				game->InitiateSwitchScene(previousId);
+			}
+			return;
+		}
+		else {
+			if (isShowFirstText) {
+				if (GetTickCount64() - textSecondLineStart > GOAL_TEXT_SECOND_LINE_TIME) {
+					StartFinish();
+				}
+				return;
+			}
+			else {
+				if (GetTickCount64() - textFirstLineStart > GOAL_TEXT_FIRST_LINE_TIME) {
+					StartTextSecondLine();
+				}
+				return;
+			}
+		}
 	}
 
 	CGameObject::Update(dt, coObjects);
@@ -73,15 +98,19 @@ void CGoal::Render()
 			break;
 		}
 		animations->Get(itemAniId)->Render(itemEarnedX, itemEarnedY, false);
-		clearText->DrawTextString(GOAL_TEXT_FIRST_LINE, initClearX, initClearY);
-		clearText->DrawTextString(GOAL_TEXT_SECOND_LINE, initClearX, initClearY + GOAL_TEXT_LINE_OFFSET);
-		sprites->Get(itemBoxSprite)->Draw(initClearX + (GOAL_TEXT_SECOND_LINE_CHAR / 2) * FONT_TEXT_SPACING + GOAL_TEXT_SECOND_LINE_OFFSET, initClearY + GOAL_TEXT_LINE_OFFSET);
+		if (isShowFirstText) {
+			clearText->DrawTextString(GOAL_TEXT_FIRST_LINE, initClearX, initClearY);
+		}
+		if (isShowSecondText) {
+			clearText->DrawTextString(GOAL_TEXT_SECOND_LINE, initClearX, initClearY + GOAL_TEXT_LINE_OFFSET);
+			sprites->Get(itemBoxSprite)->Draw(initClearX + (GOAL_TEXT_SECOND_LINE_CHAR / 2) * FONT_TEXT_SPACING + GOAL_TEXT_SECOND_LINE_OFFSET, initClearY + GOAL_TEXT_LINE_OFFSET);
+		}
 		break;
 	}
 	default:
 		break;
 	}
-	RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 void CGoal::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -114,6 +143,7 @@ void CGoal::SetState(int state)
 	}
 	case GOAL_STATE_CLEAR: {
 		CGame* game = CGame::GetInstance();
+
 		float camX, camY; 
 		game->GetCamPos(camX, camY);
 		int screenW = game->GetScreenWidth();
@@ -125,6 +155,33 @@ void CGoal::SetState(int state)
 		itemEarnedX = x;
 		itemEarnedY = y;
 		itemEarnedVy = -GOAL_ITEM_FLY_SPEED;
+
+		StartTextFirstLine();
+
+		CBoard* game_board = CBoard::GetInstance();
+
+		int itemIdx = 0;
+		for (int i = 0; i < BOARD_NUMBER_OF_ITEM_BOXES; i++) {
+			if (game_board->GetItemBox(i)->GetState() == ITEM_BOX_STATE_EMPTY) {
+				itemIdx = i;
+				break;
+			}
+		}
+
+		switch (itemBox)
+		{
+			case ITEM_BOX_MUSHROOM: 
+				game_board->SetItemBox(itemIdx, ITEM_BOX_STATE_MUSHROOM);
+				break;
+			case ITEM_BOX_FLOWER:
+				game_board->SetItemBox(itemIdx, ITEM_BOX_STATE_FLOWER);
+				break;
+			case ITEM_BOX_STAR:
+				game_board->SetItemBox(itemIdx, ITEM_BOX_STATE_STAR);
+				break;
+			default:
+				break;
+		}
 
 		break;
 	}

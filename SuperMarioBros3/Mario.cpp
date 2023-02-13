@@ -630,6 +630,7 @@ void CMario::OnCollisionWithGoal(LPCOLLISIONEVENT e)
 	{
 		if (goal->GetState() == GOAL_STATE_IDLE) {
 			goal->SetState(GOAL_STATE_CLEAR);
+			SetState(MARIO_STATE_GOAL);
 		}
 	}
 }
@@ -986,7 +987,7 @@ void CMario::Render()
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE) return; 
+	if (this->state == MARIO_STATE_DIE || this->state == MARIO_STATE_GOAL) return;
 
 	if (this->state == MARIO_STATE_PORTAL || this->state == MARIO_STATE_PORTAL_OUT) return;
 
@@ -1130,7 +1131,10 @@ void CMario::SetState(int state)
 		ax = 0;
 		die_start = GetTickCount64();
 		break;
-	
+	case MARIO_STATE_GOAL:
+		vx = 0;
+		ax = 0;
+		break;
 	}
 
 	CGameObject::SetState(state);

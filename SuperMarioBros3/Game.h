@@ -71,6 +71,7 @@ class CGame
 	unordered_map<int, LPSCENE> scenes;
 	int previous_scene;
 	int current_scene;
+	int current_world_id;
 	int next_scene = -1;
 
 	void _ParseSection_SETTINGS(string line);

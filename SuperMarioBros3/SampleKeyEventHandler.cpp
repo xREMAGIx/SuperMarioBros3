@@ -174,6 +174,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 
 	if (!mario) return;
 	if (mario->GetState() == MARIO_STATE_PORTAL) return;
+	if (mario->GetState() == MARIO_STATE_GOAL) return;
 
 	switch (KeyCode)
 	{
@@ -197,6 +198,7 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 
 	if (!mario) return;
 	if (mario->GetState() == MARIO_STATE_PORTAL) return;
+	if (mario->GetState() == MARIO_STATE_GOAL) return;
 
 	if (game->IsKeyDown(DIK_RIGHT))
 	{
