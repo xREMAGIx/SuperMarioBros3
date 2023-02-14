@@ -53,6 +53,9 @@ void CRedKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 		else if (dynamic_cast<CQuestionBlock*>(e->obj)) {
 			OnCollisionWithQuestionBlock(e);
 		} 
+		else if (dynamic_cast<CBrick*>(e->obj)) {
+			OnCollisionWithBrick(e);
+		}
 		else if (dynamic_cast<CDeadline*>(e->obj)) {
 			isDeleted = true;
 			return;
@@ -104,6 +107,20 @@ void CRedKoopa::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e)
 	if (questionBlock->GetState() != QUESTION_BLOCK_STATE_OPENED)
 	{
 		questionBlock->SetState(QUESTION_BLOCK_STATE_OPENED);
+	}
+}
+
+void CRedKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e)
+{
+	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
+
+	if (state == RED_KOOPA_STATE_SHELL_SCROLL)
+	{
+		if (brick->GetState() == BRICK_STATE_IDLE) {
+			brick->SetState(BRICK_STATE_BREAK);
+			vx = -vx;
+			nx = -nx;
+		}
 	}
 }
 

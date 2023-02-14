@@ -4,7 +4,7 @@
 #include "QuestionBlock.h"
 #include "debug.h"
 
-CKoopa::CKoopa(float x, float y) :CGameObject(x, y)
+CKoopa::CKoopa(float x, float y, bool isHaveWing) :CGameObject(x, y)
 {
 	this->ax = 0;
 	this->ay = KOOPA_GRAVITY;
@@ -14,6 +14,16 @@ CKoopa::CKoopa(float x, float y) :CGameObject(x, y)
 	SetState(KOOPA_STATE_WALKING);
 
 	fallDetector = new CFallDetector(x, y);
+
+	if (isHaveWing) {
+		this->isHaveWing = isHaveWing;
+		wings = new CWing(x, y);
+		wings->SetDirection(1, 0);
+		ay = KOOPA_WING_GRAVITY;
+	}
+	else {
+		wings = NULL;
+	}
 }
 
 void CKoopa::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -61,6 +71,11 @@ void CKoopa::OnCollisionWith(LPCOLLISIONEVENT e)
 	if (e->ny != 0)
 	{
 		vy = 0;
+
+		if (isHaveWing && e->ny < 0) {
+			SetState(KOOPA_STATE_WING_JUMP);
+			wings->SetState(WING_STATE_FLAP);
+		}
 	}
 	else if (e->nx != 0)
 	{
@@ -162,6 +177,11 @@ void CKoopa::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		fallDetector->Update(dt, coObjects);
 	}
 
+	if (isHaveWing) {
+		wings->SetPosition(x + KOOPA_WINGS_X, y + KOOPA_WINGS_Y);
+		wings->Update(dt, coObjects);
+	}
+
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -204,6 +224,9 @@ void CKoopa::Render()
 		break;
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
+	if (isHaveWing) {
+		wings->Render();
+	}
 	// RenderBoundingBox();
 }
 
@@ -212,28 +235,35 @@ void CKoopa::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case KOOPA_STATE_DIE:
-		die_start = GetTickCount64();
-		y += (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_SHELL_HEIGHT) / 2;
-		vx = 0;
-		vy = 0;
-		ay = 0;
-		break;
-	case KOOPA_STATE_SHELL: 
-		vx = 0;
-		vy = 0;
-		respawn_start = GetTickCount64();
-		break;
-	case KOOPA_STATE_RESPAWN:
-		respawn_end = GetTickCount64();
-		isRespawning = true;
-		break;
-	case KOOPA_STATE_WALKING:
-		if (isRespawning) {
-			y += (KOOPA_BBOX_SHELL_HEIGHT - KOOPA_BBOX_HEIGHT) / 2;
-			isRespawning = false;
-		}
-		vx = nx * KOOPA_WALKING_SPEED;
-		break;
+		case KOOPA_STATE_DIE:
+			die_start = GetTickCount64();
+			y += (KOOPA_BBOX_HEIGHT - KOOPA_BBOX_SHELL_HEIGHT) / 2;
+			vx = 0;
+			vy = 0;
+			ay = 0;
+			break;
+		case KOOPA_STATE_SHELL: 
+			vx = 0;
+			vy = 0;
+			respawn_start = GetTickCount64();
+			break;
+		case KOOPA_STATE_RESPAWN:
+			respawn_end = GetTickCount64();
+			isRespawning = true;
+			break;
+		case KOOPA_STATE_WALKING:
+			if (isRespawning) {
+				y += (KOOPA_BBOX_SHELL_HEIGHT - KOOPA_BBOX_HEIGHT) / 2;
+				isRespawning = false;
+			}
+			vx = nx * KOOPA_WALKING_SPEED;
+			ay = KOOPA_GRAVITY;
+			break;
+		case KOOPA_STATE_WING_JUMP:
+			vy = -KOOPA_WING_JUMP_SPEED;
+			wings->SetState(WING_STATE_FLAP);
+			break;
+		default:
+			break;
 	}
 }

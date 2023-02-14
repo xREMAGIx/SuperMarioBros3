@@ -479,7 +479,12 @@ void CMario::OnCollisionWithKoopa(LPCOLLISIONEVENT e)
 	// jump on top
 	if (e->ny < 0 && !this->isOnPlatform)
 	{
-		if (koopa->GetState() != KOOPA_STATE_SHELL)
+		if (koopa->GetIsHaveWing()) {
+			koopa->SetIsHaveWing(false);
+			koopa->SetState(KOOPA_STATE_WALKING);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopa->GetState() != KOOPA_STATE_SHELL)
 		{
 			koopa->SetState(KOOPA_STATE_SHELL);
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
