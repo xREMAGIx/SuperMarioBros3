@@ -48,7 +48,7 @@ void CMarioWorld::Render()
 	int aniId = ID_ANI_MARIO_WORLD;
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CMarioWorld::SetState(int state)

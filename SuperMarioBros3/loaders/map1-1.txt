@@ -50,8 +50,9 @@ loaders\goal.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-#101	50	300
-101	2000	300
+101	50	300
+#101	2000	300
+#101	2256	90
 
 # GOOMBA
 301	224	398
