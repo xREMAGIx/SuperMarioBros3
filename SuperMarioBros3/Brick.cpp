@@ -48,6 +48,11 @@ void CBrick::Render()
 		sprites->Get(ID_SPRITE_BRICK_TURN_COIN)->Draw(x, y);
 		break;
 	}
+	case BRICK_STATE_TOGGLED: {
+		CAnimations* animations = CAnimations::GetInstance();
+		animations->Get(ID_ANI_QUESTION_BLOCK_OPENED)->Render(x, y);
+		break;
+	}
 	case BRICK_STATE_BREAK: {
 		topLeftCube->Render();
 		bottomLeftCube->Render();
@@ -80,6 +85,17 @@ void CBrick::SetState(int state)
 			playScene->GetGameBoard()->AddPoint(COIN_POINT);
 		}
 		break;
+	case BRICK_STATE_TOGGLED: {
+		vector<LPGAMEOBJECT>& objects = ((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetGameObjects();
+
+		if (item != NULL && dynamic_cast<CPSwitch*>(item)) {
+			item->SetPosition(x, y - P_SWITCH_BBOX_HEIGHT);
+			item->SetRenderOrder(0);
+			objects.push_back(item);
+
+		}
+		break;
+	}
 	case BRICK_STATE_BREAK: {
 		StartBreak();
 

@@ -116,10 +116,12 @@ void CRedKoopa::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 
 	if (state == RED_KOOPA_STATE_SHELL_SCROLL)
 	{
-		if (brick->GetState() == BRICK_STATE_IDLE) {
-			brick->SetState(BRICK_STATE_BREAK);
-			vx = -vx;
-			nx = -nx;
+		if (e->nx != 0) {
+			if (brick->GetState() == BRICK_STATE_IDLE) {
+				brick->SetState(BRICK_STATE_BREAK);
+				vx = -vx;
+				nx = -nx;
+			}
 		}
 	}
 }

@@ -611,6 +611,13 @@ void CMario::OnCollisionWithBrick(LPCOLLISIONEVENT e)
 {
 	CBrick* brick = dynamic_cast<CBrick*>(e->obj);
 
+	if (e->ny > 0)
+	{
+		if (brick->GetState() == BRICK_STATE_IDLE && brick->GetItem() != NULL) {
+			brick->SetState(BRICK_STATE_TOGGLED);
+		}
+	}
+
 	if (brick->GetState() == BRICK_STATE_TURNED) {
 		brick->SetState(BRICK_STATE_EARNED);
 		brick->Delete();

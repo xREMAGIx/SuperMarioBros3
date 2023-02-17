@@ -17,6 +17,7 @@
 #define BRICK_STATE_BREAK	2
 #define BRICK_STATE_TURNED	3
 #define BRICK_STATE_EARNED	4
+#define BRICK_STATE_TOGGLED	5
 
 #define BRICK_BREAK_TIME	5000
 
@@ -37,7 +38,7 @@ class CBrick : public CGameObject {
 		return 0;
 	};
 	virtual int IsBlocking() {
-		if (state == BRICK_STATE_IDLE) {
+		if (state == BRICK_STATE_IDLE || state == BRICK_STATE_TOGGLED) {
 			return 1;
 		}
 		return 0;
@@ -68,6 +69,9 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void SetState(int state);
 
+	CGameObject* GetItem() {
+		return item;
+	}
 
 	void StartBreak() {
 		break_start = GetTickCount64();

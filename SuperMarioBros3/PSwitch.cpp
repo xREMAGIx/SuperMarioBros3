@@ -96,7 +96,9 @@ void CPSwitch::SetState(int state)
 			for (size_t i = 1; i < objects.size(); i++)
 			{
 				if (dynamic_cast<CBrick*>(objects[i])) {
-					objects[i]->SetState(BRICK_STATE_TURNED);
+					if (objects[i]->GetState() == BRICK_STATE_IDLE) {
+						objects[i]->SetState(BRICK_STATE_TURNED);
+					}
 				}
 			}
 		}
