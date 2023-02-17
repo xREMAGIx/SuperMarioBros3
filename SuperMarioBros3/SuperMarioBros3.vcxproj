@@ -152,6 +152,7 @@
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Goomba.cpp" />
     <ClCompile Include="GreenMushroom.cpp" />
+    <ClCompile Include="GreenPiranhaPlant.cpp" />
     <ClCompile Include="GreenVenusFireTrap.cpp" />
     <ClCompile Include="Grid.cpp" />
     <ClCompile Include="InvisiblePlatform.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Goomba.h" />
     <ClInclude Include="GreenMushroom.h" />
+    <ClInclude Include="GreenPiranhaPlant.h" />
     <ClInclude Include="GreenVenusFireTrap.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="InvisiblePlatform.h" />

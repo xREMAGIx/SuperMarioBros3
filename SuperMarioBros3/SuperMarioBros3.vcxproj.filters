@@ -228,6 +228,9 @@
     <ClCompile Include="GreenVenusFireTrap.cpp">
       <Filter>Source Files\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="GreenPiranhaPlant.cpp">
+      <Filter>Source Files\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -396,6 +399,9 @@
       <Filter>Header Files\Hud</Filter>
     </ClInclude>
     <ClInclude Include="GreenVenusFireTrap.h">
+      <Filter>Header Files\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="GreenPiranhaPlant.h">
       <Filter>Header Files\Enemies</Filter>
     </ClInclude>
   </ItemGroup>

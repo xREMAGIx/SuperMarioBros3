@@ -31,6 +31,8 @@ loaders\red-goomba.txt
 loaders\koopa.txt
 loaders\red-koopa.txt
 loaders\venus-fire-trap.txt
+loaders\green-venus-fire-trap.txt
+loaders\green-piranha-plant.txt
 
 #ENEMYITEMS
 loaders\fireball.txt
@@ -205,8 +207,8 @@ loaders\goal.txt
 #CHIMNEY
 #id	x	y	width	height	obj_id	obj_ani	direction	scene_id
 210	352	368	2	3	305	-1
-210	1792	384	2	2	0	-1
-210	1856	368	2	3	305	-1
+210	1792	384	2	2	307	-1
+210	1856	368	2	3	306	-1
 210	2256	112	2	12	0	4
 210	2256	384	2	2	0	-1
 210	2320	384	2	2	0	-1

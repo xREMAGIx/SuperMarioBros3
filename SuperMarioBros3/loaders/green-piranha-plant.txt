@@ -1,0 +1,12 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+#MOUTH OPEN
+3070001	0	144	15	175	10
+
+#MOUTH CLOSE
+3070002	16	144	31	175	10
+
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+3070100	3070001	200	3070002	200

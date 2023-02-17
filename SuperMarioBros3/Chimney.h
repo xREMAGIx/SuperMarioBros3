@@ -5,6 +5,8 @@
 #include "Sprites.h"
 #include "Textures.h"
 #include "VenusFireTrap.h"
+#include "GreenVenusFireTrap.h"
+#include "GreenPiranhaPlant.h"
 
 #define CHIMNEY_STATE_IDLE 100
 #define CHIMNEY_STATE_CANCEL 200
